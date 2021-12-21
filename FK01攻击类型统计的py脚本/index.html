@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    FK01攻击类型统计的py脚本 |  GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+<link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-FK01攻击类型统计的py脚本"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  FK01攻击类型统计的py脚本
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/FK01%E6%94%BB%E5%87%BB%E7%B1%BB%E5%9E%8B%E7%BB%9F%E8%AE%A1%E7%9A%84py%E8%84%9A%E6%9C%AC/" class="article-date">
+  <time datetime="2020-10-14T16:00:00.000Z" itemprop="datePublished">2020-10-15</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.4k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">13 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>还是为了方便自己统计一些数据搞报告<br><a target="_blank" rel="noopener" href="https://github.com/GuoKerS/Some_Script/tree/master/FK01_Attack_type_statistics">FK01_Attack_type_statistics</a></p>
+<h1 id="攻击类型统计"><a href="#攻击类型统计" class="headerlink" title="攻击类型统计"></a>攻击类型统计</h1><p>main.py 为输入日期查询所有攻击类型的次数<br>运行程序输入0911即为查询9月11日所有攻击类型次数的统计信息<br><img src="https://photo.o0o0.club/README.md/1602700480723.png" alt="enter description here"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># encoding: utf-8</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">@file: main.py</span></span><br><span class="line"><span class="string">@time: 2020-9-13 18:53</span></span><br><span class="line"><span class="string">@ide: PyCharm</span></span><br><span class="line"><span class="string">@author: guoker</span></span><br><span class="line"><span class="string">@contact: attackesb@gmail.com</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">requests.packages.urllib3.disable_warnings()</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;https://XXXXX:9443/rpc&quot;</span></span><br><span class="line"></span><br><span class="line">proxies = &#123;</span><br><span class="line">    <span class="string">&quot;http&quot;</span>: <span class="string">&quot;socks5://127.0.0.1:1XXX&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;https&#x27;</span>: <span class="string">&#x27;socks5://127.0.0.1:1XXX&#x27;</span></span><br><span class="line">&#125;<span class="comment">#  因为一些网络特殊的原因，访问该目标FK01需要走代理，自己用的时候可以将request.post中proxies=proxies删掉</span></span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">&#x27;accept&#x27;</span>: <span class="string">&quot;application/json, text/plain, */*&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;sec-fetch-dest&#x27;</span>: <span class="string">&quot;empty&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;content-type&#x27;</span>: <span class="string">&quot;application/json;charset=UTF-8&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;cache-control&#x27;</span>: <span class="string">&quot;no-cache&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Cookie&quot;</span>: <span class="string">&quot;换成你的cookie&quot;</span>,<span class="comment"># 替换下cookie</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">type_list = &#123;</span><br><span class="line">    <span class="number">0</span>: <span class="string">&quot;SQL 注入&quot;</span>,</span><br><span class="line">    <span class="number">1</span>: <span class="string">&quot;XSS&quot;</span>,</span><br><span class="line">    <span class="number">2</span>: <span class="string">&quot;CSRF&quot;</span>,</span><br><span class="line">    <span class="number">3</span>: <span class="string">&quot;SSRF&quot;</span>,</span><br><span class="line">    <span class="number">4</span>: <span class="string">&quot;拒绝服务&quot;</span>,</span><br><span class="line">    <span class="number">5</span>: <span class="string">&quot;后门&quot;</span>,</span><br><span class="line">    <span class="number">6</span>: <span class="string">&quot;反序列化&quot;</span>,</span><br><span class="line">    <span class="number">7</span>: <span class="string">&quot;代码执行&quot;</span>,</span><br><span class="line">    <span class="number">8</span>: <span class="string">&quot;代码注入&quot;</span>,</span><br><span class="line">    <span class="number">9</span>: <span class="string">&quot;命令注入&quot;</span>,</span><br><span class="line">    <span class="number">10</span>: <span class="string">&quot;文件上传&quot;</span>,</span><br><span class="line">    <span class="number">11</span>: <span class="string">&quot;文件包含&quot;</span>,</span><br><span class="line">    <span class="number">12</span>: <span class="string">&quot;重定向&quot;</span>,</span><br><span class="line">    <span class="number">13</span>: <span class="string">&quot;权限不当&quot;</span>,</span><br><span class="line">    <span class="number">14</span>: <span class="string">&quot;信息泄露&quot;</span>,</span><br><span class="line">    <span class="number">15</span>: <span class="string">&quot;未授权访问&quot;</span>,</span><br><span class="line">    <span class="number">16</span>: <span class="string">&quot;不安全的配置&quot;</span>,</span><br><span class="line">    <span class="number">17</span>: <span class="string">&quot;XXE&quot;</span>,</span><br><span class="line">    <span class="number">18</span>: <span class="string">&quot;XPath 注入&quot;</span>,</span><br><span class="line">    <span class="number">19</span>: <span class="string">&quot;LDAP 注入&quot;</span>,</span><br><span class="line">    <span class="number">20</span>: <span class="string">&quot;目录穿越&quot;</span>,</span><br><span class="line">    <span class="number">21</span>: <span class="string">&quot;扫描器&quot;</span>,</span><br><span class="line">    <span class="number">22</span>: <span class="string">&quot;水平权限绕过&quot;</span>,</span><br><span class="line">    <span class="number">23</span>: <span class="string">&quot;垂直权限绕过&quot;</span>,</span><br><span class="line">    <span class="number">24</span>: <span class="string">&quot;文件修改&quot;</span>,</span><br><span class="line">    <span class="number">25</span>: <span class="string">&quot;文件读取&quot;</span>,</span><br><span class="line">    <span class="number">26</span>: <span class="string">&quot;文件删除&quot;</span>,</span><br><span class="line">    <span class="number">27</span>: <span class="string">&quot;逻辑错误&quot;</span>,</span><br><span class="line">    <span class="number">28</span>: <span class="string">&quot;CRLF 注入&quot;</span>,</span><br><span class="line">    <span class="number">29</span>: <span class="string">&quot;模版注入&quot;</span>,</span><br><span class="line">    <span class="number">30</span>: <span class="string">&quot;点击劫持&quot;</span>,</span><br><span class="line">    <span class="number">31</span>: <span class="string">&quot;缓冲器溢出&quot;</span>,</span><br><span class="line">    <span class="number">32</span>: <span class="string">&quot;整数溢出&quot;</span>,</span><br><span class="line">    <span class="number">33</span>: <span class="string">&quot;格式化字符串&quot;</span>,</span><br><span class="line">    <span class="number">34</span>: <span class="string">&quot;条件竞争&quot;</span>,</span><br><span class="line">    <span class="number">61</span>: <span class="string">&quot;超时&quot;</span>,</span><br><span class="line">    <span class="number">62</span>: <span class="string">&quot;未知&quot;</span>,</span><br><span class="line">    -<span class="number">1</span>: <span class="string">&quot;非 Web 攻击&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">add_count = <span class="built_in">int</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># all_count = int()</span></span><br><span class="line"></span><br><span class="line">add_counts = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span>(<span class="params">targe</span>):</span></span><br><span class="line">    <span class="keyword">global</span> add_counts</span><br><span class="line">    payload = <span class="string">&quot;&#123;\&quot;method\&quot;:\&quot;RequestLogService.GetRequestLogList\&quot;,\&quot;params\&quot;:&#123;\&quot;count\&quot;:1,\&quot;offset\&quot;:0,\&quot;timestamp\&quot;:[&#123;\&quot;target\&quot;:\&quot;&quot;</span>+ date +<span class="string">&quot;\&quot;,\&quot;oper\&quot;:\&quot;=\&quot;&#125;],\&quot;attack_type\&quot;:[&#123;\&quot;target\&quot;:&quot;</span> + <span class="built_in">str</span>(targe) + <span class="string">&quot;,\&quot;oper\&quot;:\&quot;=\&quot;&#125;]&#125;,\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;0\&quot;&#125;&quot;</span></span><br><span class="line">    response = requests.request(<span class="string">&quot;POST&quot;</span>, url, data=payload, headers=headers, proxies=proxies, verify=<span class="literal">False</span>)</span><br><span class="line">    ret = response.json()</span><br><span class="line">    total = ret[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;total&#x27;</span>]</span><br><span class="line">    <span class="comment"># add_counts = add_counts + total</span></span><br><span class="line">    add_counts += total</span><br><span class="line">    <span class="comment"># print(add_counts)</span></span><br><span class="line">    <span class="keyword">return</span> total</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_attackip</span>(<span class="params">dates</span>):</span></span><br><span class="line">    <span class="comment"># date_old = int(dates) - 1</span></span><br><span class="line">    payload = <span class="string">&quot;&#123;\&quot;method\&quot;:\&quot;RequestLogService.GetSrcIPAttackAnalysis\&quot;,\&quot;params\&quot;:&#123;\&quot;count\&quot;:1,\&quot;offset\&quot;:0,\&quot;timestamp\&quot;:[&#123;\&quot;oper\&quot;:\&quot;=\&quot;,\&quot;target\&quot;:\&quot;&quot;</span>+ dates +<span class="string">&quot;\&quot;&#125;]&#125;,\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;0\&quot;&#125;&quot;</span></span><br><span class="line">    response = requests.request(<span class="string">&quot;POST&quot;</span>, url, data=payload, headers=headers, proxies=proxies, verify=<span class="literal">False</span>)</span><br><span class="line">    ret = response.json()</span><br><span class="line">    old_total = ret[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;total&#x27;</span>]</span><br><span class="line">    <span class="keyword">return</span> old_total</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_count</span>():</span></span><br><span class="line">    <span class="keyword">global</span> all_count</span><br><span class="line">    <span class="built_in">all</span> = <span class="string">&quot;&#123;\&quot;method\&quot;:\&quot;RequestLogService.GetRequestLogList\&quot;,\&quot;params\&quot;:&#123;\&quot;count\&quot;:1,\&quot;offset\&quot;:0,\&quot;timestamp\&quot;:[&#123;\&quot;target\&quot;:\&quot;&quot;</span>+ date +<span class="string">&quot;\&quot;,\&quot;oper\&quot;:\&quot;=\&quot;&#125;]&#125;,\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;0\&quot;&#125;&quot;</span></span><br><span class="line">    response = requests.request(<span class="string">&quot;POST&quot;</span>, url, data=<span class="built_in">all</span>, headers=headers, proxies=proxies, verify=<span class="literal">False</span>)</span><br><span class="line">    ret = response.json()</span><br><span class="line">    all_count = <span class="built_in">int</span>(ret[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;total&#x27;</span>])</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(all_count)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_time</span>(<span class="params">t</span>):</span></span><br><span class="line">    s_time = <span class="string">f&quot;2020-<span class="subst">&#123;t&#125;</span> 00:00:00&quot;</span></span><br><span class="line">    e_time = <span class="string">f&quot;2020-<span class="subst">&#123;t&#125;</span> 21:00:00&quot;</span></span><br><span class="line">    time_format = <span class="string">&quot;%Y-%m%d %H:%M:%S&quot;</span></span><br><span class="line">    s1_array = time.strptime(s_time, time_format)</span><br><span class="line">    e1_array = time.strptime(e_time, time_format)</span><br><span class="line">    s1 = <span class="built_in">str</span>(<span class="built_in">int</span>(time.mktime(s1_array)))</span><br><span class="line">    e1 = <span class="built_in">str</span>(<span class="built_in">int</span>(time.mktime(e1_array)))</span><br><span class="line">    ret = <span class="string">f&quot;<span class="subst">&#123;s1&#125;</span>-<span class="subst">&#123;e1&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line"></span><br><span class="line">    date = get_time(<span class="built_in">input</span>(<span class="string">&quot;&gt;&quot;</span>))</span><br><span class="line">    <span class="built_in">print</span>(date)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;all_count:<span class="subst">&#123;get_count()&#125;</span>  all_ip:<span class="subst">&#123;get_attackip(date)&#125;</span>&quot;</span>, end=<span class="string">&quot;\r\n\r\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> k, v <span class="keyword">in</span> type_list.items():</span><br><span class="line">        total = get_data(k)</span><br><span class="line">        <span class="keyword">if</span> total:</span><br><span class="line">            <span class="comment"># print(add_counts, total)</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;|&#x27;</span>, v.ljust(<span class="number">5</span>), <span class="built_in">str</span>(total).center(<span class="number">5</span>), <span class="string">&#x27;|&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;|&#x27;</span>, <span class="string">&#x27;情报模块&#x27;</span>.ljust(<span class="number">5</span>), <span class="built_in">str</span>(all_count - add_counts).center(<span class="number">5</span>), <span class="string">&#x27;|&#x27;</span>)</span><br><span class="line">    <span class="comment"># 75600  21小时   # 86400  24小时</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="攻击IP-Top10导出"><a href="#攻击IP-Top10导出" class="headerlink" title="攻击IP Top10导出"></a>攻击IP Top10导出</h1><p>main2.py 为查询指定日期段每日攻击IP次数前十的IP信息<br>看源码196行修改日期 113、114修改开始、结束的年份和时分秒</p>
+<p>PS:查询IP归属地接口有免费查询次数限制，次数我忘了<br><img src="https://photo.o0o0.club/README.md/1602700399184.png" alt="enter description here"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># encoding: utf-8</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">@file: main.py</span></span><br><span class="line"><span class="string">@time: 2020-9-13 18:53</span></span><br><span class="line"><span class="string">@ide: PyCharm</span></span><br><span class="line"><span class="string">@author: guoker</span></span><br><span class="line"><span class="string">@contact: attackesb@gmail.com</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">requests.packages.urllib3.disable_warnings()</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;https://XXXXX:9443/rpc&quot;</span></span><br><span class="line"></span><br><span class="line">proxies = &#123;</span><br><span class="line">    <span class="string">&quot;http&quot;</span>: <span class="string">&quot;socks5://127.0.0.1:1XXX&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;https&#x27;</span>: <span class="string">&#x27;socks5://127.0.0.1:1XXXX&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">proxies2 = &#123;</span><br><span class="line">    <span class="string">&quot;http&quot;</span>: <span class="string">&quot;socks5://127.0.0.1:XX&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;https&#x27;</span>: <span class="string">&#x27;socks5://127.0.0.1:XXX&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">&#x27;accept&#x27;</span>: <span class="string">&quot;application/json, text/plain, */*&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;sec-fetch-dest&#x27;</span>: <span class="string">&quot;empty&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;content-type&#x27;</span>: <span class="string">&quot;application/json;charset=UTF-8&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;cache-control&#x27;</span>: <span class="string">&quot;no-cache&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Cookie&quot;</span>: <span class="string">&quot;替换Cookie&quot;</span>,<span class="comment"># 换成你的Cookie</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">type_list = &#123;</span><br><span class="line">    <span class="number">0</span>: <span class="string">&quot;SQL 注入&quot;</span>,</span><br><span class="line">    <span class="number">1</span>: <span class="string">&quot;XSS&quot;</span>,</span><br><span class="line">    <span class="number">2</span>: <span class="string">&quot;CSRF&quot;</span>,</span><br><span class="line">    <span class="number">3</span>: <span class="string">&quot;SSRF&quot;</span>,</span><br><span class="line">    <span class="number">4</span>: <span class="string">&quot;拒绝服务&quot;</span>,</span><br><span class="line">    <span class="number">5</span>: <span class="string">&quot;后门&quot;</span>,</span><br><span class="line">    <span class="number">6</span>: <span class="string">&quot;反序列化&quot;</span>,</span><br><span class="line">    <span class="number">7</span>: <span class="string">&quot;代码执行&quot;</span>,</span><br><span class="line">    <span class="number">8</span>: <span class="string">&quot;代码注入&quot;</span>,</span><br><span class="line">    <span class="number">9</span>: <span class="string">&quot;命令注入&quot;</span>,</span><br><span class="line">    <span class="number">10</span>: <span class="string">&quot;文件上传&quot;</span>,</span><br><span class="line">    <span class="number">11</span>: <span class="string">&quot;文件包含&quot;</span>,</span><br><span class="line">    <span class="number">12</span>: <span class="string">&quot;重定向&quot;</span>,</span><br><span class="line">    <span class="number">13</span>: <span class="string">&quot;权限不当&quot;</span>,</span><br><span class="line">    <span class="number">14</span>: <span class="string">&quot;信息泄露&quot;</span>,</span><br><span class="line">    <span class="number">15</span>: <span class="string">&quot;未授权访问&quot;</span>,</span><br><span class="line">    <span class="number">16</span>: <span class="string">&quot;不安全的配置&quot;</span>,</span><br><span class="line">    <span class="number">17</span>: <span class="string">&quot;XXE&quot;</span>,</span><br><span class="line">    <span class="number">18</span>: <span class="string">&quot;XPath 注入&quot;</span>,</span><br><span class="line">    <span class="number">19</span>: <span class="string">&quot;LDAP 注入&quot;</span>,</span><br><span class="line">    <span class="number">20</span>: <span class="string">&quot;目录穿越&quot;</span>,</span><br><span class="line">    <span class="number">21</span>: <span class="string">&quot;扫描器&quot;</span>,</span><br><span class="line">    <span class="number">22</span>: <span class="string">&quot;水平权限绕过&quot;</span>,</span><br><span class="line">    <span class="number">23</span>: <span class="string">&quot;垂直权限绕过&quot;</span>,</span><br><span class="line">    <span class="number">24</span>: <span class="string">&quot;文件修改&quot;</span>,</span><br><span class="line">    <span class="number">25</span>: <span class="string">&quot;文件读取&quot;</span>,</span><br><span class="line">    <span class="number">26</span>: <span class="string">&quot;文件删除&quot;</span>,</span><br><span class="line">    <span class="number">27</span>: <span class="string">&quot;逻辑错误&quot;</span>,</span><br><span class="line">    <span class="number">28</span>: <span class="string">&quot;CRLF 注入&quot;</span>,</span><br><span class="line">    <span class="number">29</span>: <span class="string">&quot;模版注入&quot;</span>,</span><br><span class="line">    <span class="number">30</span>: <span class="string">&quot;点击劫持&quot;</span>,</span><br><span class="line">    <span class="number">31</span>: <span class="string">&quot;缓冲器溢出&quot;</span>,</span><br><span class="line">    <span class="number">32</span>: <span class="string">&quot;整数溢出&quot;</span>,</span><br><span class="line">    <span class="number">33</span>: <span class="string">&quot;格式化字符串&quot;</span>,</span><br><span class="line">    <span class="number">34</span>: <span class="string">&quot;条件竞争&quot;</span>,</span><br><span class="line">    <span class="number">61</span>: <span class="string">&quot;超时&quot;</span>,</span><br><span class="line">    <span class="number">62</span>: <span class="string">&quot;未知&quot;</span>,</span><br><span class="line">    -<span class="number">1</span>: <span class="string">&quot;非 Web 攻击&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">add_count = <span class="built_in">int</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># all_count = int()</span></span><br><span class="line"></span><br><span class="line">add_counts = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_data</span>(<span class="params">targe</span>):</span></span><br><span class="line">    <span class="keyword">global</span> add_counts</span><br><span class="line">    payload = <span class="string">&quot;&#123;\&quot;method\&quot;:\&quot;RequestLogService.GetRequestLogList\&quot;,\&quot;params\&quot;:&#123;\&quot;count\&quot;:1,\&quot;offset\&quot;:0,\&quot;timestamp\&quot;:[&#123;\&quot;target\&quot;:\&quot;&quot;</span>+ date +<span class="string">&quot;\&quot;,\&quot;oper\&quot;:\&quot;=\&quot;&#125;],\&quot;attack_type\&quot;:[&#123;\&quot;target\&quot;:&quot;</span> + <span class="built_in">str</span>(targe) + <span class="string">&quot;,\&quot;oper\&quot;:\&quot;=\&quot;&#125;]&#125;,\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;0\&quot;&#125;&quot;</span></span><br><span class="line">    response = requests.request(<span class="string">&quot;POST&quot;</span>, url, data=payload, headers=headers, proxies=proxies, verify=<span class="literal">False</span>)</span><br><span class="line">    ret = response.json()</span><br><span class="line">    total = ret[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;total&#x27;</span>]</span><br><span class="line">    <span class="comment"># add_counts = add_counts + total</span></span><br><span class="line">    add_counts += total</span><br><span class="line">    <span class="comment"># print(add_counts)</span></span><br><span class="line">    <span class="keyword">return</span> total</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_attackip</span>(<span class="params">dates</span>):</span></span><br><span class="line">    <span class="comment"># date_old = int(dates) - 1</span></span><br><span class="line">    payload = <span class="string">&quot;&#123;\&quot;method\&quot;:\&quot;RequestLogService.GetSrcIPAttackAnalysis\&quot;,\&quot;params\&quot;:&#123;\&quot;count\&quot;:1,\&quot;offset\&quot;:0,\&quot;timestamp\&quot;:[&#123;\&quot;oper\&quot;:\&quot;=\&quot;,\&quot;target\&quot;:\&quot;&quot;</span>+ dates +<span class="string">&quot;\&quot;&#125;]&#125;,\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;0\&quot;&#125;&quot;</span></span><br><span class="line">    response = requests.request(<span class="string">&quot;POST&quot;</span>, url, data=payload, headers=headers, proxies=proxies, verify=<span class="literal">False</span>)</span><br><span class="line">    ret = response.json()</span><br><span class="line">    old_total = ret[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;total&#x27;</span>]</span><br><span class="line">    <span class="keyword">return</span> old_total</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_count</span>(<span class="params">date</span>):</span></span><br><span class="line">    <span class="keyword">global</span> all_count</span><br><span class="line">    <span class="built_in">all</span> = <span class="string">&quot;&#123;\&quot;method\&quot;:\&quot;RequestLogService.GetRequestLogList\&quot;,\&quot;params\&quot;:&#123;\&quot;count\&quot;:1,\&quot;offset\&quot;:0,\&quot;timestamp\&quot;:[&#123;\&quot;target\&quot;:\&quot;&quot;</span>+ date +<span class="string">&quot;\&quot;,\&quot;oper\&quot;:\&quot;=\&quot;&#125;]&#125;,\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;0\&quot;&#125;&quot;</span></span><br><span class="line">    response = requests.request(<span class="string">&quot;POST&quot;</span>, url, data=<span class="built_in">all</span>, headers=headers, proxies=proxies, verify=<span class="literal">False</span>)</span><br><span class="line">    ret = response.json()</span><br><span class="line">    all_count = <span class="built_in">int</span>(ret[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;total&#x27;</span>])</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span>(all_count)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_time</span>(<span class="params">t</span>):</span></span><br><span class="line">    s_time = <span class="string">f&quot;2020-<span class="subst">&#123;t&#125;</span> 00:00:00&quot;</span></span><br><span class="line">    e_time = <span class="string">f&quot;2020-<span class="subst">&#123;<span class="built_in">str</span>(<span class="built_in">int</span>(t) + <span class="number">1</span>)&#125;</span> 00:00:00&quot;</span></span><br><span class="line">    time_format = <span class="string">&quot;%Y-%m%d %H:%M:%S&quot;</span></span><br><span class="line">    s1_array = time.strptime(s_time, time_format)</span><br><span class="line">    e1_array = time.strptime(e_time, time_format)</span><br><span class="line">    s1 = <span class="built_in">str</span>(<span class="built_in">int</span>(time.mktime(s1_array)))</span><br><span class="line">    e1 = <span class="built_in">str</span>(<span class="built_in">int</span>(time.mktime(e1_array)))</span><br><span class="line">    ret = <span class="string">f&quot;<span class="subst">&#123;s1&#125;</span>-<span class="subst">&#123;e1&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_time_format</span>(<span class="params">times</span>):</span></span><br><span class="line">    times = <span class="built_in">int</span>(times)</span><br><span class="line">    timeArray = time.localtime(times)</span><br><span class="line">    otherStyleTime = time.strftime(<span class="string">&quot;%Y/%m/%d %H:%M:%S&quot;</span>, timeArray)</span><br><span class="line">    <span class="keyword">return</span> otherStyleTime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_location</span>(<span class="params">ip</span>):</span></span><br><span class="line">    url = <span class="string">f&quot;http://freeapi.ipip.net/<span class="subst">&#123;ip&#125;</span>&quot;</span></span><br><span class="line">    headers = &#123;</span><br><span class="line">        <span class="string">&#x27;user-agent&#x27;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.3987.132 Safari/637.36&quot;</span>,</span><br><span class="line">        <span class="string">&#x27;accept&#x27;</span>: <span class="string">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    time.sleep(<span class="number">0.5</span>)</span><br><span class="line">    response = requests.request(<span class="string">&quot;GET&quot;</span>, url, headers=headers, proxies=proxies2)</span><br><span class="line">    tmp = <span class="built_in">eval</span>(response.text)</span><br><span class="line">    text = <span class="string">&#x27;&#x27;</span>.join(tmp)</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">format_data</span>(<span class="params">data</span>):</span></span><br><span class="line">    src_ip = data[<span class="string">&quot;src_ip&quot;</span>]</span><br><span class="line">    location = get_location(data[<span class="string">&quot;src_ip&quot;</span>])  <span class="comment"># 物理地址---要手动查询</span></span><br><span class="line">    <span class="built_in">type</span> = data[<span class="string">&quot;type&quot;</span>]</span><br><span class="line">    attack_count = data[<span class="string">&quot;attack_count&quot;</span>]</span><br><span class="line">    ip_num = data[<span class="string">&quot;ip_num&quot;</span>]</span><br><span class="line">    last_attack_time = get_time_format(data[<span class="string">&quot;last_attack_time&quot;</span>]) <span class="comment"># 上一次攻击时间 ---需要手动转换时间</span></span><br><span class="line">    text = <span class="string">f&quot;<span class="subst">&#123;src_ip&#125;</span>,<span class="subst">&#123;location&#125;</span>,<span class="subst">&#123;<span class="built_in">type</span>&#125;</span>,<span class="subst">&#123;attack_count&#125;</span>,<span class="subst">&#123;ip_num&#125;</span>,<span class="subst">&#123;last_attack_time&#125;</span>\r&quot;</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;FK01_attackIpTop.csv&#x27;</span>, <span class="string">&#x27;a+&#x27;</span>, encoding=<span class="string">&#x27;gbk&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(text)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_attack_top</span>(<span class="params">date</span>):</span></span><br><span class="line">    payload = <span class="string">&quot;&#123;\&quot;method\&quot;:\&quot;RequestLogService.GetSrcIPAttackAnalysis\&quot;,\&quot;params\&quot;:&#123;\&quot;count\&quot;:10,\&quot;offset\&quot;:0,\&quot;timestamp\&quot;:[&#123;\&quot;oper\&quot;:\&quot;=\&quot;,\&quot;target\&quot;:\&quot;&quot;</span>+ date +<span class="string">&quot;\&quot;&#125;]&#125;,\&quot;jsonrpc\&quot;:\&quot;2.0\&quot;,\&quot;id\&quot;:\&quot;0\&quot;&#125;&quot;</span></span><br><span class="line">    response = requests.request(<span class="string">&quot;POST&quot;</span>, url, data=payload, headers=headers, proxies=proxies, verify=<span class="literal">False</span>)</span><br><span class="line">    ret = response.json()</span><br><span class="line">    data = ret[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;data&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span>(data)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;FK01_attackIpTop.csv&#x27;</span>, <span class="string">&#x27;a+&#x27;</span>, encoding=<span class="string">&#x27;gbk&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">f&quot;<span class="subst">&#123;i&#125;</span>\r&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> data:</span><br><span class="line">        format_data(a)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span>():</span></span><br><span class="line">    times = [<span class="string">&#x27;0&#x27;</span>+<span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">911</span>,<span class="number">924</span>)]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> times:</span><br><span class="line">        date = get_time(i)</span><br><span class="line">        <span class="comment"># print(date)</span></span><br><span class="line">        a = get_count(date)</span><br><span class="line">        b = get_attackip(date)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;i&#125;</span> :   攻击次数<span class="subst">&#123;a&#125;</span>    封禁IP<span class="subst">&#123;b&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># date = get_time(input(&quot;&gt;&quot;))</span></span><br><span class="line">    <span class="comment"># print(date)</span></span><br><span class="line">    <span class="comment"># print(f&quot;all_count:&#123;get_count()&#125;  all_ip:&#123;get_attackip(date)&#125;&quot;, end=&quot;\r\n\r\n&quot;)</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment"># for k, v in type_list.items():</span></span><br><span class="line">    <span class="comment">#     total = get_data(k)</span></span><br><span class="line">    <span class="comment">#     if total:</span></span><br><span class="line">    <span class="comment">#         # print(add_counts, total)</span></span><br><span class="line">    <span class="comment">#         print(&#x27;|&#x27;, v.ljust(5), str(total).center(5), &#x27;|&#x27;)</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment"># print(&#x27;|&#x27;, &#x27;情报模块&#x27;.ljust(5), str(all_count - add_counts).center(5), &#x27;|&#x27;)</span></span><br><span class="line">    <span class="comment"># # 75600  21小时   # 86400  24小时</span></span><br><span class="line">    <span class="comment"># test()</span></span><br><span class="line">    <span class="comment"># get_attack_top(&quot;1599753600-1599840000&quot;)</span></span><br><span class="line">    <span class="comment"># times = [&#x27;0&#x27; + str(i) for i in range(911, 924)]</span></span><br><span class="line">    times = [<span class="string">&#x27;0&#x27;</span> + <span class="built_in">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">911</span>, <span class="number">925</span>)]  <span class="comment"># 这里我想查询 9月11日-25日每日攻击IP次数排名前十的数据</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> times:</span><br><span class="line">        date = get_time(i)</span><br><span class="line">        get_attack_top(date)</span><br><span class="line"></span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+      <div id="reword-out">
+        <div id="reward-btn">
+          交个朋友
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://o0o0.club/FK01%E6%94%BB%E5%87%BB%E7%B1%BB%E5%9E%8B%E7%BB%9F%E8%AE%A1%E7%9A%84py%E8%84%9A%E6%9C%AC/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/%E5%88%A9%E7%94%A8uuid%E5%AF%B9shellcode%E8%BF%9B%E8%A1%8C%E6%B7%B7%E6%B7%86/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            利用Uuid编码shellcode
+          
+        </div>
+      </a>
+    
+    
+      <a href="/%E5%9C%A8alpine%E4%B8%AD%E5%AE%89%E8%A3%85gevent%E7%9A%84%E9%AA%9A%E6%93%8D%E4%BD%9C/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">在Alpine中安装gevent的骚操作</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "JJV5SI6g6kCVO6UVgTIWnhT1-MdYXbMMI",
+    app_key: "Im4RXpbhuxnxUC2rWJq50eQN",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2021
+        <i class="ri-heart-fill heart_icon"></i> GuoKer
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+        <li>
+          <a href="http://beian.miit.gov.cn/" target="_black">桂ICP备19000641号-1</a>
+        </li>
+        
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://v1.cnzz.com/z_stat.php?id=1277959436&amp;web_id=1277959436'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Guoker&#39;s Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://github.com/GuoKerS/some_script/">辣鸡脚本</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>吹吹牛吗？</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://photo.o0o0.club/wx.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

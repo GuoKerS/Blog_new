@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    Awvs11批量添加、批量删除脚本多线程版（多线程学习） |  GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+<link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Awvs11批量添加、批量删除脚本多线程版（多线程学习）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Awvs11批量添加、批量删除脚本多线程版（多线程学习）
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/Awvs11%E6%89%B9%E9%87%8F%E6%B7%BB%E5%8A%A0%E3%80%81%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4%E8%84%9A%E6%9C%AC%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%89%88%EF%BC%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%89/" class="article-date">
+  <time datetime="2019-01-17T16:00:00.000Z" itemprop="datePublished">2019-01-18</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">6 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>声明：该脚本的作者是jamesj老哥于 2017-5-24 12:03在吾爱上发布的，我拿到脚本后用了一段时间，觉得有些问题，趁着学习python的这段时间，修改下源码练练手。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>有的时候当拿到单位给的大量网站进行漏扫（已授权）但又没买专业扫描器时，人工检测效率太低，就只能靠着网上的免（po）费（jie）扫描器混吃等死。。。</p>
+<p>改动如下：</p>
+<p>1.多线程添加扫描任务<br>2.删除原程序不常用的功能（删除所有扫描任务、查看已存在任务）<br>3.多线程删除已添加任务（由于awvs每次只返回100个任务，原代码每次只能删出一百条，需要重复输入）</p>
+<p>附上代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> urllib2</span><br><span class="line"><span class="keyword">import</span> ssl</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">thread_max = <span class="number">20</span>  <span class="comment"># 程序线程</span></span><br><span class="line">threads = []</span><br><span class="line">del_int = <span class="number">10</span> <span class="comment">#循环删除次数</span></span><br><span class="line">URL_FILE = <span class="string">&#x27;url.txt&#x27;</span><span class="comment">#要扫描的url列表（不加http://）</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">----------改动---------</span></span><br><span class="line"><span class="string">1.多线程添加扫描任务</span></span><br><span class="line"><span class="string">2.删除原程序不常用的功能（删除所有扫描任务、查看已存在任务）</span></span><br><span class="line"><span class="string">3.多线程删除已添加任务（由于awvs每次只返回100个任务，原代码每次只能删出一百条，需要重复输入）</span></span><br><span class="line"><span class="string">----------改动---------</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#The second revision comes from GuoKer </span></span><br><span class="line">__author = <span class="string">&quot;jamesj&quot;</span></span><br><span class="line"><span class="comment"># localhost:3443全部替换为awvs所在的服务器及端口</span></span><br><span class="line">username = <span class="string">&#x27;guokers@gov.cn&#x27;</span></span><br><span class="line"><span class="comment"># 账号邮箱</span></span><br><span class="line">pw = <span class="string">&#x27;a50ce9f2d32efac35d30e962bd6e08899e3f0aece837b0198ac55b86fd85e199&#x27;</span></span><br><span class="line"><span class="comment"># sha256加密后的密码。</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	_create_unverified_https_context = ssl._create_unverified_context</span><br><span class="line"><span class="keyword">except</span> AttributeError:</span><br><span class="line">	<span class="keyword">pass</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	ssl._create_default_https_context = _create_unverified_https_context</span><br><span class="line"></span><br><span class="line">url_login = <span class="string">&quot;https://localhost:3443/api/v1/me/login&quot;</span></span><br><span class="line">send_headers_login = &#123;</span><br><span class="line">    <span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;localhost:3443&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json, text/plain, */*&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept-Language&#x27;</span>: <span class="string">&#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept-Encoding&#x27;</span>: <span class="string">&#x27;gzip, deflate, br&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json;charset=utf-8&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data_login = <span class="string">&#x27;&#123;&quot;email&quot;:&quot;&#x27;</span> + username + <span class="string">&#x27;&quot;,&quot;password&quot;:&quot;&#x27;</span> + pw + <span class="string">&#x27;&quot;,&quot;remember_me&quot;:false&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line">req_login = urllib2.Request(url_login, headers=send_headers_login)</span><br><span class="line">response_login = urllib2.urlopen(req_login, data_login)</span><br><span class="line">xauth = response_login.headers[<span class="string">&#x27;X-Auth&#x27;</span>]</span><br><span class="line">COOOOOOOOkie = response_login.headers[<span class="string">&#x27;Set-Cookie&#x27;</span>]</span><br><span class="line"><span class="comment">#print&quot;当前验证信息如下\r\n cookie : %r  \r\n X-Auth : %r  &quot; % (COOOOOOOOkie, xauth)</span></span><br><span class="line">send_headers2 = &#123;</span><br><span class="line">    <span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;localhost:3443&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json, text/plain, */*&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept-Language&#x27;</span>: <span class="string">&#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json;charset=utf-8&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;X-Auth&#x27;</span>: xauth,</span><br><span class="line">    <span class="string">&#x27;Cookie&#x27;</span>: COOOOOOOOkie</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 以上代码实现登录（获取cookie）和校验值</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------</span></span><br><span class="line">url = <span class="string">&quot;https://localhost:3443/api/v1/targets&quot;</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_exec_scan</span>(<span class="params">url_txt</span>):</span></span><br><span class="line">    target_url = <span class="string">&#x27;http://&#x27;</span> + url_txt</span><br><span class="line">    data = <span class="string">&#x27;&#123;&quot;description&quot;:&quot;222&quot;,&quot;address&quot;:&quot;&#x27;</span> + target_url + <span class="string">&#x27;&quot;,&quot;criticality&quot;:&quot;10&quot;&#125;&#x27;</span></span><br><span class="line">    <span class="comment"># data = urllib.urlencode(data)由于使用json格式所以不用添加</span></span><br><span class="line">    req = urllib2.Request(url, headers=send_headers2)</span><br><span class="line">    response = urllib2.urlopen(req, data)</span><br><span class="line">    jo = json.loads(response.read())</span><br><span class="line">    target_id = jo[<span class="string">&#x27;target_id&#x27;</span>]  <span class="comment"># 获取添加后的任务ID</span></span><br><span class="line">    <span class="comment"># 以上代码实现批量添加</span></span><br><span class="line"></span><br><span class="line">    url_scan = <span class="string">&quot;https://localhost:3443/api/v1/scans&quot;</span></span><br><span class="line">    headers_scan = &#123;</span><br><span class="line">        <span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;localhost:3443&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json, text/plain, */*&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Accept-Language&#x27;</span>: <span class="string">&#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Accept-Encoding&#x27;</span>: <span class="string">&#x27;gzip, deflate, br&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json;charset=utf-8&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;X-Auth&#x27;</span>: xauth,</span><br><span class="line">        <span class="string">&#x27;Cookie&#x27;</span>: COOOOOOOOkie,</span><br><span class="line">    &#125;</span><br><span class="line">    data_scan = <span class="string">&#x27;&#123;&quot;target_id&quot;:&#x27;</span> + <span class="string">&#x27;\&quot;&#x27;</span> + target_id + <span class="string">&#x27;\&quot;&#x27;</span> + <span class="string">&#x27;,&quot;profile_id&quot;:&quot;11111111-1111-1111-1111-111111111111&quot;,&quot;schedule&quot;:&#123;&quot;disable&quot;:false,&quot;start_date&quot;:null,&quot;time_sensitive&quot;:false&#125;,&quot;ui_session_id&quot;:&quot;66666666666666666666666666666666&quot;&#125;&#x27;</span></span><br><span class="line">    req_scan = urllib2.Request(url_scan, headers=headers_scan)</span><br><span class="line">    response_scan = urllib2.urlopen(req_scan,<span class="built_in">str</span>(data_scan))</span><br><span class="line">    <span class="built_in">print</span> target_url + <span class="string">&quot;添加成功！&quot;</span></span><br><span class="line">    threads.pop(<span class="number">0</span>)<span class="comment">#线程序结束标志</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">count</span>():</span></span><br><span class="line">    url_count = <span class="string">&quot;https://localhost:3443/api/v1/notifications/count&quot;</span></span><br><span class="line">    req_count = urllib2.Request(url_count, headers=send_headers2)</span><br><span class="line">    response_count = urllib2.urlopen(req_count)</span><br><span class="line">    <span class="built_in">print</span><span class="string">&quot;当前存在%r个通知！&quot;</span> % json.loads(response_count.read())[<span class="string">&#x27;count&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span><span class="string">&quot;-&quot;</span> * <span class="number">20</span></span><br><span class="line">    <span class="comment"># print&quot;已存在以下任务&quot;</span></span><br><span class="line">    url_info = <span class="string">&quot;https://localhost:3443/api/v1/scans&quot;</span></span><br><span class="line">    req_info = urllib2.Request(url_info, headers=send_headers2)</span><br><span class="line">    response_info = urllib2.urlopen(req_info)</span><br><span class="line">    all_info = json.loads(response_info.read())</span><br><span class="line">    num = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> website <span class="keyword">in</span> all_info.get(<span class="string">&quot;scans&quot;</span>):</span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">        <span class="comment"># print </span></span><br><span class="line">        <span class="comment"># website.get(&quot;target&quot;).get(&quot;address&quot;) + &quot;\n target_id:&quot; + website.get(&quot;scan_id&quot;)</span></span><br><span class="line">    <span class="built_in">print</span><span class="string">&quot;共 %r个扫描任务(最多显示100个))&quot;</span> % num</span><br><span class="line"><span class="comment"># count()</span></span><br><span class="line"><span class="comment"># scan、target、notification！</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">del_targets</span>():</span></span><br><span class="line">    url_info = <span class="string">&quot;https://localhost:3443/api/v1/targets&quot;</span></span><br><span class="line">    req_info = urllib2.Request(url_info, headers=send_headers2)</span><br><span class="line">    response_info = urllib2.urlopen(req_info)</span><br><span class="line">    all_info = json.loads(response_info.read())</span><br><span class="line">    <span class="keyword">for</span> website <span class="keyword">in</span> all_info[<span class="string">&quot;targets&quot;</span>]:</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">if</span> thread_max &gt; <span class="built_in">len</span>(threads):</span><br><span class="line">                threads.append(threading.Thread(target=del_tmp,args=(website,)).start())<span class="comment">#启动子线程</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># del_targets()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">del_tmp</span>(<span class="params">website</span>):</span> <span class="comment">#删除任务</span></span><br><span class="line">    <span class="keyword">if</span> (website.get(<span class="string">&quot;description&quot;</span>)) == <span class="string">&quot;222&quot;</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            url_scan_del = <span class="string">&quot;https://localhost:3443/api/v1/targets/&quot;</span> + <span class="built_in">str</span>(website[<span class="string">&quot;target_id&quot;</span>])</span><br><span class="line">            req_del = urllib2.Request(url_scan_del, headers=send_headers2)</span><br><span class="line">            req_del.get_method = <span class="keyword">lambda</span>: <span class="string">&#x27;DELETE&#x27;</span></span><br><span class="line">            response_del = urllib2.urlopen(req_del)</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;ok!&quot;</span></span><br><span class="line">            threads.pop(<span class="number">0</span>)<span class="comment">#线程序结束标志</span></span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            exit()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;-&quot;</span> * <span class="number">20</span></span><br><span class="line">    count()</span><br><span class="line">    <span class="built_in">print</span><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    1、添加扫描任务并执行请输入1</span></span><br><span class="line"><span class="string">    2、删除所有使用该脚本添加的任务请输入2</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    choice = raw_input(<span class="string">&quot;&gt;&quot;</span>)</span><br><span class="line">    <span class="comment">#	print type(choice)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> choice == <span class="string">&quot;1&quot;</span>:</span><br><span class="line">        start_time = time.time()</span><br><span class="line">        <span class="keyword">for</span> url_txt <span class="keyword">in</span> <span class="built_in">open</span>(URL_FILE,<span class="string">&#x27;r&#x27;</span>).read().split():</span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                <span class="keyword">if</span> thread_max &gt; <span class="built_in">len</span>(threads):</span><br><span class="line">                    threads.append(threading.Thread(target=add_exec_scan,args=(url_txt,)).start())<span class="comment">#启动线程</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">        count()</span><br><span class="line">        all_time = time.time() - start_time</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;共用时&#x27;</span>,all_time</span><br><span class="line">    <span class="keyword">elif</span> choice == <span class="string">&quot;2&quot;</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(del_int):</span><br><span class="line">            del_targets()</span><br><span class="line">        count()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span></span><br><span class="line">        <span class="string">&quot;请重新运行并请输入1、2选择。&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2019/01/18/5c418137363e0.jpg" alt="- - " title="- -"></p>
+ 
+      <!-- reward -->
+      
+      <div id="reword-out">
+        <div id="reward-btn">
+          交个朋友
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://o0o0.club/Awvs11%E6%89%B9%E9%87%8F%E6%B7%BB%E5%8A%A0%E3%80%81%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4%E8%84%9A%E6%9C%AC%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%89%88%EF%BC%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%89/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/%E4%BD%A0%E5%BF%85%E9%A1%BB%E9%9D%9E%E5%B8%B8%E5%8A%AA%E5%8A%9B%EF%BC%8C%E6%89%8D%E8%83%BD%E7%9C%8B%E8%B5%B7%E6%9D%A5%E6%AF%AB%E4%B8%8D%E8%B4%B9%E5%8A%9B%E3%80%82/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            你必须非常努力，才能看起来毫不费力。
+          
+        </div>
+      </a>
+    
+    
+      <a href="/Python%E5%AE%9E%E7%8E%B0%E6%AF%8F%E6%97%A5%E5%AE%9A%E6%97%B6%E5%8F%91%E9%80%81%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5%E7%BB%99%E8%87%AA%E5%B7%B1%EF%BC%88%E6%88%96%E5%85%B6%E4%BB%96%E4%BA%BA%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Python实现每日定时发送天气预报给自己（或其他人）</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "JJV5SI6g6kCVO6UVgTIWnhT1-MdYXbMMI",
+    app_key: "Im4RXpbhuxnxUC2rWJq50eQN",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2021
+        <i class="ri-heart-fill heart_icon"></i> GuoKer
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+        <li>
+          <a href="http://beian.miit.gov.cn/" target="_black">桂ICP备19000641号-1</a>
+        </li>
+        
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://v1.cnzz.com/z_stat.php?id=1277959436&amp;web_id=1277959436'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Guoker&#39;s Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://github.com/GuoKerS/some_script/">辣鸡脚本</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>吹吹牛吗？</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://photo.o0o0.club/wx.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    记一次对某某云镜像中的数据提取与本地搭建（Mongodb与Innodb引擎Mysql） |  GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+<link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-记一次对某某云镜像中的数据提取与本地搭建（Mongodb与Innodb引擎）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  记一次对某某云镜像中的数据提取与本地搭建（Mongodb与Innodb引擎Mysql）
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E6%9F%90%E4%BA%91%E9%95%9C%E5%83%8F%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%EF%BC%88Mongodb%E4%B8%8EInnodb%E5%BC%95%E6%93%8E%EF%BC%89/" class="article-date">
+  <time datetime="2019-12-22T16:00:00.000Z" itemprop="datePublished">2019-12-23</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">9 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>由于工作的需要，负责远程协助某单位进行数据提取与本地搭建，由于此前并没有操作过Mongodb和Mysql的Innodb引擎数据库本地搭建，因此有了此文做个记录。（以下所有操作均是在本机完成，在操作前已经使用了frp+ssh隧道技术，将远程网络环境完全转发至本地。PS:后续打算捣鼓个内网穿透、隧道技术的学习记录，给自己做个总结。）</p>
+<h1 id="挂载-raw-镜像"><a href="#挂载-raw-镜像" class="headerlink" title="挂载 raw 镜像"></a>挂载 raw 镜像</h1><p>由于镜像是raw格式，因此考虑使用losetup挂载回环设备进行数据库的提取。以下操作环境远程的centos7系统（vm虚拟机，通过共享目录将镜像文件夹挂载到虚拟机中）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">losetup -f # 查询可用的回环设备,模式没使用显示为loop0以此类推loop1、loop2。。。。</span><br><span class="line"></span><br><span class="line">losetup /dev/loop0 /mnt/hgfs/10.0.0.1.raw # 块设备挂载</span><br><span class="line"></span><br><span class="line">kpartx -a /dev/loop0 # 块设备分区映射</span><br><span class="line"></span><br><span class="line"># 接下来可以使用ls /dev/mapper 查看分区入口，一般是loop0p1</span><br><span class="line"></span><br><span class="line">mount /dev/mapper/loop0p1 /vmdisk #将loop0p1挂载到根目录下的vmdisk目录中（目录可以自行mkdir创建一下）</span><br></pre></td></tr></table></figure>
+
+<p>卸载设备如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">umount /vmdisk</span><br><span class="line"></span><br><span class="line">kpartx -d /dev/loop0</span><br><span class="line"></span><br><span class="line">losetup -d /dev/loop0</span><br></pre></td></tr></table></figure>
+<h1 id="恢复过程"><a href="#恢复过程" class="headerlink" title="恢复过程"></a>恢复过程</h1><h2 id="Mongodb"><a href="#Mongodb" class="headerlink" title="Mongodb"></a>Mongodb</h2><p>由于原先并没怎么接触过mongodb数据库，因此在恢复的时候踩了许多坑，最终正解如下。</p>
+<p>首先在 usr.local/mongodb/data/db 中找到数据库文件  wt格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar zcvf mongodb_db.tar.gz db/	# 打包</span><br><span class="line">tar zxvf mongodb				# 解压</span><br></pre></td></tr></table></figure>
+<p>在虚拟机中安装对应版本的mongodb。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install https://repo.mongodb.org/yum/redhat/7/mongodb-org/3.2/x86_64/RPMS/mongodb-org-server-3.2.17-1.el7.x86_64.rpm</span><br></pre></td></tr></table></figure>
+<p>在查询相关资料时得知mongodb如果意外关闭的话需要对数据进行恢复，因为我拿到的直接是镜像（并未通过常规手段关闭服务后经行打包）因此拿到数据库文件后需要先对数据进行修复。</p>
+<p>首先删除db目下的 mongod.lock、WiredTiger.lock、journal 文件，然后使用 –repari  重建索引,但在恢复过程中还是爆出了一系列的错误，最终逐一排查得以解决恢复数据库并成功拉起mongodb服务。</p>
+<p><strong>在做任何删改操作时，都请务必cp一份备份，以防万一。</strong></p>
+<p>修改文件句柄数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#数据库接近20G有大量文件，首先遇到的报错就是提示文件句柄满而导致恢复过程中断</span><br><span class="line"></span><br><span class="line">ulimit -n 4096</span><br></pre></td></tr></table></figure>
+
+<p>修改大内存页面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo never &gt;&gt;  /sys/kernel/mm/transparent_hugepage/enabled</span><br><span class="line">echo never &gt;&gt;  /sys/kernel/mm/transparent_hugepage/defrag</span><br></pre></td></tr></table></figure>
+
+<p>恢复</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#这里也爆了错 通过增加storageEngine wiredTiger指定引擎</span><br><span class="line">#其中/home/bak/mongodb/data/db 表示你数据库所在位置</span><br><span class="line">mongod --repair --dbpath /home/bak/mongodb/data/db --storageEngine wiredTiger</span><br></pre></td></tr></table></figure>
+
+<p>启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod --dbpath /home/bak/mongodb/data/db --storageEngine wiredTiger</span><br></pre></td></tr></table></figure>
+
+<p>后台运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod --dbpath=/home/bak/mongodb/data/db --logpath=/home/bak/mongodb/logs/mongodb.log --port=27017 --storageEngine wiredTiger --logappend --fork</span><br></pre></td></tr></table></figure>
+<p>关闭</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod --shutdown --dbpath /home/bak/mongodb/data/db/</span><br></pre></td></tr></table></figure>
+<p>至此数据库成功恢复并在本地运行。(*^__^*)开心</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E6%9F%90%E4%BA%91%E9%95%9C%E5%83%8F%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%EF%BC%88Mongodb%E4%B8%8EInnodb%E5%BC%95%E6%93%8E%EF%BC%89/1577117398583.png" alt="mongodb"></p>
+<h2 id="Innodb引擎数据库"><a href="#Innodb引擎数据库" class="headerlink" title="Innodb引擎数据库"></a>Innodb引擎数据库</h2><p>当时在找到mysql的data目录时以为直接打包后拖至本地的data目录中即可恢复，却并未注意到表是由.frm和.idb文件组成，因此导致了在查询时找不到表名的错误。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from ks_admin;</span><br><span class="line"></span><br><span class="line">ERROR 1146 (42S02): Table &#x27;test.ks_admin&#x27; doesn&#x27;t exist</span><br></pre></td></tr></table></figure>
+<p>后来查阅资料得知从5.5开始，默认使用Innodb做表存储引擎，且由于事务的存在，导致这些文件如果直接复制的话是不可以还原直接查看数据。<br>而又由于innodb表存储引擎的数据都是存放在idb文件中，因此尝试通过从idb文件内恢复数据。最后有幸在<a target="_blank" rel="noopener" href="http://www.zcgonvh.com/">zcgonvh</a>大佬的博客中找到了解决方法，其大致思路为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1.使用mysqlfrm工具将frm转换为建表语句</span><br><span class="line">2.创建空表</span><br><span class="line">3.释放表空间</span><br><span class="line">4.复制ibd文件，还原表空间</span><br></pre></td></tr></table></figure>
+<p>并且大佬还特此编写了恢复工具（再次感谢zcgonvh大佬）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">工具的大致原理</span><br><span class="line"></span><br><span class="line">1.修改frm头部标志位为_DB_TYPE_HEAP，表示内存表</span><br><span class="line">2.修改frm文件中保存的表引擎名称为MEMORY</span><br><span class="line">3.复制文件到数据目录，执行show create table还原sql</span><br><span class="line">4.替换语句中的MEMORY为原始引擎</span><br></pre></td></tr></table></figure>
+<p>而在大佬提供的工具中只需要使用 InnoDBRestore.exe 即可恢复数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">InnoDBRepair &lt;username&gt; &lt;password&gt; &lt;port&gt; &lt;srcdir&gt; &lt;destDB&gt;</span><br><span class="line">InnoDBRepair.exe root pass 3306 c:\dbcopy my_database</span><br></pre></td></tr></table></figure>
+<p>大佬编译好的程序，默认连接到本地mysql，但所幸大佬已经提供了程序源码。如果mysql服务不在本机的话可以修改源码实现。</p>
+<p>大佬原文参考链接：<a target="_blank" rel="noopener" href="http://www.zcgonvh.com/post/mysql_innodb_restore.html">http://www.zcgonvh.com/post/mysql_innodb_restore.html</a></p>
+<p>修改后编译好的附件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">链接: https://pan.baidu.com/s/198Pq0jC4l7i94CM-P6PiqA 提取码: beb2 </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E6%9F%90%E4%BA%91%E9%95%9C%E5%83%8F%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%EF%BC%88Mongodb%E4%B8%8EInnodb%E5%BC%95%E6%93%8EMysql%EF%BC%89/1577121954425.png"></p>
+<p>修改后源码如下：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Threading;</span><br><span class="line"><span class="keyword">using</span> System.Net;</span><br><span class="line"><span class="keyword">using</span> System.Collections;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Specialized;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Security;</span><br><span class="line"><span class="keyword">using</span> System.Diagnostics;</span><br><span class="line"><span class="keyword">using</span> System.Security.Permissions;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"><span class="keyword">using</span> System.Reflection;</span><br><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="keyword">using</span> System.Text.RegularExpressions;</span><br><span class="line"><span class="keyword">using</span> MySql.Data.MySqlClient;</span><br><span class="line"><span class="keyword">class</span> <span class="title">a</span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span>&#123;</span><br><span class="line">Console.WriteLine(<span class="string">&quot;MySql InnoDB Restore tool by zcgonvh.\r\n&quot;</span>);</span><br><span class="line"><span class="keyword">if</span>(args.Length!=<span class="number">6</span>)&#123;Console.WriteLine(<span class="string">&quot;usage: InnoDBRestore &lt;username&gt; &lt;password&gt; &lt;mysql_ip&gt; &lt;port&gt; &lt;srcdir&gt; &lt;destDB&gt;&quot;</span>);<span class="keyword">return</span>;&#125;</span><br><span class="line"><span class="built_in">string</span> dbname=args[<span class="number">4</span>];</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">MySqlConnection conn=<span class="keyword">new</span> MySqlConnection(<span class="built_in">string</span>.Format(<span class="string">&quot;Host=&#123;2&#125;;UserName=&#123;0&#125;;Password=&#123;1&#125;;Port=&#123;2&#125;;&quot;</span>,args[<span class="number">0</span>],args[<span class="number">1</span>],args[<span class="number">3</span>],args[<span class="number">2</span>]));</span><br><span class="line">conn.Open();</span><br><span class="line">MySqlCommand cmd=conn.CreateCommand();</span><br><span class="line">cmd.CommandTimeout=<span class="number">0x200000</span>;</span><br><span class="line">cmd.CommandText=<span class="string">&quot;SET GLOBAL innodb_file_format=&#x27;Barracuda&#x27;;&quot;</span>;<span class="comment">//innodb-compressed row_format</span></span><br><span class="line">cmd.ExecuteNonQuery();</span><br><span class="line">cmd.CommandText=<span class="string">&quot;set global innodb_file_per_table=&#x27;on&#x27;;&quot;</span>;<span class="comment">//single innodb</span></span><br><span class="line">cmd.ExecuteNonQuery();</span><br><span class="line">cmd.CommandText=<span class="string">&quot;set names utf8;&quot;</span>;</span><br><span class="line">cmd.ExecuteNonQuery();</span><br><span class="line">cmd.CommandText=<span class="string">&quot;create database &quot;</span>+dbname;</span><br><span class="line">cmd.ExecuteNonQuery();</span><br><span class="line">cmd.CommandText=<span class="string">&quot;select @@datadir&quot;</span>;</span><br><span class="line"><span class="built_in">string</span> datadir=cmd.ExecuteScalar()+<span class="string">&quot;\\&quot;</span>+dbname+<span class="string">&quot;\\&quot;</span>;</span><br><span class="line"><span class="built_in">string</span> filedir=args[<span class="number">3</span>];</span><br><span class="line">conn.ChangeDatabase(dbname);</span><br><span class="line"><span class="keyword">foreach</span>(<span class="function">FileInfo frm <span class="keyword">in</span> <span class="keyword">new</span> <span class="title">DirectoryInfo</span>(<span class="params">filedir</span>).<span class="title">GetFiles</span>(<span class="params"><span class="string">&quot;*.frm&quot;</span></span>))</span></span><br><span class="line">&#123;</span><br><span class="line">  Console.WriteLine(<span class="string">&quot;restoring : &quot;</span>+frm);</span><br><span class="line">  <span class="built_in">string</span> tablename=frm.Name.Substring(<span class="number">0</span>,frm.Name.Length<span class="number">-4</span>);</span><br><span class="line">  <span class="comment">//modify frm set type=memory</span></span><br><span class="line">  <span class="keyword">try</span>&#123;</span><br><span class="line">  <span class="built_in">byte</span>[] b=File.ReadAllBytes(frm.FullName);</span><br><span class="line">  <span class="keyword">if</span>(b[<span class="number">0</span>]!=<span class="number">0xfe</span> || b[<span class="number">1</span>]!=<span class="number">0x01</span>) <span class="comment">//table magic fe 01</span></span><br><span class="line">  &#123;</span><br><span class="line">      Console.WriteLine(<span class="string">&quot;not a table frm&quot;</span>);</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(b[<span class="number">3</span>]!=<span class="number">0x0c</span>) <span class="comment">//table type innodb</span></span><br><span class="line">  &#123;</span><br><span class="line">      <span class="keyword">if</span>(b[<span class="number">3</span>]==<span class="number">0x09</span>)</span><br><span class="line">      &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;this is a MyISAM db, copy it.&quot;</span>);</span><br><span class="line">        frm.CopyTo(datadir+frm.Name,<span class="literal">true</span>);</span><br><span class="line">        File.Copy(filedir+tablename+<span class="string">&quot;.MYD&quot;</span>,datadir+tablename+<span class="string">&quot;.MYD&quot;</span>);</span><br><span class="line">        File.Copy(filedir+tablename+<span class="string">&quot;.MYI&quot;</span>,datadir+tablename+<span class="string">&quot;.MYI&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;unknown table type&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">uint</span> offset=BitConverter.ToUInt16(b,<span class="number">6</span>);<span class="comment">//io_size</span></span><br><span class="line">  offset+=BitConverter.ToUInt16(b,<span class="number">0x0e</span>);<span class="comment">//tmp_key_length</span></span><br><span class="line">  offset+=BitConverter.ToUInt16(b,<span class="number">0x10</span>);<span class="comment">//rec_length</span></span><br><span class="line">  offset+=<span class="number">2</span>;<span class="comment">//00 00</span></span><br><span class="line">  <span class="built_in">uint</span> len=BitConverter.ToUInt16(b,(<span class="built_in">int</span>)offset);<span class="comment">//type string length,in word</span></span><br><span class="line">  offset+=<span class="number">2</span>;</span><br><span class="line">  <span class="keyword">if</span>(Encoding.Default.GetString(b,(<span class="built_in">int</span>)offset,(<span class="built_in">int</span>)len)!=<span class="string">&quot;InnoDB&quot;</span>)</span><br><span class="line">  &#123;</span><br><span class="line">      Console.WriteLine(<span class="string">&quot;not an innodb frm&quot;</span>);</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  b[<span class="number">3</span>]=<span class="number">6</span>;<span class="comment">//_DB_TYPE_HEAP</span></span><br><span class="line">  Array.Copy(<span class="keyword">new</span> <span class="built_in">byte</span>[]&#123;<span class="number">0x4d</span>,<span class="number">0x45</span>,<span class="number">0x4d</span>,<span class="number">0x4f</span>,<span class="number">0x52</span>,<span class="number">0x59</span>&#125;,<span class="number">0</span>,b,offset,<span class="number">6</span>);<span class="comment">//MEMORY</span></span><br><span class="line">  FileInfo ibd=<span class="keyword">new</span> FileInfo(frm.FullName.Substring(<span class="number">0</span>,frm.FullName.Length<span class="number">-3</span>)+<span class="string">&quot;ibd&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span>(!ibd.Exists)</span><br><span class="line">  &#123;</span><br><span class="line">    Console.WriteLine(<span class="string">&quot;can not found ibd: &quot;</span>+ibd);</span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  File.WriteAllBytes(datadir+frm.Name,b);<span class="comment">//write to frm file</span></span><br><span class="line">  cmd.CommandText=<span class="string">&quot;flush tables;&quot;</span>;</span><br><span class="line">  cmd.ExecuteNonQuery();</span><br><span class="line">  cmd.CommandText=<span class="string">&quot;SHOW CREATE TABLE `&quot;</span>+tablename+<span class="string">&quot;`&quot;</span>;</span><br><span class="line">  MySqlDataReader reader=cmd.ExecuteReader();</span><br><span class="line">  reader.Read();</span><br><span class="line">  <span class="built_in">string</span> createsql=reader[<span class="number">1</span>].ToString().Replace(<span class="string">&quot; ENGINE=MEMORY&quot;</span>,<span class="string">&quot; ENGINE=InnoDB&quot;</span>);</span><br><span class="line">  reader.Close();</span><br><span class="line">  cmd.CommandText=<span class="string">&quot;drop table `&quot;</span>+tablename+<span class="string">&quot;`&quot;</span>;</span><br><span class="line">  cmd.ExecuteNonQuery();</span><br><span class="line">  cmd.CommandText=createsql;</span><br><span class="line">  cmd.ExecuteNonQuery();</span><br><span class="line">  cmd.CommandText=<span class="string">&quot;ALTER TABLE `&quot;</span>+tablename+<span class="string">&quot;` DISCARD TABLESPACE;&quot;</span>;</span><br><span class="line">  cmd.ExecuteNonQuery();</span><br><span class="line">  ibd.CopyTo(datadir+ibd.Name,<span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">try</span>&#123;</span><br><span class="line">  cmd.CommandText=<span class="string">&quot;ALTER TABLE `&quot;</span>+tablename+<span class="string">&quot;` IMPORT TABLESPACE;&quot;</span>;</span><br><span class="line">  cmd.ExecuteNonQuery();</span><br><span class="line">  &#125;catch(MySqlException ex)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">//change row_format</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">new</span> Regex(<span class="string">@&quot;Schema mismatch \(Table has ROW_TYPE_(\w+) row format, .ibd file has ROW_TYPE_(\w+) row format.\)&quot;</span>).IsMatch(ex.Message))</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">string</span> type=<span class="keyword">new</span> Regex(<span class="string">@&quot;Schema mismatch \(Table has ROW_TYPE_(\w+) row format, .ibd file has ROW_TYPE_(\w+) row format.\)&quot;</span>).Matches(ex.Message)[<span class="number">0</span>].Groups[<span class="number">2</span>].Value.ToString();</span><br><span class="line">      cmd.CommandText=<span class="string">&quot;drop table `&quot;</span>+tablename+<span class="string">&quot;`&quot;</span>;</span><br><span class="line">      cmd.ExecuteNonQuery();</span><br><span class="line">      File.Delete(datadir+ibd.Name);</span><br><span class="line">      cmd.CommandText=createsql+<span class="string">&quot; row_format=&quot;</span>+type;</span><br><span class="line">      cmd.ExecuteNonQuery();</span><br><span class="line">      cmd.CommandText=<span class="string">&quot;ALTER TABLE `&quot;</span>+tablename+<span class="string">&quot;` DISCARD TABLESPACE;&quot;</span>;</span><br><span class="line">      cmd.ExecuteNonQuery();</span><br><span class="line">      ibd.CopyTo(datadir+ibd.Name,<span class="literal">true</span>);</span><br><span class="line">      cmd.CommandText=<span class="string">&quot;ALTER TABLE `&quot;</span>+tablename+<span class="string">&quot;` IMPORT TABLESPACE;&quot;</span>;</span><br><span class="line">      cmd.ExecuteNonQuery();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;Console.WriteLine(<span class="string">&quot;unknown error:&quot;</span>+ex);&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  &#125;catch(Exception ex)&#123;Console.WriteLine(<span class="string">&quot;error!! :&quot;</span>+ex);&#125;</span><br><span class="line">&#125;</span><br><span class="line">conn.Close();</span><br><span class="line">&#125;catch(Exception ex)&#123;Console.WriteLine(ex);&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h1><p>其实raw镜像是可以使用qemu-img直接转成vmdk文件，然后在VMware中打开。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-img convert -f raw f:\192.168.1.2.raw -O vmdk f:\centos.vmdk</span><br></pre></td></tr></table></figure>
+<p>懒0.0如果没用特殊情况的话，直接挂载他不香吗？（手动滑稽）<br>有机会的话找个时间根据zcgonvh大佬的源码捣鼓个python版的出来。</p>
+ 
+      <!-- reward -->
+      
+      <div id="reword-out">
+        <div id="reward-btn">
+          交个朋友
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://o0o0.club/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E6%9F%90%E4%BA%91%E9%95%9C%E5%83%8F%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%EF%BC%88Mongodb%E4%B8%8EInnodb%E5%BC%95%E6%93%8E%EF%BC%89/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/Python%E5%AE%9E%E7%8E%B0%E5%88%A0%E9%99%A4%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95%E4%B8%8E%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Python2删除指定目录文件与日志记录
+          
+        </div>
+      </a>
+    
+    
+      <a href="/Virmach%20%E9%BB%91%E4%BA%94%E4%BC%98%E6%83%A0%E7%9B%91%E6%B5%8B%E8%84%9A%E6%9C%AC(%E5%88%A9%E7%94%A8server%E9%85%B1%E5%AE%9E%E7%8E%B0%E5%BE%AE%E4%BF%A1%E6%94%B6%E4%BF%A1)/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Virmach 黑五优惠监测脚本(利用Server酱实现微信收信)</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "JJV5SI6g6kCVO6UVgTIWnhT1-MdYXbMMI",
+    app_key: "Im4RXpbhuxnxUC2rWJq50eQN",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2021
+        <i class="ri-heart-fill heart_icon"></i> GuoKer
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+        <li>
+          <a href="http://beian.miit.gov.cn/" target="_black">桂ICP备19000641号-1</a>
+        </li>
+        
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://v1.cnzz.com/z_stat.php?id=1277959436&amp;web_id=1277959436'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Guoker&#39;s Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://github.com/GuoKerS/some_script/">辣鸡脚本</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>吹吹牛吗？</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://photo.o0o0.club/wx.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>

