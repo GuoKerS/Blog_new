@@ -6,7 +6,7 @@
   <link href="https://o0o0.club/atom.xml" rel="self"/>
   
   <link href="https://o0o0.club/"/>
-  <updated>2021-03-22T11:45:03.390Z</updated>
+  <updated>2021-12-21T09:16:31.626Z</updated>
   <id>https://o0o0.club/</id>
   
   <author>
@@ -15,6 +15,108 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【学习笔记】C移植Go之MiniDumpWriteDump导出lsass.exe内存</title>
+    <link href="https://o0o0.club/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91C%E7%A7%BB%E6%A4%8DGo%E4%B9%8BMiniDumpWriteDump%E5%AF%BC%E5%87%BAlsass.exe%E5%86%85%E5%AD%98/"/>
+    <id>https://o0o0.club/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91C%E7%A7%BB%E6%A4%8DGo%E4%B9%8BMiniDumpWriteDump%E5%AF%BC%E5%87%BAlsass.exe%E5%86%85%E5%AD%98/</id>
+    <published>2021-11-20T16:00:00.000Z</published>
+    <updated>2021-12-21T09:16:31.626Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;调用MiniDumpWriteDump抓取lsass.exe内存后使用minikatz分析&lt;/p&gt;
+&lt;p&gt;调用栈：&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
+        
+      
+    
+    
+    
+    
+    <category term="渗透测试" scheme="https://o0o0.club/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="Golang" scheme="https://o0o0.club/tags/Golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【学习笔记】C移植Go之CreateToolhelp32Snapshot遍历进程</title>
+    <link href="https://o0o0.club/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91C%E7%A7%BB%E6%A4%8DGo%E4%B9%8BCreateToolhelp32Snapshot%E9%81%8D%E5%8E%86%E8%BF%9B%E7%A8%8B/"/>
+    <id>https://o0o0.club/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91C%E7%A7%BB%E6%A4%8DGo%E4%B9%8BCreateToolhelp32Snapshot%E9%81%8D%E5%8E%86%E8%BF%9B%E7%A8%8B/</id>
+    <published>2021-11-15T16:00:00.000Z</published>
+    <updated>2021-12-21T09:00:58.002Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Golang源码&quot;&gt;&lt;a href=&quot;#Golang源码&quot; class=&quot;headerlink&quot; title=&quot;Golang源码&quot;&gt;&lt;/a&gt;Golang源码&lt;/h1&gt;&lt;p&gt;Go:go version go1.16.5</summary>
+        
+      
+    
+    
+    
+    
+    <category term="渗透测试" scheme="https://o0o0.club/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="Golang" scheme="https://o0o0.club/tags/Golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【学习笔记】C移植Go之NetUserAdd添加系统账号</title>
+    <link href="https://o0o0.club/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91C%E7%A7%BB%E6%A4%8DGo%E4%B9%8BNetUserAdd%E6%B7%BB%E5%8A%A0%E7%B3%BB%E7%BB%9F%E8%B4%A6%E5%8F%B7/"/>
+    <id>https://o0o0.club/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91C%E7%A7%BB%E6%A4%8DGo%E4%B9%8BNetUserAdd%E6%B7%BB%E5%8A%A0%E7%B3%BB%E7%BB%9F%E8%B4%A6%E5%8F%B7/</id>
+    <published>2021-06-30T16:00:00.000Z</published>
+    <updated>2021-12-21T08:57:29.573Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Golang源码&quot;&gt;&lt;a href=&quot;#Golang源码&quot; class=&quot;headerlink&quot; title=&quot;Golang源码&quot;&gt;&lt;/a&gt;Golang源码&lt;/h1&gt;&lt;p&gt;Go:go version go1.16.5</summary>
+        
+      
+    
+    
+    
+    
+    <category term="渗透测试" scheme="https://o0o0.club/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="Golang" scheme="https://o0o0.club/tags/Golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【学习笔记】C移植Go之EnumDesktopsW回调执行shellcode</title>
+    <link href="https://o0o0.club/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91C%E7%A7%BB%E6%A4%8DGo%E4%B9%8BEnumDesktopsW%E5%9B%9E%E8%B0%83%E6%89%A7%E8%A1%8Cshellcode/"/>
+    <id>https://o0o0.club/%E3%80%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%91C%E7%A7%BB%E6%A4%8DGo%E4%B9%8BEnumDesktopsW%E5%9B%9E%E8%B0%83%E6%89%A7%E8%A1%8Cshellcode/</id>
+    <published>2021-05-31T16:00:00.000Z</published>
+    <updated>2021-12-21T08:58:32.528Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Golang源码&quot;&gt;&lt;a href=&quot;#Golang源码&quot; class=&quot;headerlink&quot; title=&quot;Golang源码&quot;&gt;&lt;/a&gt;Golang源码&lt;/h1&gt;&lt;p&gt;使用EnumDesktopsW回调执行shellcode&lt;br&gt;GO：go version</summary>
+        
+      
+    
+    
+    
+    
+    <category term="渗透测试" scheme="https://o0o0.club/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="Golang" scheme="https://o0o0.club/tags/Golang/"/>
+    
+  </entry>
   
   <entry>
     <title>【Burp插件】利用字符集编码绕过waf</title>
@@ -395,100 +497,6 @@
     
     
     
-    
-    <category term="渗透" scheme="https://o0o0.club/tags/%E6%B8%97%E9%80%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>文件上传总结(待填坑)</title>
-    <link href="https://o0o0.club/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%80%BB%E7%BB%93(%E5%BE%85%E5%A1%AB%E5%9D%91)/"/>
-    <id>https://o0o0.club/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%80%BB%E7%BB%93(%E5%BE%85%E5%A1%AB%E5%9D%91)/</id>
-    <published>2019-09-29T16:00:00.000Z</published>
-    <updated>2020-08-14T17:01:44.219Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;欢迎使用</summary>
-        
-      
-    
-    
-    
-    
-    <category term="渗透" scheme="https://o0o0.club/tags/%E6%B8%97%E9%80%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mysql注入总结(待填坑)</title>
-    <link href="https://o0o0.club/Mysql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93(%E5%BE%85%E5%A1%AB%E5%9D%91)/"/>
-    <id>https://o0o0.club/Mysql%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93(%E5%BE%85%E5%A1%AB%E5%9D%91)/</id>
-    <published>2019-05-10T16:00:00.000Z</published>
-    <updated>2020-08-14T17:01:27.616Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;欢迎使用</summary>
-        
-      
-    
-    
-    
-    
-    <category term="渗透" scheme="https://o0o0.club/tags/%E6%B8%97%E9%80%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python批量运维之执行命令（ssh登录）</title>
-    <link href="https://o0o0.club/Python%E6%89%B9%E9%87%8F%E8%BF%90%E7%BB%B4%E4%B9%8B%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%EF%BC%88ssh%E7%99%BB%E5%BD%95%EF%BC%89/"/>
-    <id>https://o0o0.club/Python%E6%89%B9%E9%87%8F%E8%BF%90%E7%BB%B4%E4%B9%8B%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%EF%BC%88ssh%E7%99%BB%E5%BD%95%EF%BC%89/</id>
-    <published>2019-05-10T16:00:00.000Z</published>
-    <updated>2020-08-14T17:04:05.389Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    
-    <category term="Python" scheme="https://o0o0.club/tags/Python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Awvs11批量添加脚本 V2.0（基于上一次修改 增加6种扫描模式）</title>
-    <link href="https://o0o0.club/Awvs11%E6%89%B9%E9%87%8F%E6%B7%BB%E5%8A%A0%E8%84%9A%E6%9C%AC%20V2.0%EF%BC%88%E5%9F%BA%E4%BA%8E%E4%B8%8A%E4%B8%80%E6%AC%A1%E4%BF%AE%E6%94%B9%20%E5%A2%9E%E5%8A%A06%E7%A7%8D%E6%89%AB%E6%8F%8F%E6%A8%A1%E5%BC%8F%EF%BC%89/"/>
-    <id>https://o0o0.club/Awvs11%E6%89%B9%E9%87%8F%E6%B7%BB%E5%8A%A0%E8%84%9A%E6%9C%AC%20V2.0%EF%BC%88%E5%9F%BA%E4%BA%8E%E4%B8%8A%E4%B8%80%E6%AC%A1%E4%BF%AE%E6%94%B9%20%E5%A2%9E%E5%8A%A06%E7%A7%8D%E6%89%AB%E6%8F%8F%E6%A8%A1%E5%BC%8F%EF%BC%89/</id>
-    <published>2019-03-31T16:00:00.000Z</published>
-    <updated>2019-04-03T03:37:19.913Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    
-    <category term="Python" scheme="https://o0o0.club/tags/Python/"/>
     
     <category term="渗透" scheme="https://o0o0.club/tags/%E6%B8%97%E9%80%8F/"/>
     
